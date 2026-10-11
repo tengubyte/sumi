@@ -1,0 +1,114 @@
+/* Only the kanji on this page; rebuild with pyftsubset from @fontsource/yuji-syuku when one is added. */
+@font-face {
+  font-family: "Yuji Syuku";
+  font-display: swap;
+  src: url("./fonts/yuji-syuku-sumi.woff2") format("woff2");
+}
+
+/* TenguByte's tokens: one red, everything else quiet around it. */
+:root {
+  --paper: #fdfcfa;
+  --paper-2: #f5f1ee;
+  --ink: #161314;
+  --ink-soft: #4b4547;
+  --line: #e4dedb;
+  --field-line: #8a8183;
+  --red: #d8001a;
+  --red-deep: #a3001a;
+  --red-text: #c40018;
+  --on-red: #ffffff;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #100d0e;
+    --paper-2: #1a1516;
+    --ink: #f5f0ef;
+    --ink-soft: #bcb2b3;
+    --line: #2f2729;
+    --field-line: #7a6f71;
+    --red-deep: #b0001a;
+    --red-text: #ff5468;
+  }
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: clip;
+}
+body {
+  margin: 0;
+  font-family: "Zen Kaku Gothic New", ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+}
+:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+a { color: var(--ink); font-weight: 700; text-underline-offset: 0.22em; text-decoration-thickness: 2px; text-decoration-color: var(--red); }
+code, pre { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; font-size: 0.875rem; }
+.kanji { font-family: "Yuji Syuku", serif; font-weight: 400; color: var(--red); }
+
+.wrap { max-width: 72rem; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 640px) { .wrap { padding-inline: 32px; } }
+
+.top { display: flex; align-items: center; gap: 24px; min-height: 72px; border-bottom: 1px solid var(--line); }
+.mark { display: inline-flex; align-items: baseline; gap: 10px; font-weight: 900; font-size: 1.5rem; text-decoration: none; letter-spacing: -0.02em; }
+.mark .kanji { font-size: 2rem; }
+.top nav { margin-left: auto; display: flex; gap: 24px; }
+.top nav a { display: inline-flex; align-items: center; min-height: 44px; }
+
+.hero { display: grid; gap: 40px; align-items: center; padding-block: 56px 72px; }
+@media (min-width: 900px) { .hero { grid-template-columns: 1.1fr 1fr; padding-block: 80px 96px; } }
+h1 { margin: 0; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.02; font-weight: 900; letter-spacing: -0.03em; }
+.lede { margin: 20px 0 0; max-width: 44ch; font-size: 1.25rem; color: var(--ink-soft); }
+.hero-art { width: min(100%, 440px); margin-inline: auto; }
+
+.code { position: relative; margin: 28px 0 0; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); }
+.code pre { margin: 0; padding: 16px 96px 16px 18px; overflow-x: auto; line-height: 1.55; }
+.code button { position: absolute; top: 8px; right: 8px; }
+@media (max-width: 639px) {
+  .code pre { padding-right: 18px; }
+  .code button { position: static; display: block; margin: 0 8px 8px auto; }
+}
+
+button, .button {
+  min-height: 44px; padding: 0 20px; border-radius: 999px; font: inherit; font-weight: 700; cursor: pointer;
+  background: transparent; color: var(--ink); border: 1px solid var(--field-line);
+}
+button:hover { border-color: var(--ink); }
+button.primary { background: var(--red); color: var(--on-red); border: 0; }
+button.primary:hover { background: var(--red-deep); }
+
+.study { padding-block: 72px; border-top: 1px solid var(--line); }
+.study header { display: flex; align-items: center; gap: 20px; }
+.study header .kanji { font-size: 3.5rem; line-height: 1; }
+.study h2 { margin: 0; font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.1; }
+.study .what { margin: 4px 0 0; color: var(--ink-soft); font-weight: 700; }
+.study-body { display: grid; gap: 32px; margin-top: 36px; }
+@media (min-width: 900px) { .study-body { grid-template-columns: 1fr 1fr; align-items: start; } }
+.stage { border-radius: 16px; background: var(--paper-2); padding: 24px; overflow: hidden; }
+.study p { margin: 0 0 16px; max-width: 60ch; font-size: 1.0625rem; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 20px; }
+.controls label { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
+.controls input[type="range"] { width: 140px; accent-color: var(--red); }
+.controls output { min-width: 3.5ch; font-variant-numeric: tabular-nums; color: var(--ink-soft); font-weight: 400; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9375rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+th { font-weight: 700; }
+td code { white-space: nowrap; }
+.table-scroll { overflow-x: auto; }
+.facts { padding-left: 1.2em; max-width: 64ch; }
+.facts li { margin-bottom: 8px; }
+
+footer { margin-top: 48px; padding-block: 40px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.9375rem; }
+footer p { margin: 0 0 8px; }
+
+/* The hero splat comes in from past the right edge of the page, below the header. Only where the text
+   leaves room for it; a hidden canvas never scrolls into view, so it never opens a WebGL context. */
+.intro { position: relative; }
+.hero-splat { position: absolute; right: 0; top: 72px; width: clamp(330px, 34vw, 520px); aspect-ratio: 360 / 396; display: none; }
+@media (min-width: 1000px) { .hero-splat { display: block; } }
+.hero > div { position: relative; max-width: 40rem; }
+/* Grid items default to their content's width, so a long code line would widen the page. */
+.hero > div, .study-body > * { min-width: 0; }
+.study h3 { margin: 40px 0 0; font-size: 1.25rem; font-weight: 900; }
