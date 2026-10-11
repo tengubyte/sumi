@@ -1,18 +1,7 @@
 import { paintStrokes } from "./paintStrokes.js";
+import { random } from "./random.js";
 import type { BrushOptions } from "./strokePainter.js";
 import type { Point, StrokeArt } from "./strokes.js";
-
-/** A seeded generator, so a seed always draws the same ensō. */
-function random(seed: number): () => number {
-  let a = Math.floor(seed * 1000) >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 /**
  * One ensō stroke from a seed, in a 200 by 200 box: where it starts, how far round it goes, how it

@@ -1,6 +1,6 @@
 # sumi
 
-Brush and ink effects for React. `BrushReveal` paints brush art in the way the stroke was laid. `BrushPaint` writes any SVG's strokes, such as a kanji from KanjiVG, with a brush drawn in code, and `Enso` draws an ensō from a seed. `Suminagashi` floats ink on water, and `InkSplat` throws an ink splat drawn in code. Each effect is one WebGL canvas that plays once when it scrolls into view. There are no dependencies besides React, and the core works without React too.
+Brush and ink effects for React. `BrushReveal` paints brush art in the way the stroke was laid. `BrushPaint` writes any SVG's strokes, such as a kanji from KanjiVG, with a brush drawn in code, and `Enso` draws an ensō from a seed. `BrushMark` paints brush marks round words. `Suminagashi` floats ink on water, `InkWipe` brings an image in under blooming ink, `Sansui` paints ink-wash mountains, and `InkSplat` throws an ink splat drawn in code. Each effect is one WebGL canvas that plays once when it scrolls into view. There are no dependencies besides React, and the core works without React too.
 
 Live demos: [sumi.tengubyte.io](https://sumi.tengubyte.io)
 
@@ -9,7 +9,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.2.0
+npm install github:tengubyte/sumi#v0.3.0
 ```
 
 ## BrushReveal
@@ -67,6 +67,18 @@ KanjiVG's stroke data is CC BY-SA 3.0 (Ulrich Apel, [kanjivg.tagaini.net](https:
 | `delay` | `number` | `0` | Seconds after it is in view. |
 | `className`, `style` | | | Size the canvas here; the art sits centred without stretching. |
 
+## BrushMark
+
+```tsx
+import { BrushMark } from "@tengubyte/sumi";
+
+<h1>
+  Paint the <BrushMark type="circle">word</BrushMark> that <BrushMark delay={1}>matters</BrushMark>
+</h1>
+```
+
+Hand-drawn annotations in the spirit of Rough Notation, with the brush: `underline` (default), `circle` (an ensō round the word), `highlight` (a dry swipe behind the text), `strike` and `box`. The words stay plain text on one line; the mark is measured when it scrolls into view and painted on a canvas round it. Takes `seed` (how far off true the hand is), `color` (default `"#d8001a"`), `speed` and `delay`. Stagger several marks with `delay`.
+
 ## Enso
 
 ```tsx
@@ -95,6 +107,38 @@ Drops of ink and clear water land on one spot in turn, each pushing the last out
 | `accent` | `` `#${string}` `` | `"#d8001a"` | The one accent ring. |
 | `delay` | `number` | `0` | Seconds after it is in view. |
 
+## InkWipe
+
+```tsx
+import { InkWipe } from "@tengubyte/sumi";
+
+<InkWipe src="/hero.webp" width={1200} height={674} alt="Mountains at dawn" blots={[[0.5, 0.5, 0]]} />
+```
+
+The image comes in under ink that blooms from up to three blots. The edge spreads unevenly with feathered fibres, pigment pools dark at the front and the wash thins behind it until the picture shows, then the ink dries away. One shader instead of a sprite sheet.
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | The image and its own size in px. |
+| `from` | `string` | | An image in the same box that the ink wipes away. |
+| `blots` | `[x, y, start][]` | `[[0.5, 0.5, 0]]` | Where, as shares of the image (y down), and when, 0 to 1. |
+| `color` | `` `#${string}` `` | `"#161314"` | The ink at the spreading edge. |
+| `seed` | `number` | `1` | Changes the shape of the bloom. |
+| `duration`, `delay` | `number` | `1.8`, `0` | Seconds. |
+| `className`, `style` | | | Width alone keeps the image's shape. |
+
+Like `BrushReveal`, it ends on the image's own pixels and hands back to a plain image.
+
+## Sansui
+
+```tsx
+import { Sansui } from "@tengubyte/sumi";
+
+<Sansui seed={8} style={{ width: "100%", aspectRatio: "16 / 9" }} />
+```
+
+An ink-wash landscape drawn in code. Five ridges are brushed in from far to near; each ridge line goes on left to right, then its wash creeps down and thins into mist. The sun bleeds in like vermilion on damp paper and bands of mist drift across it. Takes `seed` (default `3`), `sun` (default `true`), `mist` (0 to 1, default `0.6`), `color`, `sunColor` (default `"#d8001a"`), `speed` and `delay`. It runs about 6.5 seconds at speed 1.
+
 ## InkSplat
 
 ```tsx
@@ -119,7 +163,7 @@ No art needed. Size the canvas with CSS; the splat scales with its width. With t
 ## Without React
 
 ```ts
-import { floatInk, paintEnso, paintIn, paintStrokes, throwSplat } from "@tengubyte/sumi/core";
+import { floatInk, paintEnso, paintIn, paintMark, paintSansui, paintStrokes, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -127,6 +171,10 @@ const stopWrite = paintStrokes(document.querySelector("canvas.kanji")!, svgMarku
 const stopEnso = paintEnso(document.querySelector("canvas.enso")!, { seed: 42 });
 const stopFloat = floatInk(document.querySelector("canvas.water")!, { pattern: "rings" });
 const stopSplat = throwSplat(document.querySelector("canvas.splat")!, { seed: 12 });
+// A positioned, one-line element; the image must fill a positioned parent.
+const stopMark = paintMark(document.querySelector<HTMLElement>("span.key")!, "circle");
+const stopWipe = wipeIn(document.querySelector("img.hero")!, { blots: [[0.5, 0.5, 0]] });
+const stopHills = paintSansui(document.querySelector("canvas.hills")!, { seed: 8 });
 ```
 
 Each call returns its cleanup.
@@ -135,8 +183,8 @@ Each call returns its cleanup.
 
 - Plays once, when it has scrolled a little way into view.
 - With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water or the landed splat.
-- Without WebGL, `BrushReveal` shows the plain image and the canvas effects show nothing.
-- `BrushReveal` ends on the image's own pixels, hands back to the plain image and releases its WebGL context. The canvas effects keep their last frame and redraw it on resize.
+- Without WebGL, `BrushReveal` and `InkWipe` show the plain image, `BrushMark` shows the plain words, and the canvas effects show nothing.
+- `BrushReveal` and `InkWipe` end on the image's own pixels, hand back to the plain image and release their WebGL context. The canvas effects keep their last frame and redraw it on resize.
 - Every component is marked `"use client"` for React Server Components.
 
 ## Development
@@ -151,4 +199,4 @@ The site in `site/` deploys to Cloudflare Pages from `main`: build command `npm 
 
 ## License
 
-The code is MIT licensed. The ensō and band art used on the showcase site belong to TenguByte and are not part of the package. The KanjiVG files in `site/src/kanji` are CC BY-SA 3.0, Ulrich Apel, and are not part of the package either.
+The code is MIT licensed. The ensō, band and landscape art used on the showcase site belong to TenguByte and are not part of the package. The KanjiVG files in `site/src/kanji` are CC BY-SA 3.0, Ulrich Apel, and are not part of the package either.

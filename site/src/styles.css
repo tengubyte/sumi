@@ -118,3 +118,6 @@ footer p { margin: 0 0 8px; }
 /* Grid items default to their content's width, so a long code line would widen the page. */
 .hero > div, .study-body > * { min-width: 0; }
 .study h3 { margin: 40px 0 0; font-size: 1.25rem; font-weight: 900; }
+.mark-stage { padding: 24px 8px; }
+.mark-stage p { margin: 0 0 16px; font-size: 1.125rem; line-height: 2.1; }
+.mark-stage .mark-head { margin-bottom: 28px; font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.4; font-weight: 900; letter-spacing: -0.02em; }

@@ -43,6 +43,32 @@ export const ENSO: readonly Row[] = [
   ["className, style", "", "", "Size the canvas here."],
 ];
 
+export const MARK: readonly Row[] = [
+  ["type", '"underline" | "circle" | "highlight" | "strike" | "box"', '"underline"', "The mark. A highlight goes behind the text."],
+  ["seed", "number", "1", "How far off true the hand is."],
+  ["color", "#rrggbb", '"#d8001a"', "The ink."],
+  ["speed, delay", "number", "1, 0", "As for BrushPaint. Stagger marks with delay."],
+  ["children", "ReactNode", "required", "The words. They stay on one line."],
+];
+
+export const WIPE: readonly Row[] = [
+  ["src, width, height, alt", "", "required", "The image the ink brings in, and its own size in px."],
+  ["from", "string", "none", "An image in the same box that the ink wipes away."],
+  ["blots", "[x, y, start][]", "[[0.5, 0.5, 0]]", "Up to three: where, as shares of the image, and when, 0 to 1."],
+  ["color", "#rrggbb", '"#161314"', "The ink at the spreading edge."],
+  ["seed", "number", "1", "Changes the shape of the bloom."],
+  ["duration, delay", "number", "1.8, 0", "Seconds."],
+];
+
+export const SANSUI: readonly Row[] = [
+  ["seed", "number", "3", "Changes every ridge."],
+  ["sun", "boolean", "true", "A sun behind the far ridges, half veiled by mist."],
+  ["mist", "number", "0.6", "How much mist lies between the ridges, 0 to 1."],
+  ["color, sunColor", "#rrggbb", '"#161314", "#d8001a"', "The ink and the sun."],
+  ["speed, delay", "number", "1, 0", "2 paints twice as fast; seconds to wait once in view."],
+  ["className, style", "", "", "Size the canvas here; wide shapes suit it."],
+];
+
 export const FLOAT: readonly Row[] = [
   ["pattern", '"flow" | "rings" | "comb"', '"flow"', "A preset, laid out for the canvas's shape."],
   ["ops", "MarbleOp[]", "none", "Your own drops, ring systems, tines, waves and vortices instead."],
