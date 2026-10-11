@@ -1,5 +1,6 @@
 import { InkSplat, type Hex } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { SPLAT } from "./apiRows";
 import { Code, Range, Study } from "./parts";
 
 // True sumi disappears on dark paper, so the second ink lifts to a warm charcoal there.
@@ -20,6 +21,7 @@ export function SplatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="飛"
       title="Throw a splat"
       what="InkSplat"
+      props={{ rows: SPLAT, label: "InkSplat props" }}
       stage={
         <InkSplat
           seed={seed}
@@ -31,9 +33,9 @@ export function SplatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       }
     >
       <p>
-        No art at all. The splat is drawn in code: a pool with fingers that grow longest along the throw, beads off
-        their tips, droplets that streak while they fly and skid when they land, a smaller second ink under it,
-        and a fine mist.
+        The splat is drawn in code: a pool with fingers that grow longest along the throw, beads off their tips,
+        droplets that streak while they fly and skid when they land, a smaller second ink under it, and a fine
+        mist.
       </p>
       <p>
         Every seed gives a different splat. With the pool past the edge of the canvas, as here, only the fingers

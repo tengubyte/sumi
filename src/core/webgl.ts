@@ -40,9 +40,13 @@ export function uploadTexture(gl: WebGLRenderingContext, image: TexImageSource, 
   return texture;
 }
 
-/** Matches the canvas buffer to its CSS size at up to 2x density. Returns true when it changed. */
-export function fitCanvas(gl: WebGLRenderingContext, canvas: HTMLCanvasElement): boolean {
-  const scale = Math.min(window.devicePixelRatio, 2);
+/**
+ * Matches the canvas buffer to its CSS size at up to 2x density, and to no more than `maxPixels` in all.
+ * Returns true when it changed.
+ */
+export function fitCanvas(gl: WebGLRenderingContext, canvas: HTMLCanvasElement, maxPixels = Infinity): boolean {
+  const area = Math.max(canvas.clientWidth * canvas.clientHeight, 1);
+  const scale = Math.min(window.devicePixelRatio, 2, Math.sqrt(maxPixels / area));
   const width = Math.max(1, Math.round(canvas.clientWidth * scale));
   const height = Math.max(1, Math.round(canvas.clientHeight * scale));
   if (canvas.width === width && canvas.height === height) return false;
@@ -50,4 +54,34 @@ export function fitCanvas(gl: WebGLRenderingContext, canvas: HTMLCanvasElement):
   canvas.height = height;
   gl.viewport(0, 0, width, height);
   return true;
+}
+
+/** Covers the canvas with one triangle; the fragment shader does the rest. */
+export const COVER_VERTEX = `
+attribute vec2 corner;
+void main() {
+  gl_Position = vec4(corner, 0.0, 1.0);
+}`;
+
+/**
+ * Links `fragmentSource` with COVER_VERTEX, makes it current and binds the triangle. Returns the uniform
+ * lookup, or null when the driver rejects the shaders.
+ */
+export function coverProgram(gl: WebGLRenderingContext, fragmentSource: string): ((name: string) => WebGLUniformLocation | null) | null {
+  const program = linkProgram(gl, COVER_VERTEX, fragmentSource);
+  if (!program) return null;
+  gl.useProgram(program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const corner = gl.getAttribLocation(program, "corner");
+  gl.enableVertexAttribArray(corner);
+  gl.vertexAttribPointer(corner, 2, gl.FLOAT, false, 0, 0);
+  return (name) => gl.getUniformLocation(program, name);
+}
+
+/** Clears the canvas and draws the covering triangle. */
+export function drawCover(gl: WebGLRenderingContext): void {
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }

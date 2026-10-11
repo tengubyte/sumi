@@ -1,7 +1,7 @@
 {
   "name": "@tengubyte/sumi",
-  "version": "0.3.0",
-  "description": "Brush and ink effects for React: paint brush art in the way the stroke was laid, write SVG strokes and kanji with a brush drawn in code, mark words, paint ink-wash mountains, float ink on water, bring images in under ink and throw ink splats. WebGL, no other dependencies.",
+  "version": "0.4.0",
+  "description": "Brush and ink effects for React: paint brush art in the way the stroke was laid, write SVG strokes and kanji with a brush drawn in code, mark words, press seals, paint ink-wash mountains, float ink on water, drop it in, bring images and pages in under ink and throw ink splats. WebGL, no other dependencies.",
   "license": "MIT",
   "author": "TenguByte (https://tengubyte.io)",
   "repository": {
@@ -22,6 +22,9 @@
     "marbling",
     "annotation",
     "landscape",
+    "hanko",
+    "seal",
+    "page-transition",
     "transition",
     "animation",
     "shader"

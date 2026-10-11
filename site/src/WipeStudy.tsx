@@ -1,5 +1,6 @@
 import { InkWipe, type Blot, type Hex } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { WIPE } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
 
@@ -23,6 +24,7 @@ export function WipeStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="滲"
       title="Bring an image in under ink"
       what="InkWipe"
+      props={{ rows: WIPE, label: "InkWipe props" }}
       stage={
         <InkWipe
           key={`${spread} ${String(over)} ${String(run)}`}
@@ -43,8 +45,8 @@ export function WipeStudy({ dark }: { readonly dark: boolean }): JSX.Element {
         shows through. Then the ink dries away.
       </p>
       <p>
-        It replaces the old sprite-sheet ink transition with one shader: any size, a different bloom for every
-        seed, any ink. The finished image is a plain image, as with BrushReveal.
+        A shader draws the bloom at the image's own size, and each seed grows a different one. The finished image
+        is a plain image, as with BrushReveal.
       </p>
       <div className="controls">
         <Choice label="Blots" options={[["one", "One"], ["three", "Three"], ["corner", "Corner"]]} value={spread} onChange={setSpread} />

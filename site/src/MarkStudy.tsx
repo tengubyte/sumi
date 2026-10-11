@@ -1,5 +1,6 @@
 import { BrushMark } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { MARK } from "./apiRows";
 import { Code, Study, useReplay } from "./parts";
 
 export function MarkStudy(): JSX.Element {
@@ -14,22 +15,23 @@ export function MarkStudy(): JSX.Element {
       kanji="印"
       title="Mark the words"
       what="BrushMark"
+      props={{ rows: MARK, label: "BrushMark props" }}
       stage={
         <div key={run} className="mark-stage">
           <p className="mark-head">
             Paint the <BrushMark type="circle" seed={seed} delay={0.2}>word</BrushMark> that <BrushMark seed={seed + 1} delay={1}>matters</BrushMark>
           </p>
           <p>
-            One <BrushMark type="highlight" seed={seed + 2} delay={1.6}>brush stroke</BrushMark> says more than a{" "}
-            <BrushMark type="strike" seed={seed + 3} delay={2.2}>bold font</BrushMark> ever will. Draw a{" "}
-            <BrushMark type="box" seed={seed + 4} delay={2.7}>box</BrushMark> round the price.
+            Swipe <BrushMark type="highlight" seed={seed + 2} delay={1.6}>a dry stroke</BrushMark> behind a phrase,{" "}
+            <BrushMark type="strike" seed={seed + 3} delay={2.2}>cross out</BrushMark> the old price and draw a{" "}
+            <BrushMark type="box" seed={seed + 4} delay={2.7}>box</BrushMark> round the new one.
           </p>
         </div>
       }
     >
       <p>
-        Rough Notation's idea, with a real brush: an underline that sags and tapers out, an ensō round a word that
-        runs past where it began, a dry highlight swipe behind the text, a strike-through, and a box drawn in the
+        Rough Notation's idea, painted with sumi's brush. The underline sags and tapers out, the ensō round a
+        word runs past where it began, the highlight is a dry swipe behind the text, and the box is drawn in the
         stroke order of 口.
       </p>
       <p>

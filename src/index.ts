@@ -3,6 +3,8 @@ export { BrushMark, type BrushMarkProps } from "./react/BrushMark.js";
 export { BrushPaint, type BrushPaintProps } from "./react/BrushPaint.js";
 export { BrushReveal, type BrushRevealProps } from "./react/BrushReveal.js";
 export { Enso, type EnsoProps } from "./react/Enso.js";
+export { Hanko, type HankoProps } from "./react/Hanko.js";
+export { InkDrop, type InkDropProps } from "./react/InkDrop.js";
 export { InkSplat, type InkSplatProps } from "./react/InkSplat.js";
 export { InkWipe, type InkWipeProps } from "./react/InkWipe.js";
 export { Sansui, type SansuiProps } from "./react/Sansui.js";

@@ -1,5 +1,6 @@
 import { BrushReveal } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { REVEAL } from "./apiRows";
 import { Code, Range, Study, useReplay } from "./parts";
 
 export function RingStudy(): JSX.Element {
@@ -11,6 +12,7 @@ export function RingStudy(): JSX.Element {
       kanji="円"
       title="Paint a ring"
       what='BrushReveal with sweep="ring"'
+      props={{ rows: REVEAL, label: "BrushReveal props" }}
       stage={<BrushReveal key={run} src="/art/enso.webp" width={560} height={560} sweep="ring" startAngle={2} duration={duration} />}
     >
       <p>
@@ -19,7 +21,7 @@ export function RingStudy(): JSX.Element {
       </p>
       <p>
         The front frays because each bristle line reaches its own distance, and ink just behind it reads darker
-        while it is wet. The timing is jo-ha-kyu: the brush presses, speeds up, and leaves the paper still moving.
+        while it is wet. The timing follows jo-ha-kyu. The brush presses, speeds up, and leaves the paper still moving.
       </p>
       <p>
         When the stroke lands, the canvas ends on the image's own pixels, hands back to the plain image and

@@ -57,7 +57,7 @@ export const WIPE: readonly Row[] = [
   ["blots", "[x, y, start][]", "[[0.5, 0.5, 0]]", "Up to three: where, as shares of the image, and when, 0 to 1."],
   ["color", "#rrggbb", '"#161314"', "The ink at the spreading edge."],
   ["seed", "number", "1", "Changes the shape of the bloom."],
-  ["duration, delay", "number", "1.8, 0", "Seconds."],
+  ["duration, delay", "number", "1.8, 0", "Seconds the bloom takes, and to wait once in view."],
 ];
 
 export const SANSUI: readonly Row[] = [
@@ -76,4 +76,35 @@ export const FLOAT: readonly Row[] = [
   ["accent", "#rrggbb", '"#d8001a"', "The one accent ring."],
   ["delay", "number", "0", "Seconds to wait once it is in view."],
   ["className, style", "", "", "Size the canvas here."],
+];
+
+export const HANKO: readonly Row[] = [
+  ["text", "string", "required", "One to four characters, read in columns from the right."],
+  ["label", "string", "none", "What the seal says. Without it the canvas is hidden from assistive technology."],
+  ["shape", '"square" | "tall" | "round"', '"square"', "Tall suits two or three characters in a column."],
+  ["white", "boolean", "false", "White characters cut into a red block, instead of red characters in a border."],
+  ["font, weight", "string, number", "a Mincho stack, 700", "A CSS font family you load. The seal waits for it."],
+  ["color", "#rrggbb", '"#d8001a"', "The seal paste."],
+  ["seed", "number", "1", "Paper grain, chips in the border and which side pressed harder."],
+  ["speed, delay", "number", "1, 0", "2 presses twice as fast; seconds to wait once in view."],
+  ["className, style", "", "", "A square canvas for square and round seals, about 1:1.6 for tall ones."],
+];
+
+export const DROP: readonly Row[] = [
+  ["drops", "[x, y, start?, color?][]", "[[0.5, 0.1]]", "Up to three: where, as shares of the canvas, when in seconds, and their ink."],
+  ["color", "#rrggbb", '"#161314"', "Ink for drops without their own."],
+  ["swirl", "number", "0.6", "How much the water churns, 0 to 2."],
+  ["seed", "number", "1", "How the rims fray."],
+  ["speed, delay", "number", "1, 0", "2 runs twice as fast; seconds to wait once in view."],
+  ["className, style", "", "", "Size the canvas here. Each drop sinks about 60% of its height."],
+];
+
+export const TRANSITION: readonly Row[] = [
+  ["swap", "() => unknown", "required", "The change to make once nothing shows. A promise keeps the ink down until it settles."],
+  ["from", "[x, y]", "[0.5, 0.5]", "Where the ink floods from, as shares of the covered box."],
+  ["to", "[x, y]", "from", "Where the paper opens from. Outside 0 to 1 is past an edge."],
+  ["color", "#rrggbb", '"#161314"', "The ink."],
+  ["seed", "number", "1", "Changes the shape of the fronts."],
+  ["duration", "number", "1.6", "Seconds for the flood and the opening, not counting the wait for swap."],
+  ["within", "HTMLElement", "the window", "Cover a positioned element instead."],
 ];

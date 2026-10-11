@@ -98,26 +98,48 @@ button.primary:hover { background: var(--red-deep); }
 .controls input[type="range"] { width: 140px; accent-color: var(--red); }
 .controls output { min-width: 3.5ch; font-variant-numeric: tabular-nums; color: var(--ink-soft); font-weight: 400; }
 
-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9375rem; }
-th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
-th { font-weight: 700; }
-td code { white-space: nowrap; }
-.table-scroll { overflow-x: auto; }
 .facts { padding-left: 1.2em; max-width: 64ch; }
 .facts li { margin-bottom: 8px; }
 
 footer { margin-top: 48px; padding-block: 40px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.9375rem; }
 footer p { margin: 0 0 8px; }
 
-/* The hero splat comes in from past the right edge of the page, below the header. Only where the text
+/* The hero splat comes in from past the right edge of the page, below the effects index. Only where the text
    leaves room for it; a hidden canvas never scrolls into view, so it never opens a WebGL context. */
 .intro { position: relative; }
-.hero-splat { position: absolute; right: 0; top: 72px; width: clamp(330px, 34vw, 520px); aspect-ratio: 360 / 396; display: none; }
+.hero-splat { position: absolute; right: 0; top: 0; width: clamp(330px, 34vw, 520px); aspect-ratio: 360 / 396; display: none; }
 @media (min-width: 1000px) { .hero-splat { display: block; } }
 .hero > div { position: relative; max-width: 40rem; }
 /* Grid items default to their content's width, so a long code line would widen the page. */
 .hero > div, .study-body > * { min-width: 0; }
 .study h3 { margin: 40px 0 0; font-size: 1.25rem; font-weight: 900; }
+.screen { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 8px; aspect-ratio: 16 / 9; padding: 6% 8%; border-radius: 10px; overflow: hidden; background: var(--paper); }
+.screen h3 { margin: 0; max-width: 11ch; font-size: clamp(1.25rem, 3vw, 2rem); line-height: 1.15; font-weight: 900; letter-spacing: -0.02em; }
+.study .screen p { margin: 0; max-width: 22ch; color: var(--ink-soft); }
+.screen.page-1::after { content: ""; position: absolute; right: 10%; top: 20%; width: 20%; aspect-ratio: 1; border-radius: 50%; background: var(--red); }
+button:disabled { opacity: 0.5; cursor: default; }
+.index { border-bottom: 1px solid var(--line); font-size: 0.9375rem; }
+.index summary, .props summary { padding-block: 11px; font-weight: 700; cursor: pointer; }
+.index ul { margin: 0; padding: 0; list-style: none; }
+.index details > ul { display: grid; gap: 4px; padding-bottom: 12px; }
+.index details > ul > li { display: grid; grid-template-columns: 8rem 1fr; align-items: start; }
+.index span { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-soft); }
+.index li ul { display: flex; flex-wrap: wrap; gap: 0 18px; }
+.index a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+.index a:hover { text-decoration: underline; text-decoration-color: var(--red); }
+@media (min-width: 640px) {
+  .index summary { display: none; }
+  .index details > ul { display: flex; flex-wrap: wrap; gap: 0 36px; padding-block: 4px; }
+  .index details > ul > li { display: flex; gap: 18px; }
+}
+.props { margin-top: 32px; border-top: 1px solid var(--line); }
+.props dl { margin: 4px 0 0; }
+.props dl > div { padding-block: 12px; border-bottom: 1px solid var(--line); }
+.props dt { display: flex; flex-wrap: wrap; gap: 4px 14px; font-weight: 700; }
+.props dt code { overflow-wrap: anywhere; }
+.props .type { color: var(--ink-soft); font-weight: 400; }
+.props dd { margin: 6px 0 0; max-width: 60ch; }
+.props .default { color: var(--ink-soft); font-size: 0.9375rem; }
 .mark-stage { padding: 24px 8px; }
 .mark-stage p { margin: 0 0 16px; font-size: 1.125rem; line-height: 2.1; }
 .mark-stage .mark-head { margin-bottom: 28px; font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.4; font-weight: 900; letter-spacing: -0.02em; }

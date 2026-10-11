@@ -1,5 +1,6 @@
 import { Sansui } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { SANSUI } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Code, Range, Study, useReplay } from "./parts";
 
@@ -17,6 +18,7 @@ export function SansuiStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="山"
       title="Paint the mountains"
       what="Sansui"
+      props={{ rows: SANSUI, label: "Sansui props" }}
       stage={<Sansui key={run} seed={seed} sun={sun} mist={mist} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "16 / 9" }} />}
     >
       <p>
@@ -24,7 +26,7 @@ export function SansuiStudy({ dark }: { readonly dark: boolean }): JSX.Element {
         each ridge line goes on left to right, then its wash creeps down from it and thins into mist. Far ridges
         stay pale and soft; only the near ones get a hard brush line.
       </p>
-      <p>No art and no images: every seed is a different range, drawn in one pass of one shader.</p>
+      <p>Every seed draws a different range, all of it in a single shader pass.</p>
       <div className="controls">
         <button type="button" className="primary" onClick={shuffle}>
           New seed

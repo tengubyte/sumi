@@ -1,5 +1,6 @@
 import { Suminagashi, type MarblePattern } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { FLOAT } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
 
@@ -18,6 +19,7 @@ export function FloatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="流"
       title="Float ink on water"
       what="Suminagashi"
+      props={{ rows: FLOAT, label: "Suminagashi props" }}
       stage={<Suminagashi key={run} pattern={pattern} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "4 / 3" }} />}
     >
       <p>
@@ -26,9 +28,9 @@ export function FloatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
         or a slow current pulls the rings into flowing lines.
       </p>
       <p>
-        No fluid simulation. Each drop and pull is an exact map of the water's surface, from Jaffer's
-        mathematical marbling, so every pixel runs the list backwards to find where its ink came from. One pass,
-        one canvas, sharp at any size.
+        Each drop and pull is an exact map of the water's surface, from Jaffer's mathematical marbling, so every
+        pixel runs the list backwards to find where its ink came from. That keeps the lines sharp at any canvas
+        size.
       </p>
       <div className="controls">
         <Choice label="Pattern" options={PATTERNS} value={pattern} onChange={setPattern} />

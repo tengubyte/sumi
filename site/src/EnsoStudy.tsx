@@ -1,5 +1,6 @@
 import { Enso } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
+import { ENSO } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Code, Range, Study, useReplay } from "./parts";
 
@@ -16,6 +17,7 @@ export function EnsoStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="禅"
       title="Draw an ensō"
       what="Enso"
+      props={{ rows: ENSO, label: "Enso props" }}
       stage={<Enso key={run} seed={seed} speed={speed} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "1" }} />}
     >
       <p>
@@ -23,8 +25,8 @@ export function EnsoStudy({ dark }: { readonly dark: boolean }): JSX.Element {
         starts, how far round it goes before it lifts, how it wobbles, how heavy it is and how dry its tail runs.
       </p>
       <p>
-        Unlike the ring above, there is no art to own: every seed is a different ensō, and the same seed always
-        draws the same one.
+        The ring above is a painted image. This one comes from a number, so every seed is a different ensō and
+        the same seed always draws the same one.
       </p>
       <div className="controls">
         <button type="button" className="primary" onClick={shuffle}>

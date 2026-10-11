@@ -1,4 +1,5 @@
 import { useEffect, useState, type JSX, type ReactNode } from "react";
+import { Props, type PropsDoc } from "./Props";
 
 /** A code block with a copy button. */
 export function Code({ children }: { readonly children: string }): JSX.Element {
@@ -31,10 +32,12 @@ interface StudyProps {
   readonly what: string;
   readonly stage: ReactNode;
   readonly children: ReactNode;
+  /** The effect's props table, shown last under how it works. */
+  readonly props?: PropsDoc | undefined;
 }
 
-/** One effect: the live demo on one side, how it works and its controls on the other. */
-export function Study({ id, kanji, title, what, stage, children }: StudyProps): JSX.Element {
+/** One effect: the live demo on one side, how it works, its controls and its props on the other. */
+export function Study({ id, kanji, title, what, stage, children, props }: StudyProps): JSX.Element {
   return (
     <section id={id} className="study" aria-labelledby={`${id}-title`}>
       <header>
@@ -48,7 +51,10 @@ export function Study({ id, kanji, title, what, stage, children }: StudyProps): 
       </header>
       <div className="study-body">
         <div className="stage">{stage}</div>
-        <div>{children}</div>
+        <div>
+          {children}
+          {props && <Props {...props} />}
+        </div>
       </div>
     </section>
   );
@@ -96,19 +102,23 @@ export function Choice<T extends string>({ label, options, value, onChange }: { 
   );
 }
 
-/** True when the visitor's system is in dark mode, kept up to date. */
-export function useDark(): boolean {
-  const query = "(prefers-color-scheme: dark)";
-  const [dark, setDark] = useState(() => window.matchMedia(query).matches);
+/** True while the media query matches, kept up to date. */
+export function useMedia(query: string): boolean {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
     const media = window.matchMedia(query);
     const update = (): void => {
-      setDark(media.matches);
+      setMatches(media.matches);
     };
     media.addEventListener("change", update);
     return () => {
       media.removeEventListener("change", update);
     };
-  }, []);
-  return dark;
+  }, [query]);
+  return matches;
+}
+
+/** True when the visitor's system is in dark mode, kept up to date. */
+export function useDark(): boolean {
+  return useMedia("(prefers-color-scheme: dark)");
 }
