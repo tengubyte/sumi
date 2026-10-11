@@ -1,5 +1,5 @@
-import { onceInView, playClock, prefersReducedMotion } from "./play.js";
-import { SPLAT_SECONDS, splatPainter, type SplatPainter, type SplatShape } from "./splatShader.js";
+import { playCanvas } from "./play.js";
+import { SPLAT_SECONDS, splatPainter, type SplatShape } from "./splatShader.js";
 
 export interface SplatOptions extends SplatShape {
   /** Seconds from the hit until the last mist lands. Default 2.2. */
@@ -15,41 +15,23 @@ export interface SplatOptions extends SplatShape {
  */
 export function throwSplat(canvas: HTMLCanvasElement, options: SplatOptions = {}): () => void {
   const { duration = SPLAT_SECONDS, delay = 0 } = options;
-  let painter: SplatPainter | null = null;
-  let time = 0;
-  // Chrome paints a canvas whose WebGL context was released as a white box, so the canvas leaves the page too.
-  const stop = (): void => {
-    canvas.hidden = true;
-    painter?.dispose();
-    painter = null;
-  };
-  const resize = new ResizeObserver(() => {
-    painter?.draw(time);
-  });
-
-  canvas.hidden = false;
-  canvas.addEventListener("webglcontextlost", stop);
-  const unwatch = onceInView(canvas, () => {
-    painter = splatPainter(canvas, options);
-    if (!painter) {
-      stop();
-      return undefined;
-    }
-    resize.observe(canvas);
-    if (prefersReducedMotion() || duration <= 0) {
-      time = SPLAT_SECONDS;
-      painter.draw(time);
-      return undefined;
-    }
-    return playClock(duration, delay, (seconds) => {
-      time = (seconds / duration) * SPLAT_SECONDS;
-      painter?.draw(time);
-    });
-  });
-  return () => {
-    unwatch();
-    resize.disconnect();
-    canvas.removeEventListener("webglcontextlost", stop);
-    stop();
-  };
+  const run = Math.max(duration, 0);
+  return playCanvas(
+    canvas,
+    () => {
+      const painter = splatPainter(canvas, options);
+      if (!painter) return null;
+      // The splat's own clock always runs to SPLAT_SECONDS; `duration` only stretches it.
+      return {
+        duration: run,
+        draw: (seconds) => {
+          painter.draw(run > 0 ? (seconds / run) * SPLAT_SECONDS : SPLAT_SECONDS);
+        },
+        dispose: () => {
+          painter.dispose();
+        },
+      };
+    },
+    delay,
+  );
 }

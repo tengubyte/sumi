@@ -80,6 +80,9 @@ button, .button {
 button:hover { border-color: var(--ink); }
 button.primary { background: var(--red); color: var(--on-red); border: 0; }
 button.primary:hover { background: var(--red-deep); }
+.choice { display: inline-flex; gap: 4px; }
+.choice button { padding: 0 16px; }
+.choice button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 .study { padding-block: 72px; border-top: 1px solid var(--line); }
 .study header { display: flex; align-items: center; gap: 20px; }

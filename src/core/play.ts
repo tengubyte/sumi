@@ -45,3 +45,55 @@ export function playClock(duration: number, delay: number, frame: (seconds: numb
     cancelAnimationFrame(request);
   };
 }
+
+/** Draws an effect `seconds` into its run; by `duration` it has fully landed. */
+export interface CanvasPainter {
+  readonly duration: number;
+  draw(seconds: number): void;
+  dispose(): void;
+}
+
+/**
+ * Plays the painter from `create` on `canvas` once it scrolls into view, `delay` seconds later. The last
+ * frame stays, and a resize redraws it. Reduced motion draws the last frame; no WebGL hides the canvas.
+ * Returns the cleanup, which releases the WebGL context.
+ */
+export function playCanvas(canvas: HTMLCanvasElement, create: () => CanvasPainter | null, delay = 0): () => void {
+  let painter: CanvasPainter | null = null;
+  let time = 0;
+  // Chrome paints a canvas whose WebGL context was released as a white box, so the canvas leaves the page too.
+  const stop = (): void => {
+    canvas.hidden = true;
+    painter?.dispose();
+    painter = null;
+  };
+  const resize = new ResizeObserver(() => {
+    painter?.draw(time);
+  });
+
+  canvas.hidden = false;
+  canvas.addEventListener("webglcontextlost", stop);
+  const unwatch = onceInView(canvas, () => {
+    painter = create();
+    if (!painter) {
+      stop();
+      return undefined;
+    }
+    resize.observe(canvas);
+    if (prefersReducedMotion() || painter.duration <= 0) {
+      time = painter.duration;
+      painter.draw(time);
+      return undefined;
+    }
+    return playClock(painter.duration, delay, (seconds) => {
+      time = seconds;
+      painter?.draw(time);
+    });
+  });
+  return () => {
+    unwatch();
+    resize.disconnect();
+    canvas.removeEventListener("webglcontextlost", stop);
+    stop();
+  };
+}

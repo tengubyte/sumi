@@ -77,6 +77,25 @@ export function Range({ label, value, min, max, step, unit = "", onChange }: Ran
   );
 }
 
+/** A counter for `key`, so Replay remounts a demo and it plays again. */
+export function useReplay(): [number, () => void] {
+  const [run, setRun] = useState(0);
+  return [run, () => { setRun((n) => n + 1); }];
+}
+
+/** Buttons that pick one of a few options. */
+export function Choice<T extends string>({ label, options, value, onChange }: { readonly label: string; readonly options: readonly (readonly [T, string])[]; readonly value: T; readonly onChange: (value: T) => void }): JSX.Element {
+  return (
+    <div className="choice" role="group" aria-label={label}>
+      {options.map(([option, text]) => (
+        <button key={option} type="button" aria-pressed={option === value} onClick={() => { onChange(option); }}>
+          {text}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /** True when the visitor's system is in dark mode, kept up to date. */
 export function useDark(): boolean {
   const query = "(prefers-color-scheme: dark)";

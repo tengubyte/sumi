@@ -1,6 +1,6 @@
 # sumi
 
-Brush and ink effects for React. `BrushReveal` paints brush art in the way the stroke was laid, and `InkSplat` throws an ink splat drawn in code. Each effect is one WebGL canvas that plays once when it scrolls into view. There are no dependencies besides React, and the core works without React too.
+Brush and ink effects for React. `BrushReveal` paints brush art in the way the stroke was laid. `BrushPaint` writes any SVG's strokes, such as a kanji from KanjiVG, with a brush drawn in code, and `Enso` draws an ensō from a seed. `Suminagashi` floats ink on water, and `InkSplat` throws an ink splat drawn in code. Each effect is one WebGL canvas that plays once when it scrolls into view. There are no dependencies besides React, and the core works without React too.
 
 Live demos: [sumi.tengubyte.io](https://sumi.tengubyte.io)
 
@@ -9,7 +9,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.1.0
+npm install github:tengubyte/sumi#v0.2.0
 ```
 
 ## BrushReveal
@@ -39,6 +39,62 @@ The art must be on a transparent background, and its stroke must travel the way 
 | `ease` | `(t: number) => number` | `joHaKyu` | Pass a stable function. |
 | `alt`, `className`, `style` | | | Width alone keeps the art's shape; width and height stretch it. |
 
+## BrushPaint
+
+```tsx
+import { BrushPaint } from "@tengubyte/sumi";
+import ei from "./06c38.svg?raw"; // 永 from KanjiVG
+
+<BrushPaint svg={ei} label="永" style={{ width: 360, aspectRatio: "1" }} />
+```
+
+Paints every path, line, polyline, polygon, circle, ellipse and rect in the SVG, in document order, as one stroke along its centre line. Fills are ignored. No raster art: the brush lands and presses, runs lighter through the middle, shoulders into each sharp turn and dries out toward the end.
+
+How a stroke leaves the paper comes from KanjiVG's `kvg:type` on each stroke. In any other SVG, set `data-brush-end` on a shape to `tome` (press and stop, the default), `harai` (sweep out to a point), `hane` (flick off a hook), `na` (widen, then sweep out), `rise` or `dot`.
+
+KanjiVG's stroke data is CC BY-SA 3.0 (Ulrich Apel, [kanjivg.tagaini.net](https://kanjivg.tagaini.net/)), so it is not bundled. Fetch or import the characters you need and credit KanjiVG.
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `svg` | `string` | required | SVG markup made of strokes. |
+| `label` | `string` | | What the art says. Without it the canvas is hidden from assistive technology. |
+| `weight` | `number` | `0.034` | Brush radius as a share of the art's width. |
+| `speed` | `number` | `1` | 2 paints twice as fast. |
+| `color` | `` `#${string}` `` | `"#161314"` | The ink. |
+| `bleed` | `number` | `0.07` | Ink that bleeds into the paper past the edges, 0 to 0.3. |
+| `contrast` | `number` | `0.8` | How much thinner horizontals are than verticals, 0 to 1. |
+| `bristles` | `number` | `22` | Bristle lines across the brush. |
+| `delay` | `number` | `0` | Seconds after it is in view. |
+| `className`, `style` | | | Size the canvas here; the art sits centred without stretching. |
+
+## Enso
+
+```tsx
+import { Enso } from "@tengubyte/sumi";
+
+<Enso seed={42} style={{ width: 360, aspectRatio: "1" }} />
+```
+
+The same brush given one stroke made from a seed: where it starts, how far round it goes, its wobble, weight and how dry its tail runs. The same seed always draws the same ensō. Takes `seed` (default `7`), `weight` (default from the seed), and `speed`, `color`, `bleed` and `delay` as for `BrushPaint`.
+
+## Suminagashi
+
+```tsx
+import { Suminagashi } from "@tengubyte/sumi";
+
+<Suminagashi pattern="flow" style={{ width: 480, aspectRatio: "4 / 3" }} />
+```
+
+Drops of ink and clear water land on one spot in turn, each pushing the last outward into a ring, then a wave, a comb or a slow turn pulls the rings into flowing lines. There is no fluid simulation: each step is an exact, area-preserving map of the water's surface, after Lu, Jaffer et al., "Mathematical Marbling" (2012), so every pixel runs the list backwards to find where its ink came from.
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `pattern` | `"flow" \| "rings" \| "comb"` | `"flow"` | A preset, laid out for the canvas's shape. |
+| `ops` | `MarbleOp[]` | | Your own drops, ring systems, tines, waves and vortices instead. Positions in tray heights. |
+| `color` | `` `#${string}` `` | `"#161314"` | The ink. Pale rings are the same ink, thinner. |
+| `accent` | `` `#${string}` `` | `"#d8001a"` | The one accent ring. |
+| `delay` | `number` | `0` | Seconds after it is in view. |
+
 ## InkSplat
 
 ```tsx
@@ -63,10 +119,13 @@ No art needed. Size the canvas with CSS; the splat scales with its width. With t
 ## Without React
 
 ```ts
-import { paintIn, throwSplat } from "@tengubyte/sumi/core";
+import { floatInk, paintEnso, paintIn, paintStrokes, throwSplat } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
+const stopWrite = paintStrokes(document.querySelector("canvas.kanji")!, svgMarkup, { weight: 0.03 });
+const stopEnso = paintEnso(document.querySelector("canvas.enso")!, { seed: 42 });
+const stopFloat = floatInk(document.querySelector("canvas.water")!, { pattern: "rings" });
 const stopSplat = throwSplat(document.querySelector("canvas.splat")!, { seed: 12 });
 ```
 
@@ -75,10 +134,10 @@ Each call returns its cleanup.
 ## What every effect does
 
 - Plays once, when it has scrolled a little way into view.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, or the landed splat.
-- Without WebGL, `BrushReveal` shows the plain image and `InkSplat` shows nothing.
-- `BrushReveal` ends on the image's own pixels, hands back to the plain image and releases its WebGL context. `InkSplat` keeps its last frame and redraws it on resize.
-- Both components are marked `"use client"` for React Server Components.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water or the landed splat.
+- Without WebGL, `BrushReveal` shows the plain image and the canvas effects show nothing.
+- `BrushReveal` ends on the image's own pixels, hands back to the plain image and releases its WebGL context. The canvas effects keep their last frame and redraw it on resize.
+- Every component is marked `"use client"` for React Server Components.
 
 ## Development
 
@@ -92,4 +151,4 @@ The site in `site/` deploys to Cloudflare Pages from `main`: build command `npm 
 
 ## License
 
-The code is MIT licensed. The ensō and band art used on the showcase site belong to TenguByte and are not part of the package.
+The code is MIT licensed. The ensō and band art used on the showcase site belong to TenguByte and are not part of the package. The KanjiVG files in `site/src/kanji` are CC BY-SA 3.0, Ulrich Apel, and are not part of the package either.

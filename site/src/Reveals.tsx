@@ -1,11 +1,6 @@
 import { BrushReveal } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { Code, Range, Study } from "./parts";
-
-function useReplay(): [number, () => void] {
-  const [run, setRun] = useState(0);
-  return [run, () => { setRun((n) => n + 1); }];
-}
+import { Code, Range, Study, useReplay } from "./parts";
 
 export function RingStudy(): JSX.Element {
   const [run, replay] = useReplay();
