@@ -55,6 +55,9 @@ code, pre { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospa
 .mark .kanji { font-size: 2rem; }
 .top nav { margin-left: auto; display: flex; gap: 24px; }
 .top nav a { display: inline-flex; align-items: center; min-height: 44px; }
+/* The maker's crest stays small: sumi is the mark here, TenguByte signs it. */
+.maker { display: inline-flex; align-items: center; gap: 8px; vertical-align: bottom; }
+.maker img { flex: none; }
 
 .hero { display: grid; gap: 40px; align-items: center; padding-block: 56px 72px; }
 @media (min-width: 900px) { .hero { grid-template-columns: 1.1fr 1fr; padding-block: 80px 96px; } }

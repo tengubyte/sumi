@@ -23,7 +23,10 @@ export function App(): JSX.Element {
             </a>
             <nav aria-label="Links">
               <a href="https://github.com/tengubyte/sumi">GitHub</a>
-              <a href="https://tengubyte.io/">TenguByte</a>
+              <a className="maker" href="https://tengubyte.io/">
+                <img src="/tengubyte.svg" alt="" width={22} height={22} />
+                TenguByte
+              </a>
             </nav>
           </header>
           <section className="hero" aria-labelledby="hero-title">
@@ -47,8 +50,12 @@ export function App(): JSX.Element {
       </main>
       <footer className="wrap">
         <p>
-          Made by <a href="https://tengubyte.io/">TenguByte</a>, a small software studio. Sumi (墨) is the ink of
-          Japanese brush painting.
+          Made by{" "}
+          <a className="maker" href="https://tengubyte.io/">
+            <img src="/tengubyte.svg" alt="" width={20} height={20} />
+            TenguByte
+          </a>
+          , a small software studio. Sumi (墨) is the ink of Japanese brush painting.
         </p>
         <p>
           The code is MIT licensed. The ensō and band art on this page belong to TenguByte and are not part of the
