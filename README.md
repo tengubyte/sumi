@@ -1,31 +1,34 @@
 # sumi
 
-Eleven brush and ink effects for React, listed in the table below. Each one is a WebGL shader that plays once as it scrolls into view; `inkTransition` plays each time it is called. React is the only dependency, and the core works without it.
+Fourteen brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, and `Hinoko` burns while it is on screen. React is the only dependency, and the core works without it.
 
-Live demos: [sumi.tengubyte.io](https://sumi.tengubyte.io)
+Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects)
 
 Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://tengubyte.io).
 
 | Effect | What it does | Demo |
 | --- | --- | --- |
-| [BrushReveal](#brushreveal) | Paints brush art in the way the stroke was laid | [ring](https://sumi.tengubyte.io/#ring) |
-| [BrushPaint](#brushpaint) | Writes an SVG's strokes with a brush | [kanji](https://sumi.tengubyte.io/#brush) |
-| [BrushMark](#brushmark) | Paints a mark round words | [marks](https://sumi.tengubyte.io/#mark) |
-| [Hanko](#hanko) | Presses a seal | [seal](https://sumi.tengubyte.io/#hanko) |
-| [Enso](#enso) | Draws an ensō from a seed | [ensō](https://sumi.tengubyte.io/#enso) |
-| [Suminagashi](#suminagashi) | Floats ink on water | [water](https://sumi.tengubyte.io/#float) |
-| [InkDrop](#inkdrop) | Drops ink into still water | [drop](https://sumi.tengubyte.io/#drop) |
-| [InkWipe](#inkwipe) | Brings an image in under ink | [image](https://sumi.tengubyte.io/#wipe) |
-| [inkTransition](#inktransition) | Changes the page under ink | [page](https://sumi.tengubyte.io/#transition) |
-| [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/#sansui) |
-| [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/#splat) |
+| [BrushReveal](#brushreveal) | Paints brush art in the way the stroke was laid | [ring](https://sumi.tengubyte.io/effects#ring) |
+| [BrushPaint](#brushpaint) | Writes an SVG's strokes with a brush | [kanji](https://sumi.tengubyte.io/effects#brush) |
+| [BrushMark](#brushmark) | Paints a mark round words | [marks](https://sumi.tengubyte.io/effects#mark) |
+| [Hanko](#hanko) | Presses a seal | [seal](https://sumi.tengubyte.io/effects#hanko) |
+| [KanjiStrike](#kanjistrike) | Strikes one character in a single brush sweep | [strike](https://sumi.tengubyte.io/effects#strike) |
+| [Enso](#enso) | Draws an ensō from a seed | [ensō](https://sumi.tengubyte.io/effects#enso) |
+| [Suminagashi](#suminagashi) | Floats ink on water | [water](https://sumi.tengubyte.io/effects#float) |
+| [InkDrop](#inkdrop) | Drops ink into still water | [drop](https://sumi.tengubyte.io/effects#drop) |
+| [InkWipe](#inkwipe) | Brings an image in under ink | [image](https://sumi.tengubyte.io/effects#wipe) |
+| [inkTransition](#inktransition) | Changes the page under ink | [page](https://sumi.tengubyte.io/effects#transition) |
+| [TornEdge](#tornedge) | Tears paper round a picture or across a section | [tear](https://sumi.tengubyte.io/effects#torn) |
+| [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
+| [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
+| [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
 
 The core calls for pages without React are under [Without React](#without-react).
 
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.4.0
+npm install github:tengubyte/sumi#v0.5.0
 ```
 
 ## BrushReveal
@@ -117,6 +120,28 @@ A seal pressed in vermilion paste. It comes down, is rocked once round its face 
 | `speed`, `delay` | `number` | `1`, `0` | It takes 1.6 seconds at speed 1. |
 
 The characters come from the font you pass, so sumi ships no glyph data.
+
+## KanjiStrike
+
+```tsx
+import { KanjiStrike } from "@tengubyte/sumi";
+
+<KanjiStrike text="死" label="Death" font='"Yuji Syuku"' glow style={{ width: 320, aspectRatio: "1" }} />
+```
+
+One character in one sweep of the brush. The front of the sweep is streaky with bristles, the brush runs dry toward the end, and drops fly off where it stops. It lands a little large and shakes, then the ink creeps a short way into the paper. It suits alerts, error pages and title cards.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `text` | `string` | required | One character, or two. |
+| `label` | `string` | | What it means. Without it the canvas is hidden from assistive technology. |
+| `font`, `weight` | `string`, `number` | a Mincho stack, `700` | A CSS font family you load. The strike waits for it. A brush face such as Yuji Syuku suits it. |
+| `color` | `` `#${string}` `` | `"#d8001a"` | The ink. |
+| `angle` | `number` | `-20` | Direction of the sweep, degrees clockwise from pointing right. |
+| `glow` | `boolean` | `false` | A red halo, for dark pages. |
+| `seed` | `number` | `1` | Changes the streaks and the drops. |
+| `speed`, `delay` | `number` | `1`, `0` | It takes 1.8 seconds at speed 1. |
+| `className`, `style` | | | Size the canvas here; the character takes 92% of its shorter side. |
 
 ## Enso
 
@@ -212,6 +237,34 @@ Ink floods the window from a point until nothing shows, `swap` runs, then paper 
 
 Clicks pass through the ink to the page under it. With reduced motion, or without WebGL, it just calls `swap`.
 
+## TornEdge
+
+```tsx
+import { TornBand, TornEdge } from "@tengubyte/sumi";
+
+// The border tears away to a ragged frame.
+<TornEdge src="/scroll.webp" width={1200} height={674} alt="A hanging scroll" />
+
+// A paper cover tears off, leaving the plain image.
+<TornEdge tear="cover" src="/scroll.webp" width={1200} height={674} alt="A hanging scroll" />
+
+// A dark band whose bottom edge tears across, for the end of a section.
+<TornBand color="#161314" style={{ width: "100%", height: 96 }} />
+```
+
+Paper torn by hand. The edge wanders at three scales, a thin white core shows where the tear split the sheet, and long fibres reach past it. The torn sheet throws a soft shadow. The tear is measured in pixels, so a thumbnail and a hero tear alike.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | `TornEdge`: the picture, and its own size in px. |
+| `tear` | `"frame" \| "cover"` | `"frame"` | `TornEdge`: tear the border off to a ragged frame, which stays, or tear a cover off and end on the plain image. |
+| `side` | `"bottom" \| "top"` | `"bottom"` | `TornBand`: which edge of the band is torn. |
+| `color` | `` `#${string}` `` | `"#161314"`, cover `"#dbd1bd"` | The band, or the cover's paper. |
+| `edge` | `` `#${string}` `` | `"#fdfcfa"` | The white core along the tear. |
+| `seed` | `number` | `1` | Changes the path of the tear. |
+| `duration`, `delay` | `number` | `1.4` (band `1.6`), `0` | Seconds the tear takes, and seconds to wait once in view. |
+| `className`, `style` | | | `TornEdge`: width alone keeps the image's shape. `TornBand`: full width and 80 to 120 px tall suits a section edge. |
+
 ## Sansui
 
 ```tsx
@@ -243,10 +296,36 @@ The splat is drawn in code from the seed. Size the canvas with CSS; the splat sc
 | `mist` | `number` | `0.55` | How much mist, 0 to 1. |
 | `duration`, `delay` | `number` | `2.2`, `0` | Seconds until the last mist lands, and seconds to wait once in view. |
 
+## Hinoko
+
+```tsx
+import { Hinoko } from "@tengubyte/sumi";
+
+<div style={{ position: "relative", background: "#100d0e" }}>
+  <img src="/castle.webp" width={1200} height={674} alt="A castle on fire" />
+  <Hinoko wind={0.3} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+</div>
+```
+
+Embers off a fire. Each one leaves hot and nearly white, cools to red as it climbs, and sways in the eddies over the heat. A few are flakes of ash that tumble. Embers are light, so they add up on a dark page and vanish on a light one.
+
+Unlike the other effects it keeps going: the fire runs while the canvas is on screen and stops costing anything when it scrolls away. With `burst` it throws one shower once in view and lets it die down. With reduced motion nothing rises.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `count` | `number` | `120` | Embers in the air at once, at most 400. |
+| `burst` | `boolean` | `false` | One shower that dies down, instead of a fire that keeps going. |
+| `from` | `[x, y]` | `[0.5, 1]` | Where they leave from, as shares of the canvas (y down). |
+| `spread` | `number` | `1` (burst `0.1`) | The share of the width they leave across. |
+| `wind` | `number` | `0.15` | Sideways drift, -1 to 1. |
+| `ash` | `number` | `0.1` | The share that are tumbling flakes of ash. |
+| `seed` | `number` | `1` | Changes every ember's path. |
+| `speed`, `delay` | `number` | `1`, `0` | 2 runs twice as fast; seconds to wait once in view. |
+
 ## Without React
 
 ```ts
-import { dropInk, floatInk, inkTransition, paintEnso, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+import { dropInk, floatInk, inkTransition, paintEnso, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -260,6 +339,11 @@ const stopWipe = wipeIn(document.querySelector("img.hero")!, { blots: [[0.5, 0.5
 const stopHills = paintSansui(document.querySelector("canvas.hills")!, { seed: 8 });
 const stopSeal = pressSeal(document.querySelector("canvas.seal")!, "天狗", { shape: "tall", white: true });
 const stopDrop = dropInk(document.querySelector("canvas.water")!, { drops: [[0.5, 0.1]] });
+const stopStrike = strikeKanji(document.querySelector("canvas.death")!, "死", { glow: true });
+// The image must fill a positioned parent; the tear runs on a canvas laid over it.
+const stopTear = tearIn(document.querySelector("img.scroll")!, { tear: "frame" });
+const stopBand = tearBand(document.querySelector("canvas.edge")!, { side: "top" });
+const stopFire = riseEmbers(document.querySelector("canvas.fire")!, { wind: 0.3 });
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });
 ```
 
@@ -267,10 +351,11 @@ Each call returns its cleanup, except `inkTransition`, which returns a promise.
 
 ## What every effect does
 
-- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal or the landed splat. `inkTransition` just swaps.
-- Without WebGL, `BrushReveal` and `InkWipe` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
-- `BrushReveal` and `InkWipe` end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects keep their last frame and redraw it on resize.
+- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, and `Hinoko` burns while it is on screen.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame or the landed splat. `inkTransition` just swaps, a torn cover is already off, and no embers rise.
+- Without WebGL, `BrushReveal`, `InkWipe` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
+- `BrushReveal`, `InkWipe` and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects and a torn frame keep their last frame and redraw it on resize.
+- Each effect holds one WebGL context while it keeps its last frame, and browsers keep about 16 alive per page. Past that the oldest is dropped and its canvas leaves the page, so spread long runs of effects across pages.
 - Every component is marked `"use client"` for React Server Components.
 
 ## Development

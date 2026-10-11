@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX, type ReactNode } from "react";
+import { useEffect, useRef, useState, type JSX, type ReactNode } from "react";
 import { Props, type PropsDoc } from "./Props";
 
 /** A code block with a copy button. */
@@ -34,10 +34,12 @@ interface StudyProps {
   readonly children: ReactNode;
   /** The effect's props table, shown last under how it works. */
   readonly props?: PropsDoc | undefined;
+  /** Keep the demo mounted off screen, for a study whose own code holds on to the demo's elements. */
+  readonly eager?: boolean;
 }
 
 /** One effect: the live demo on one side, how it works, its controls and its props on the other. */
-export function Study({ id, kanji, title, what, stage, children, props }: StudyProps): JSX.Element {
+export function Study({ id, kanji, title, what, stage, children, props, eager = false }: StudyProps): JSX.Element {
   return (
     <section id={id} className="study" aria-labelledby={`${id}-title`}>
       <header>
@@ -50,7 +52,7 @@ export function Study({ id, kanji, title, what, stage, children, props }: StudyP
         </div>
       </header>
       <div className="study-body">
-        <div className="stage">{stage}</div>
+        {eager ? <div className="stage">{stage}</div> : <InView className="stage">{stage}</InView>}
         <div>
           {children}
           {props && <Props {...props} />}
@@ -98,6 +100,37 @@ export function Choice<T extends string>({ label, options, value, onChange }: { 
           {text}
         </button>
       ))}
+    </div>
+  );
+}
+
+/**
+ * Mounts its children only within a screen of the viewport. Chrome keeps about sixteen WebGL contexts and drops
+ * the oldest past that, and every effect releases its context when it unmounts, so a page of demos stays under
+ * the limit. A demo plays again when it comes back. The box keeps its last height, so the page does not jump.
+ */
+function InView({ className, children }: { readonly className?: string; readonly children: ReactNode }): JSX.Element {
+  const box = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  const [height, setHeight] = useState<number>();
+  useEffect(() => {
+    if (!box.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const near = entry?.isIntersecting ?? false;
+        if (!near && box.current) setHeight(box.current.offsetHeight);
+        setShown(near);
+      },
+      { rootMargin: "100% 0px" },
+    );
+    observer.observe(box.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  return (
+    <div ref={box} className={className} style={{ minHeight: height, boxSizing: "border-box" }}>
+      {shown && children}
     </div>
   );
 }

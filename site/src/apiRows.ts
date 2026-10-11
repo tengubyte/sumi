@@ -99,6 +99,41 @@ export const DROP: readonly Row[] = [
   ["className, style", "", "", "Size the canvas here. Each drop sinks about 60% of its height."],
 ];
 
+export const TORN: readonly Row[] = [
+  ["src, width, height, alt", "", "required", "TornEdge: the picture, and its own size in px."],
+  ["tear", '"frame" | "cover"', '"frame"', "TornEdge: tear the border off to a ragged frame, or tear a cover off and end on the plain image."],
+  ["side", '"bottom" | "top"', '"bottom"', "TornBand: which edge of the band is torn."],
+  ["color", "#rrggbb", '"#161314", "#dbd1bd"', "The band, or the cover's paper."],
+  ["edge", "#rrggbb", '"#fdfcfa"', "The white core along the tear."],
+  ["seed", "number", "1", "Changes the path of the tear."],
+  ["duration, delay", "number", "1.4 (band 1.6), 0", "Seconds the tear takes, and seconds to wait once in view."],
+  ["className, style", "", "", "TornBand: full width and 80 to 120 px tall suits a section edge."],
+];
+
+export const STRIKE: readonly Row[] = [
+  ["text", "string", "required", "One character, or two."],
+  ["label", "string", "none", "What it means. Without it the canvas is hidden from assistive technology."],
+  ["font, weight", "string, number", "a Mincho stack, 700", "A CSS font family you load. The strike waits for it."],
+  ["color", "#rrggbb", '"#d8001a"', "The ink."],
+  ["angle", "number", "-20", "Direction of the sweep, degrees clockwise from pointing right."],
+  ["glow", "boolean", "false", "A red halo, for dark pages."],
+  ["seed", "number", "1", "Changes the streaks and the drops."],
+  ["speed, delay", "number", "1, 0", "2 strikes twice as fast; seconds to wait once in view."],
+  ["className, style", "", "", "Size the canvas here; the character takes 92% of its shorter side."],
+];
+
+export const EMBERS: readonly Row[] = [
+  ["count", "number", "120", "Embers in the air at once, at most 400."],
+  ["burst", "boolean", "false", "One shower that dies down, instead of a fire that keeps going."],
+  ["from", "[x, y]", "[0.5, 1]", "Where they leave from, as shares of the canvas."],
+  ["spread", "number", "1 (burst 0.1)", "The share of the width they leave across."],
+  ["wind", "number", "0.15", "Sideways drift, -1 to 1."],
+  ["ash", "number", "0.1", "The share that are tumbling flakes of ash."],
+  ["seed", "number", "1", "Changes every ember's path."],
+  ["speed, delay", "number", "1, 0", "2 runs twice as fast; seconds to wait once in view."],
+  ["className, style", "", "", "Lay the canvas over whatever burns, on a dark page."],
+];
+
 export const TRANSITION: readonly Row[] = [
   ["swap", "() => unknown", "required", "The change to make once nothing shows. A promise keeps the ink down until it settles."],
   ["from", "[x, y]", "[0.5, 0.5]", "Where the ink floods from, as shares of the covered box."],

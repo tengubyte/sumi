@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://sumi.tengubyte.io/sitemap.xml

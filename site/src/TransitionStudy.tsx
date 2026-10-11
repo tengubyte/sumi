@@ -38,6 +38,7 @@ export function TransitionStudy({ dark }: { readonly dark: boolean }): JSX.Eleme
       title="Change the page under ink"
       what="inkTransition"
       props={{ rows: TRANSITION, label: "inkTransition options" }}
+      eager
       stage={
         <div ref={screen} className={`screen page-${String(page % 2)}`}>
           <h3>{shown.title}</h3>

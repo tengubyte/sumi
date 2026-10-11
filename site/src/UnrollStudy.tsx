@@ -69,6 +69,7 @@ export function UnrollStudy(): JSX.Element {
       kanji="展"
       title="From ring to band"
       what="How the band below was made"
+      eager
       stage={<canvas ref={canvas} aria-hidden="true" style={{ display: "block", width: "100%", aspectRatio: "7 / 3" }} />}
     >
       <p>
