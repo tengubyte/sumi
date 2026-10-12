@@ -1,6 +1,6 @@
 # sumi
 
-Seventeen brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, and `Hinoko` and `Shuchusen` run while they are on screen. React is the only dependency, and the core works without it.
+Twenty brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, `Hinoko` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
 
 Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects)
 
@@ -14,6 +14,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [Hanko](#hanko) | Presses a seal | [seal](https://sumi.tengubyte.io/effects#hanko) |
 | [KanjiStrike](#kanjistrike) | Strikes one character in a single brush sweep | [strike](https://sumi.tengubyte.io/effects#strike) |
 | [Enso](#enso) | Draws an ensō from a seed | [ensō](https://sumi.tengubyte.io/effects#enso) |
+| [Fude](#fude) | A sumi brush the visitor draws with | [draw](https://sumi.tengubyte.io/effects#fude) |
 | [Suminagashi](#suminagashi) | Floats ink on water | [water](https://sumi.tengubyte.io/effects#float) |
 | [InkDrop](#inkdrop) | Drops ink into still water | [drop](https://sumi.tengubyte.io/effects#drop) |
 | [InkWipe](#inkwipe) | Brings an image in under ink | [image](https://sumi.tengubyte.io/effects#wipe) |
@@ -21,17 +22,19 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [TornEdge](#tornedge) | Tears paper round a picture or across a section | [tear](https://sumi.tengubyte.io/effects#torn) |
 | [Irodori](#irodori) | Colours a picture in from wet blooms | [colour](https://sumi.tengubyte.io/effects#irodori) |
 | [HakeCut](#hakecut) | Brushes a picture in with a wide flat brush, or drags one stroke | [hake](https://sumi.tengubyte.io/effects#hake) |
+| [Tachigami](#tachigami) | Cuts a picture or a word with one slash | [slash](https://sumi.tengubyte.io/effects#slash) |
 | [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
 | [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
 | [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
 | [Shuchusen](#shuchusen) | Draws manga focus lines or speed lines | [lines](https://sumi.tengubyte.io/effects#focus) |
+| [Hanasaka](#hanasaka) | Brings a cherry branch into bloom | [bloom](https://sumi.tengubyte.io/effects#bloom) |
 
 The core calls for pages without React are under [Without React](#without-react).
 
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.6.0
+npm install github:tengubyte/sumi#v0.7.0
 ```
 
 ## BrushReveal
@@ -155,6 +158,34 @@ import { Enso } from "@tengubyte/sumi";
 ```
 
 The same brush given one stroke made from a seed: where it starts, how far round it goes, its wobble, weight and how dry its tail runs. The same seed always draws the same ensō. Takes `seed` (default `7`), `weight` (default from the seed), and `speed`, `color`, `bleed` and `delay` as for `BrushPaint`.
+
+## Fude
+
+```tsx
+import { ensoStroke, Fude, type FudeHandle } from "@tengubyte/sumi";
+
+const brush = useRef<FudeHandle>(null);
+
+<Fude ref={brush} label="Drawing area" onDrawing={setDrawing} style={{ width: "100%", aspectRatio: "4 / 3" }} />
+
+// A hand draws an ensō on it.
+await brush.current?.trace(ensoStroke());
+```
+
+A sumi brush to draw with, by mouse, finger or pen. The brush goes in thin and presses, runs thinner and greyer when fast, and dries out bristle by bristle into streaks. A slow lift stops round; a quick one flicks off to a dry point. A pen's pressure changes the width. The strokes fade once the hand rests, unless `fadeAfter` is 0.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `color` | `` `#${string}` `` | `"#161314"` | The ink. |
+| `size` | `number` | `9` | The brush's half width in CSS px at an even pace. |
+| `dryAfter` | `number` | `1200` | CSS px of stroke a loaded brush lasts before it runs dry. |
+| `fadeAfter` | `number` | `1.6` | Seconds of rest before the strokes fade; 0 keeps them. |
+| `onDrawing` | `(drawing: boolean) => void` | | Told when the brush goes down and comes up, to change the page while drawing. |
+| `seed` | `number` | `1` | Changes how much ink each bristle holds. |
+| `label` | `string` | | What the drawing area is for. Without it the canvas is hidden from assistive technology. |
+| `className`, `style` | | | Size the canvas here. A resize wipes it. |
+
+The ref's `trace(stroke)` draws a stroke as a hand would and resolves when the brush lifts; with reduced motion the stroke lands at once. A stroke is `points` as shares of the canvas (y down), with optional `ms`, `pace(share)` and `pressure(share)`. `ensoStroke(aspect?, radius?)` gives a ready one. `clear()` wipes the paper.
 
 ## Suminagashi
 
@@ -321,6 +352,34 @@ One pass of a hake, the wide flat brush. Its bristles leave long streaks along t
 | `duration`, `delay` | `number` | `1.3` (stroke `1`), `0` | Seconds the stroke takes, and seconds to wait once in view. |
 | `className`, `style` | | | `HakeCut`: width alone keeps the image's shape. `HakeStroke`: size the canvas; the stroke runs through its middle. |
 
+## Tachigami
+
+```tsx
+import { Tachigami, TachigamiText } from "@tengubyte/sumi";
+
+// The top half sticks, slips down the cut and falls away.
+<Tachigami src="/duel.webp" width={1200} height={800} alt="Two swordsmen at dawn" mode="fall" />
+
+// A word cut in two with vermilion ink, the halves left apart.
+<TachigamiText text="一閃" label="Issen, one flash" mode="apart" font='"Yuji Syuku"' color="#d8001a" style={{ width: "100%", aspectRatio: "4 / 3" }} />
+```
+
+One slash of the brush. A dry ink stroke tears across, spraying drops, and the two halves shear apart along it with dark cut faces. By default they close again and the picture hands back to a plain image. `mode="apart"` leaves them parted, and `mode="fall"` lets the top half stick, slip down the cut and tip away; both stay on a canvas over the hidden image. `TachigamiText` draws its text from the font into a canvas and cuts that.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | `Tachigami`: the picture and its own size in px. |
+| `text`, `label` | `string` | required, none | `TachigamiText`: the word, and what it says for screen readers. |
+| `mode` | `"rejoin" \| "apart" \| "fall"` | `"rejoin"` | Close the cut again, leave the halves parted, or let the top half fall. |
+| `through` | `[x, y]` | `[0.5, 0.5]` | A point the cut passes through, as shares of the box (y down). |
+| `angle` | `number` | `17` | The slash's direction in degrees. Positive climbs. |
+| `color` | `` `#${string}` `` | `"#161314"` | The ink of the stroke, the spray and the cut faces. |
+| `glint` | `boolean` | `false` | A white core along the blade, for dark pages. |
+| `font`, `weight`, `textColor` | | Mincho, `900`, `"#161314"` | `TachigamiText`: how the word is drawn. The font loads before the cut. |
+| `seed` | `number` | `1` | Changes the stroke's streaks and the spray. |
+| `duration`, `delay` | `number` | `1.6` (fall `2`), `0` | Seconds the cut takes, and seconds to wait once in view. |
+| `className`, `style` | | | `Tachigami`: width alone keeps the image's shape. `TachigamiText`: size the canvas. |
+
 ## Sansui
 
 ```tsx
@@ -403,10 +462,32 @@ Manga focus lines (集中線). Spikes shoot in from past the edges, taper to poi
 | `angle`, `speed` | `number` | `0`, `1` | Speed lines: their direction in degrees, and how fast they stream. |
 | `seed`, `delay` | `number` | `1`, `0` | Changes every line; seconds to wait once in view. |
 
+## Hanasaka
+
+```tsx
+import { Hanasaka } from "@tengubyte/sumi";
+
+<Hanasaka from={[1.04, 0.06]} angle={-146} style={{ width: "100%", aspectRatio: "4 / 3" }} />
+```
+
+A cherry branch brushed in stroke by stroke, thick at the start and thinning as it forks. Buds swell along it and blossoms burst open one after another, each with an ink outline and a dark heart. Then a few petals let go and tumble away on the wind. The last frame, the branch in full bloom, stays. It is decoration, hidden from assistive technology.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `from` | `[x, y]` | `[-0.04, 0.8]` | Where the branch starts, as shares of the canvas (y down). Past an edge, it grows in from outside. |
+| `angle` | `number` | `26` | The way it grows, in degrees. Positive climbs. |
+| `reach` | `number` | `1` | How far it grows. |
+| `flowers`, `petals` | `number` | `22`, `10` | Blossoms along the branch, up to 28, and petals that fall, up to 16. |
+| `wind` | `[x, y]` | `[0.06, 0.02]` | Where the falling petals drift, per second, as shares of the shorter side (y down). |
+| `bark`, `outline` | `` `#${string}` `` | `"#291f1c"`, `"#3b1f26"` | The branch's ink, and the line round each petal. |
+| `pink`, `heart` | `` `#${string}` `` | `"#f7bfd1"`, `"#db6185"` | The petals, and the deep pink at each flower's heart. |
+| `seed` | `number` | `1` | Grows a different branch. |
+| `duration`, `delay` | `number` | `5`, `0` | Seconds from the first stroke to the last petal, and seconds to wait once in view. |
+
 ## Without React
 
 ```ts
-import { colorIn, dropInk, floatInk, focusLines, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -430,17 +511,23 @@ const stopCut = hakeIn(document.querySelector("img.header")!, { angle: -16 });
 const stopSwash = paintHake(document.querySelector("canvas.swash")!, { color: "#c99e2b", bend: -0.5 });
 const stopLines = focusLines(document.querySelector("canvas.lines")!, { focus: [0.6, 0.4] });
 const stopFire = riseEmbers(document.querySelector("canvas.fire")!, { wind: 0.3 });
+// The image must fill a positioned parent; the cut runs on a canvas laid over it.
+const stopSlash = slashIn(document.querySelector("img.duel")!, { mode: "fall" });
+const stopWord = slashText(document.querySelector("canvas.word")!, "一閃", { color: "#d8001a" });
+const stopBloom = bloomBranch(document.querySelector("canvas.branch")!, { seed: 5 });
+const pad = fudePad(document.querySelector("canvas.sheet")!, { fadeAfter: 0 });
+await pad?.trace(ensoStroke());
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });
 ```
 
-Each call returns its cleanup, except `inkTransition`, which returns a promise.
+Each call returns its cleanup, except `inkTransition`, which returns a promise, and `fudePad`, which returns a pad with `trace`, `clear` and `stop`, or null without WebGL.
 
 ## What every effect does
 
-- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, and `Hinoko` and `Shuchusen` run while they are on screen.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` shows the plain image, focus lines hold still and no embers rise.
-- Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
-- `BrushReveal`, `InkWipe`, `Irodori` and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects, a torn frame and `HakeCut` keep their last frame and redraw it on resize.
+- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, `Hinoko` and `Shuchusen` run while they are on screen, and `Fude` draws when the visitor does.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge, the parted halves, the branch in bloom or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` and a closed `Tachigami` cut show the plain image, focus lines hold still, no embers rise and a traced `Fude` stroke lands at once.
+- Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut`, `Tachigami` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
+- `BrushReveal`, `InkWipe`, `Irodori`, a closed `Tachigami` cut and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects, a torn frame, `HakeCut` and parted or fallen halves keep their last frame and redraw it on resize. `Fude` keeps its context while it is on the page.
 - Each effect holds one WebGL context while it keeps its last frame, and browsers keep about 16 alive per page. Past that the oldest is dropped and its canvas leaves the page, so spread long runs of effects across pages.
 - Every component is marked `"use client"` for React Server Components.
 

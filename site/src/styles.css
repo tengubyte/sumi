@@ -128,6 +128,10 @@ button:disabled { opacity: 0.5; cursor: default; }
 .focus-stage { position: relative; aspect-ratio: 4 / 3; }
 .focus-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .focus-word { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Yuji Syuku", serif; font-size: clamp(4rem, 10vw, 7rem); line-height: 1; }
+.fude-over { position: relative; }
+.fude-over img { display: block; width: 100%; height: auto; transition: filter 0.4s; }
+.fude-over canvas { position: absolute; inset: 0; height: 100%; }
+.fude-over.brushing img { filter: sepia(0.75) saturate(0.55) brightness(1.06) contrast(0.92); }
 .props { margin-top: 32px; border-top: 1px solid var(--line); }
 .props dl { margin: 4px 0 0; }
 .props dl > div { padding-block: 12px; border-bottom: 1px solid var(--line); }

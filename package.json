@@ -1,7 +1,7 @@
 {
   "name": "@tengubyte/sumi",
-  "version": "0.6.0",
-  "description": "Brush and ink effects for React: paint brush art in the way the stroke was laid, write SVG strokes and kanji with a brush drawn in code, mark words, press seals, strike a character in one sweep, paint ink-wash mountains, float ink on water, drop it in, bring images and pages in under ink, colour pictures in from wet blooms, brush them in with a wide flat brush, tear paper, draw manga focus lines, throw ink splats and send up embers. WebGL, no other dependencies.",
+  "version": "0.7.0",
+  "description": "Brush and ink effects for React: paint brush art in the way the stroke was laid, write SVG strokes and kanji with a brush drawn in code, let visitors draw with a sumi brush, mark words, press seals, strike a character in one sweep, cut a picture or a word with one slash, paint ink-wash mountains, bring a cherry branch into bloom, float ink on water, drop it in, bring images and pages in under ink, colour pictures in from wet blooms, brush them in with a wide flat brush, tear paper, draw manga focus lines, throw ink splats and send up embers. WebGL, no other dependencies.",
   "license": "MIT",
   "author": "TenguByte (https://tengubyte.io)",
   "repository": {
@@ -33,6 +33,9 @@
     "dry-brush",
     "manga",
     "focus-lines",
+    "slash",
+    "cherry-blossom",
+    "drawing",
     "animation",
     "shader"
   ],

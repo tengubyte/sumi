@@ -23,6 +23,7 @@ export const EFFECTS: readonly Effect[] = [
   { slug: "hanko", group: "brush", anchors: ["hanko"] },
   { slug: "kanji-strike", group: "brush", anchors: ["strike"] },
   { slug: "enso", group: "brush", anchors: ["enso"] },
+  { slug: "fude", group: "brush", anchors: ["fude"] },
   { slug: "suminagashi", group: "water", anchors: ["float"] },
   { slug: "ink-drop", group: "water", anchors: ["drop"] },
   { slug: "ink-wipe", group: "image", anchors: ["wipe"] },
@@ -30,10 +31,12 @@ export const EFFECTS: readonly Effect[] = [
   { slug: "torn-edge", group: "image", anchors: ["torn"] },
   { slug: "irodori", group: "image", anchors: ["irodori"] },
   { slug: "hake", group: "image", anchors: ["hake"] },
+  { slug: "tachigami", group: "image", anchors: ["slash"] },
   { slug: "sansui", group: "scene", anchors: ["sansui"] },
   { slug: "ink-splat", group: "scene", anchors: ["splat"] },
   { slug: "hinoko", group: "scene", anchors: ["embers"] },
   { slug: "shuchusen", group: "scene", anchors: ["focus"] },
+  { slug: "hanasaka", group: "scene", anchors: ["bloom"] },
 ];
 
 /** The effects page. */

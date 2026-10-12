@@ -5,7 +5,9 @@ import { EmberStudy } from "./EmberStudy";
 import { EnsoStudy } from "./EnsoStudy";
 import { FloatStudy } from "./FloatStudy";
 import { FocusStudy } from "./FocusStudy";
+import { FudeStudy } from "./FudeStudy";
 import { HakeStudy } from "./HakeStudy";
+import { HanasakaStudy } from "./HanasakaStudy";
 import { HankoStudy } from "./HankoStudy";
 import { IrodoriStudy } from "./IrodoriStudy";
 import { MarkStudy } from "./MarkStudy";
@@ -13,6 +15,7 @@ import { BandStudy, RingStudy } from "./Reveals";
 import { SansuiStudy } from "./SansuiStudy";
 import { SplatStudy } from "./SplatStudy";
 import { StrikeStudy } from "./StrikeStudy";
+import { TachigamiStudy } from "./TachigamiStudy";
 import { TornStudy } from "./TornStudy";
 import { TransitionStudy } from "./TransitionStudy";
 import { UnrollStudy } from "./UnrollStudy";
@@ -34,6 +37,7 @@ export const BODIES: Readonly<Record<string, Body>> = {
   hanko: () => <HankoStudy />,
   "kanji-strike": () => <StrikeStudy />,
   enso: (dark) => <EnsoStudy dark={dark} />,
+  fude: (dark) => <FudeStudy dark={dark} />,
   suminagashi: (dark) => <FloatStudy dark={dark} />,
   "ink-drop": (dark) => <DropStudy dark={dark} />,
   "ink-wipe": (dark) => <WipeStudy dark={dark} />,
@@ -41,8 +45,10 @@ export const BODIES: Readonly<Record<string, Body>> = {
   "torn-edge": (dark) => <TornStudy dark={dark} />,
   irodori: () => <IrodoriStudy />,
   hake: () => <HakeStudy />,
+  tachigami: (dark) => <TachigamiStudy dark={dark} />,
   sansui: (dark) => <SansuiStudy dark={dark} />,
   "ink-splat": (dark) => <SplatStudy dark={dark} />,
   hinoko: () => <EmberStudy />,
   shuchusen: (dark) => <FocusStudy dark={dark} />,
+  hanasaka: (dark) => <HanasakaStudy dark={dark} />,
 };
