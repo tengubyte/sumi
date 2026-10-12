@@ -1,4 +1,4 @@
-import { onceInView, playCanvas, playClock, prefersReducedMotion, type CanvasPainter } from "./play.js";
+import { onceInView, overlayCanvas as overlay, playCanvas, playClock, prefersReducedMotion, type CanvasPainter } from "./play.js";
 import { tornPainter, type TornOptions } from "./torn.js";
 
 export interface TearOptions extends TornOptions {
@@ -7,14 +7,6 @@ export interface TearOptions extends TornOptions {
    * sheet of `color` (default aged paper, `#dbd1bd`) off the picture and ends on the plain image.
    */
   readonly tear?: "frame" | "cover" | undefined;
-}
-
-function overlay(image: HTMLImageElement): HTMLCanvasElement {
-  const surface = document.createElement("canvas");
-  surface.setAttribute("aria-hidden", "true");
-  surface.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none";
-  image.after(surface);
-  return surface;
 }
 
 /** The torn frame is the finished look, so its canvas stays over the hidden image and redraws on resize. */

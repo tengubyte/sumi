@@ -10,7 +10,7 @@ export function Api(): JSX.Element {
         The same effects work on plain elements. Each call returns its cleanup, except inkTransition, which returns
         a promise that resolves when the ink has gone.
       </p>
-      <Code>{`import { dropInk, floatInk, inkTransition, paintEnso, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+      <Code>{`import { colorIn, dropInk, floatInk, focusLines, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas over it.
 const stopPaint = paintIn(document.querySelector("img.enso"), { sweep: "ring" });
@@ -28,14 +28,19 @@ const stopStrike = strikeKanji(document.querySelector("canvas.death"), "死", { 
 // The image must fill a positioned parent; the tear runs on a canvas over it.
 const stopTear = tearIn(document.querySelector("img.scroll"), { tear: "frame" });
 const stopBand = tearBand(document.querySelector("canvas.edge"), { side: "top" });
+// The image must fill a positioned parent; the colour and the brush run on a canvas over it.
+const stopColor = colorIn(document.querySelector("img.view"), { seed: 2 });
+const stopCut = hakeIn(document.querySelector("img.header"), { angle: -16 });
+const stopSwash = paintHake(document.querySelector("canvas.swash"), { color: "#c99e2b", bend: -0.5 });
+const stopLines = focusLines(document.querySelector("canvas.lines"), { focus: [0.6, 0.4] });
 const stopFire = riseEmbers(document.querySelector("canvas.fire"), { wind: 0.3 });
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });`}</Code>
       <h3>What every effect does</h3>
       <ul className="facts">
-        <li>Plays once, when it has scrolled a little way into view. inkTransition plays once per call, and Hinoko burns while it is on screen.</li>
-        <li>With reduced motion it shows the last frame: the finished art, the settled water, the torn frame or the landed splat. inkTransition just swaps, a torn cover is already off, and no embers rise.</li>
-        <li>Without WebGL, BrushReveal, InkWipe and TornEdge show the plain image, BrushMark the plain words, inkTransition just swaps, and the others show nothing.</li>
-        <li>BrushReveal, InkWipe, a torn cover and inkTransition release their WebGL context as soon as they finish. The others keep their last frame.</li>
+        <li>Plays once, when it has scrolled a little way into view. inkTransition plays once per call, and Hinoko and Shuchusen run while they are on screen.</li>
+        <li>With reduced motion it shows the last frame: the finished art, the settled water, the torn frame or the landed splat. inkTransition just swaps, a torn cover is already off, Irodori shows the plain image, focus lines hold still and no embers rise.</li>
+        <li>Without WebGL, BrushReveal, InkWipe, Irodori, HakeCut and TornEdge show the plain image, BrushMark the plain words, inkTransition just swaps, and the others show nothing.</li>
+        <li>BrushReveal, InkWipe, Irodori, a torn cover and inkTransition release their WebGL context as soon as they finish. The others keep their last frame.</li>
         <li>No dependencies besides React, which the core does not need.</li>
       </ul>
     </section>

@@ -28,9 +28,12 @@ export const EFFECTS: readonly Effect[] = [
   { slug: "ink-wipe", group: "image", anchors: ["wipe"] },
   { slug: "ink-transition", group: "image", anchors: ["transition"] },
   { slug: "torn-edge", group: "image", anchors: ["torn"] },
+  { slug: "irodori", group: "image", anchors: ["irodori"] },
+  { slug: "hake", group: "image", anchors: ["hake"] },
   { slug: "sansui", group: "scene", anchors: ["sansui"] },
   { slug: "ink-splat", group: "scene", anchors: ["splat"] },
   { slug: "hinoko", group: "scene", anchors: ["embers"] },
+  { slug: "shuchusen", group: "scene", anchors: ["focus"] },
 ];
 
 /** The effects page. */

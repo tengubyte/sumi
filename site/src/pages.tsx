@@ -4,7 +4,10 @@ import { DropStudy } from "./DropStudy";
 import { EmberStudy } from "./EmberStudy";
 import { EnsoStudy } from "./EnsoStudy";
 import { FloatStudy } from "./FloatStudy";
+import { FocusStudy } from "./FocusStudy";
+import { HakeStudy } from "./HakeStudy";
 import { HankoStudy } from "./HankoStudy";
+import { IrodoriStudy } from "./IrodoriStudy";
 import { MarkStudy } from "./MarkStudy";
 import { BandStudy, RingStudy } from "./Reveals";
 import { SansuiStudy } from "./SansuiStudy";
@@ -36,7 +39,10 @@ export const BODIES: Readonly<Record<string, Body>> = {
   "ink-wipe": (dark) => <WipeStudy dark={dark} />,
   "ink-transition": (dark) => <TransitionStudy dark={dark} />,
   "torn-edge": (dark) => <TornStudy dark={dark} />,
+  irodori: () => <IrodoriStudy />,
+  hake: () => <HakeStudy />,
   sansui: (dark) => <SansuiStudy dark={dark} />,
   "ink-splat": (dark) => <SplatStudy dark={dark} />,
   hinoko: () => <EmberStudy />,
+  shuchusen: (dark) => <FocusStudy dark={dark} />,
 };

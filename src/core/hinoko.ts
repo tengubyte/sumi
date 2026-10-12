@@ -1,5 +1,5 @@
 import { HINOKO_FRAGMENT, HINOKO_VERTEX } from "./hinokoGlsl.js";
-import { playCanvas, prefersReducedMotion, type CanvasPainter } from "./play.js";
+import { loopInView, playCanvas, prefersReducedMotion, type CanvasPainter } from "./play.js";
 import { random } from "./random.js";
 import { fitCanvas, linkProgram } from "./webgl.js";
 
@@ -80,54 +80,6 @@ export function emberPainter(canvas: HTMLCanvasElement, options: EmberOptions = 
     dispose() {
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     },
-  };
-}
-
-/**
- * Runs a painter from `create` only while the canvas is on screen, so a fire off screen costs nothing. The
- * WebGL context opens the first time the canvas shows. Returns the cleanup, which releases it.
- */
-function loopInView(canvas: HTMLCanvasElement, create: () => CanvasPainter | null, delay: number): () => void {
-  let painter: CanvasPainter | null = null;
-  let request = 0;
-  let last = 0;
-  let seconds = -delay;
-  let running = false;
-  const tick = (now: number): void => {
-    // A long gap, such as a background tab, moves the clock on by a frame, not by the whole gap.
-    seconds += Math.min((now - last) / 1000, 0.1);
-    last = now;
-    painter?.draw(Math.max(seconds, 0));
-    request = requestAnimationFrame(tick);
-  };
-  // Chrome paints a canvas whose WebGL context was released as a white box, so the canvas leaves the page too.
-  const stop = (): void => {
-    observer.disconnect();
-    cancelAnimationFrame(request);
-    canvas.hidden = true;
-    painter?.dispose();
-    painter = null;
-  };
-  const observer = new IntersectionObserver((entries) => {
-    const visible = entries.some((entry) => entry.isIntersecting);
-    if (visible && !running) {
-      painter ??= create();
-      if (!painter) {
-        stop();
-        return;
-      }
-      last = performance.now();
-      request = requestAnimationFrame(tick);
-    }
-    if (!visible) cancelAnimationFrame(request);
-    running = visible;
-  });
-  canvas.hidden = false;
-  canvas.addEventListener("webglcontextlost", stop);
-  observer.observe(canvas);
-  return () => {
-    canvas.removeEventListener("webglcontextlost", stop);
-    stop();
   };
 }
 

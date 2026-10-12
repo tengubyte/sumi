@@ -1,6 +1,6 @@
 # sumi
 
-Fourteen brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, and `Hinoko` burns while it is on screen. React is the only dependency, and the core works without it.
+Seventeen brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, and `Hinoko` and `Shuchusen` run while they are on screen. React is the only dependency, and the core works without it.
 
 Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects)
 
@@ -19,16 +19,19 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [InkWipe](#inkwipe) | Brings an image in under ink | [image](https://sumi.tengubyte.io/effects#wipe) |
 | [inkTransition](#inktransition) | Changes the page under ink | [page](https://sumi.tengubyte.io/effects#transition) |
 | [TornEdge](#tornedge) | Tears paper round a picture or across a section | [tear](https://sumi.tengubyte.io/effects#torn) |
+| [Irodori](#irodori) | Colours a picture in from wet blooms | [colour](https://sumi.tengubyte.io/effects#irodori) |
+| [HakeCut](#hakecut) | Brushes a picture in with a wide flat brush, or drags one stroke | [hake](https://sumi.tengubyte.io/effects#hake) |
 | [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
 | [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
 | [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
+| [Shuchusen](#shuchusen) | Draws manga focus lines or speed lines | [lines](https://sumi.tengubyte.io/effects#focus) |
 
 The core calls for pages without React are under [Without React](#without-react).
 
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.5.0
+npm install github:tengubyte/sumi#v0.6.0
 ```
 
 ## BrushReveal
@@ -265,6 +268,59 @@ Paper torn by hand. The edge wanders at three scales, a thin white core shows wh
 | `duration`, `delay` | `number` | `1.4` (band `1.6`), `0` | Seconds the tear takes, and seconds to wait once in view. |
 | `className`, `style` | | | `TornEdge`: width alone keeps the image's shape. `TornBand`: full width and 80 to 120 px tall suits a section edge. |
 
+## Irodori
+
+```tsx
+import { Irodori } from "@tengubyte/sumi";
+
+<Irodori src="/view.webp" width={1200} height={800} alt="A red bridge in spring" blooms={[[0.3, 0.4, 0], [0.75, 0.6, 0.15]]} />
+```
+
+The picture starts as an ink wash on paper, then colour seeps in from a few wet blooms. Each bloom has a ragged, lobed edge and a dark rim where the pigment pools, and grows until it meets its neighbours, so fewer blooms take as long as more. Until the colour starts, the browser greys the image, so it never shows in full colour first.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | The picture and its own size in px. |
+| `blooms` | `[x, y, start][]` | three | Up to five: where, as shares of the picture (y down), and when, 0 to 0.9 of the run. Outside 0 to 1 starts past an edge. |
+| `paper`, `ink` | `` `#${string}` `` | `"#f5f1eb"`, `"#161314"` | The light and the dark of the wash. |
+| `seed` | `number` | `1` | Changes the shape of the blooms. |
+| `duration`, `delay` | `number` | `2.6`, `0` | Seconds the colour takes, and seconds to wait once in view. |
+| `className`, `style` | | | Width alone keeps the image's shape. |
+
+Like `InkWipe`, it ends on the image's own pixels and hands back to a plain image.
+
+## HakeCut
+
+```tsx
+import { HakeCut, HakeStroke } from "@tengubyte/sumi";
+
+// The picture keeps the top, above a brushed edge that falls to the right.
+<HakeCut src="/header.webp" width={1200} height={800} alt="Castle walls" />
+
+// The picture inside one brushed band.
+<HakeCut shape="band" thickness={0.5} src="/header.webp" width={1200} height={800} alt="Castle walls" />
+
+// One gold stroke, arching as it climbs.
+<HakeStroke color="#c99e2b" thickness={0.22} bend={-0.5} angle={20} style={{ width: "100%", aspectRatio: "4 / 3" }} />
+```
+
+One pass of a hake, the wide flat brush. Its bristles leave long streaks along the way it travels, the edges break up where the brush runs dry, and the head shows bristle tips as it moves. The bristles are measured in pixels, so they stay fine at any size. The brushed edge stays: the canvas keeps its last frame over the hidden image and redraws it on resize.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | `HakeCut`: the picture and its own size in px. |
+| `shape` | `"edge" \| "band"` | `"edge"` | `HakeCut`: keep the picture on one side of a brushed edge, or inside one band. |
+| `side` | `"top" \| "bottom"` | `"top"` | `HakeCut`: which side of the edge keeps the picture. |
+| `offset` | `number` | `0.2` (band `0`) | `HakeCut`: how far below the middle the edge or band runs, as a share of the height. |
+| `thickness` | `number` | `0.6` (stroke `0.3`) | The band's share of the height, or the stroke's share of the canvas's shorter side. |
+| `streaks` | `number` | `0` | `HakeCut`: white streaks laid over the picture along its edge, 0 to 1. |
+| `color` | `` `#${string}` `` | `"#161314"` | `HakeStroke`: the paint. |
+| `bend` | `number` | `0` | `HakeStroke`: positive sags in the middle, negative arches. |
+| `angle` | `number` | `-12` (stroke `0`) | The way the brush travels, in degrees. Positive climbs. |
+| `seed` | `number` | `1` | Changes the bristles. |
+| `duration`, `delay` | `number` | `1.3` (stroke `1`), `0` | Seconds the stroke takes, and seconds to wait once in view. |
+| `className`, `style` | | | `HakeCut`: width alone keeps the image's shape. `HakeStroke`: size the canvas; the stroke runs through its middle. |
+
 ## Sansui
 
 ```tsx
@@ -322,10 +378,35 @@ Unlike the other effects it keeps going: the fire runs while the canvas is on sc
 | `seed` | `number` | `1` | Changes every ember's path. |
 | `speed`, `delay` | `number` | `1`, `0` | 2 runs twice as fast; seconds to wait once in view. |
 
+## Shuchusen
+
+```tsx
+import { Shuchusen } from "@tengubyte/sumi";
+
+<div style={{ position: "relative", aspectRatio: "4 / 3" }}>
+  <Shuchusen focus={[0.6, 0.4]} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+  <h2>斬</h2>
+</div>
+```
+
+Manga focus lines (集中線). Spikes shoot in from past the edges, taper to points round a clear oval and are drawn anew ten times a second, so they shiver the way hand-inked frames do. `lines="speed"` streams spindles past side by side instead. Like `Hinoko` it runs while the canvas is on screen; with reduced motion it holds one still drawing.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `lines` | `"focus" \| "speed"` | `"focus"` | Lines that run in toward a point, or stream past side by side. |
+| `focus` | `[x, y]` | `[0.5, 0.5]` | The point they run toward, as shares of the canvas (y down). |
+| `clear` | `[x, y]` | `[0.32, 0.3]` | Half the width and half the height of the clear oval, as shares of the canvas. |
+| `count` | `number` | `150` | How many lines go round, 8 to 600. |
+| `weight` | `number` | `1` | Line thickness; 2 is twice as heavy. |
+| `color` | `` `#${string}` `` | `"#161314"` | The ink. |
+| `fps` | `number` | `10` | How often the lines are drawn anew; 0 keeps one drawing. |
+| `angle`, `speed` | `number` | `0`, `1` | Speed lines: their direction in degrees, and how fast they stream. |
+| `seed`, `delay` | `number` | `1`, `0` | Changes every line; seconds to wait once in view. |
+
 ## Without React
 
 ```ts
-import { dropInk, floatInk, inkTransition, paintEnso, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+import { colorIn, dropInk, floatInk, focusLines, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -343,6 +424,11 @@ const stopStrike = strikeKanji(document.querySelector("canvas.death")!, "死", {
 // The image must fill a positioned parent; the tear runs on a canvas laid over it.
 const stopTear = tearIn(document.querySelector("img.scroll")!, { tear: "frame" });
 const stopBand = tearBand(document.querySelector("canvas.edge")!, { side: "top" });
+// The image must fill a positioned parent; the colour and the brush run on a canvas laid over it.
+const stopColor = colorIn(document.querySelector("img.view")!, { seed: 2 });
+const stopCut = hakeIn(document.querySelector("img.header")!, { angle: -16 });
+const stopSwash = paintHake(document.querySelector("canvas.swash")!, { color: "#c99e2b", bend: -0.5 });
+const stopLines = focusLines(document.querySelector("canvas.lines")!, { focus: [0.6, 0.4] });
 const stopFire = riseEmbers(document.querySelector("canvas.fire")!, { wind: 0.3 });
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });
 ```
@@ -351,10 +437,10 @@ Each call returns its cleanup, except `inkTransition`, which returns a promise.
 
 ## What every effect does
 
-- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, and `Hinoko` burns while it is on screen.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame or the landed splat. `inkTransition` just swaps, a torn cover is already off, and no embers rise.
-- Without WebGL, `BrushReveal`, `InkWipe` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
-- `BrushReveal`, `InkWipe` and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects and a torn frame keep their last frame and redraw it on resize.
+- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, and `Hinoko` and `Shuchusen` run while they are on screen.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` shows the plain image, focus lines hold still and no embers rise.
+- Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
+- `BrushReveal`, `InkWipe`, `Irodori` and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects, a torn frame and `HakeCut` keep their last frame and redraw it on resize.
 - Each effect holds one WebGL context while it keeps its last frame, and browsers keep about 16 alive per page. Past that the oldest is dropped and its canvas leaves the page, so spread long runs of effects across pages.
 - Every component is marked `"use client"` for React Server Components.
 
@@ -370,4 +456,4 @@ The site in `site/` deploys to Cloudflare Pages from `main`: build command `npm 
 
 ## License
 
-The code is MIT licensed. The ensō, band and landscape art used on the showcase site belong to TenguByte and are not part of the package. The KanjiVG files in `site/src/kanji` are CC BY-SA 3.0, Ulrich Apel, and are not part of the package either.
+The code is MIT licensed. The ensō, band, landscape and tengu art used on the showcase site belong to TenguByte and are not part of the package. The KanjiVG files in `site/src/kanji` are CC BY-SA 3.0, Ulrich Apel, and are not part of the package either.
