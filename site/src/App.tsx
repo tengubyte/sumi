@@ -4,10 +4,13 @@ import { LIST } from "./effects";
 import { Footer, Header, Hero, NotFound } from "./Layout";
 import { useDark } from "./parts";
 import { rememberedScroll, usePath } from "./router";
-import { Sumigane, SUMIGANE } from "./Sumigane";
+import { ShowcaseList } from "./Showcase";
+import { SHOWCASE, SUMIGANE, TSUKIMI } from "./showcases";
+import { Sumigane } from "./Sumigane";
+import { Tsukimi } from "./Tsukimi";
 
 const SITE = "https://sumi.tengubyte.io";
-const PAGES = [LIST, SUMIGANE] as const;
+const PAGES = [LIST, SHOWCASE, SUMIGANE, TSUKIMI] as const;
 
 /** Each page but home gets its own title and description; the home page keeps those from index.html. */
 function usePageMeta(path: string): void {
@@ -26,6 +29,7 @@ function usePageMeta(path: string): void {
 function Page({ path, dark }: { readonly path: string; readonly dark: boolean }): JSX.Element {
   if (path === "/") return <Hero dark={dark} />;
   if (path === LIST.path) return <EffectList dark={dark} />;
+  if (path === SHOWCASE.path) return <ShowcaseList />;
   return <NotFound />;
 }
 
@@ -47,8 +51,9 @@ export function App(): JSX.Element {
     document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
   }, [path]);
 
-  // The showcase stands as its own site, with its own header and footer.
+  // Each showcase stands as its own site, with its own header and footer.
   if (path === SUMIGANE.path) return <Sumigane />;
+  if (path === TSUKIMI.path) return <Tsukimi />;
   return (
     <>
       <Header />

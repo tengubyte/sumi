@@ -4,16 +4,6 @@ import { Link } from "./router";
 
 const SHAPES = ["Gyuto", "Santoku", "Petty"] as const;
 
-/** sumi speaking above the forge's own header: the forge is made up, and this is the way back to the docs. */
-export function ShowcaseBar(): JSX.Element {
-  return (
-    <p className="forge-bar">
-      A showcase for sumi. Sumigane is made up, and everything that moves here is a sumi effect, named in its caption.{" "}
-      <Link to="/">Back to sumi</Link>
-    </p>
-  );
-}
-
 export function ForgeHeader(): JSX.Element {
   return (
     <header className="forge-top wrap">

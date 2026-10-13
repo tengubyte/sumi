@@ -4,7 +4,7 @@ import { LIST } from "./effects";
 import { Code } from "./parts";
 import { Link } from "./router";
 import { sumiFor } from "./SplatStudy";
-import { SUMIGANE } from "./Sumigane";
+import { SHOWCASE } from "./showcases";
 
 /** The mark and the site links, on every page. The effects have their own page, so this stays one row however many ship. */
 export function Header(): JSX.Element {
@@ -20,7 +20,7 @@ export function Header(): JSX.Element {
         <nav aria-label="Site">
           <Link to="/">Home</Link>
           <Link to={LIST.path}>Effects</Link>
-          <Link to={SUMIGANE.path}>Showcase</Link>
+          <Link to={SHOWCASE.path}>Showcase</Link>
           <a href="https://github.com/tengubyte/sumi">GitHub</a>
           <a className="maker" href="https://tengubyte.io/">
             <img src="/tengubyte.svg" alt="" width={22} height={22} />
@@ -54,7 +54,7 @@ export function Hero({ dark }: { readonly dark: boolean }): JSX.Element {
           </p>
           <Code>npm install github:tengubyte/sumi#v0.9.0</Code>
           <p className="more">
-            <Link to={LIST.path}>See every effect</Link> or <Link to={SUMIGANE.path}>see six of them build a page</Link>
+            <Link to={LIST.path}>See every effect</Link> or <Link to={SHOWCASE.path}>see them build two made-up sites</Link>
           </p>
         </div>
       </section>

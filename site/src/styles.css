@@ -180,12 +180,6 @@ body:has(.forge-page) { background: #f5f1ee; }
 .forge-page figure { margin: 0; }
 .forge-page figcaption, .forge-cap { margin: 8px 0 0; font-size: 0.875rem; color: var(--f-soft); }
 .forge-page h2 { margin: 0 0 16px; font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; }
-/* sumi speaking, in the docs type, so it reads as apart from the forge. */
-.forge-page .forge-bar {
-  max-width: none; margin: 0; padding: 10px 16px; background: var(--f-ink); color: var(--f-ash);
-  font-family: "Zen Kaku Gothic New", ui-sans-serif, sans-serif; font-weight: 400; font-size: 0.875rem; text-align: center;
-}
-.forge-page .forge-bar a { color: var(--f-glow); }
 .forge-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 24px; min-height: 72px; padding-block: 8px; }
 .forge-page .forge-mark { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--f-ink); font-size: 1.25rem; font-weight: 700; }
 .forge-mark span { font-family: "Yuji Syuku", serif; font-weight: 400; font-size: 1.75rem; }
@@ -246,3 +240,91 @@ body:has(.forge-page) { background: #f5f1ee; }
 .forge-sent h3:focus { outline: none; }
 .forge-page .forge-again { border: 1px solid var(--f-field); background: transparent; color: var(--f-ink); }
 .forge-page .forge-again:hover { border-color: var(--f-ink); }
+
+/*
+ * The Tsukimi-an showcase. Night is the brand, so the page stays dark in either site theme. Gold is the moon, the
+ * booking button and the seal; the focus ring takes it too, because red falls to 3.4:1 on this indigo.
+ */
+.tsuki-page {
+  --t-night: #11152a; --t-deep: #0c0f20; --t-paper: #ece6d6; --t-soft: #b8b6c8; --t-field: #7f87a8; --t-gold: #e3c77a;
+  background: var(--t-night); color: var(--t-paper); color-scheme: dark;
+  font-family: "Zen Maru Gothic", ui-rounded, sans-serif; font-weight: 400;
+}
+body:has(.tsuki-page) { background: #11152a; }
+.tsuki-page :focus-visible { outline-color: var(--t-gold); }
+.tsuki-page a { color: var(--t-paper); text-decoration-color: currentColor; }
+.tsuki-page p { max-width: 60ch; color: var(--t-soft); }
+.tsuki-page figure { margin: 0; }
+.tsuki-page figcaption { margin: 8px 0 0; font-size: 0.875rem; color: var(--t-soft); }
+.tsuki-page h1, .tsuki-page h2, .tsuki-page h3 { color: var(--t-paper); font-weight: 700; letter-spacing: 0; }
+.tsuki-page h2 { margin: 0 0 16px; font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.15; }
+.tsuki-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 24px; min-height: 72px; padding-block: 8px; }
+.tsuki-page .tsuki-mark { display: flex; align-items: baseline; gap: 10px; margin: 0; color: var(--t-paper); font-size: 1.25rem; font-weight: 700; }
+.tsuki-mark span { font-family: "Yuji Syuku", serif; font-weight: 400; font-size: 1.75rem; }
+.tsuki-top nav { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.tsuki-top nav a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 400; text-decoration: none; }
+.tsuki-top nav a:hover { text-decoration: underline; }
+/* The ridges run full bleed; the name sits under them in the clear night. */
+.tsuki-ridges { display: block; width: 100%; aspect-ratio: 4 / 3; }
+@media (min-width: 640px) { .tsuki-ridges { aspect-ratio: 2.4 / 1; } }
+.tsuki-hero figcaption { text-align: right; }
+.tsuki-intro { padding-block: 24px 64px; }
+.tsuki-intro h1 { margin: 0 0 12px; font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.05; }
+.tsuki-intro p { margin: 0 0 24px; font-size: 1.125rem; }
+.tsuki-page .tsuki-button {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 8px;
+  background: var(--t-gold); color: var(--t-night); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.tsuki-page .tsuki-button:hover { background: #f0dc9e; }
+.tsuki-tea { display: grid; gap: 24px 56px; align-items: center; padding-block: 56px; }
+@media (min-width: 900px) { .tsuki-tea { grid-template-columns: 1.1fr 1fr; } }
+.tsuki-drop { display: block; width: 100%; aspect-ratio: 4 / 3; }
+.tsuki-spring { padding-top: 56px; background: var(--t-deep); }
+.tsuki-branch { display: block; width: 100%; aspect-ratio: 4 / 3; }
+@media (min-width: 640px) { .tsuki-branch { aspect-ratio: 3 / 1; } }
+.tsuki-spring figcaption { padding-bottom: 24px; text-align: right; }
+.tsuki-circle { display: grid; justify-items: center; padding-block: 72px; text-align: center; }
+.tsuki-ring { display: grid; place-items: center; width: min(100%, 30rem); }
+.tsuki-ring > * { grid-area: 1 / 1; }
+.tsuki-enso { display: block; width: 100%; aspect-ratio: 1; }
+.tsuki-ring h2 { margin: 0; }
+.tsuki-circle p { margin: 24px 0 0; max-width: 40ch; }
+.tsuki-page .tsuki-cap { margin-top: 12px; font-size: 0.875rem; }
+.tsuki-book { padding-block: 56px 72px; }
+.tsuki-form { display: grid; gap: 20px; max-width: 32rem; margin-top: 24px; }
+.tsuki-form label { display: grid; gap: 6px; font-weight: 700; }
+.tsuki-form input:not([type="radio"]), .tsuki-form select {
+  min-height: 44px; padding: 0 12px; border: 1px solid var(--t-field); border-radius: 8px; background: #181d36;
+  color: var(--t-paper); font: inherit;
+}
+.tsuki-form fieldset { display: grid; margin: 0; padding: 0; border: 0; }
+.tsuki-form legend { margin-bottom: 6px; padding: 0; font-weight: 700; }
+.tsuki-form fieldset label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; }
+.tsuki-form input[type="radio"] { width: 20px; height: 20px; accent-color: var(--t-gold); }
+.tsuki-form .tsuki-button { justify-self: start; }
+.tsuki-sent { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 40px; margin-top: 24px; }
+.tsuki-seal { display: block; width: 128px; aspect-ratio: 1; }
+.tsuki-sent h3 { margin: 0 0 8px; font-size: 1.5rem; }
+.tsuki-sent h3:focus { outline: none; }
+.tsuki-page .tsuki-again { border: 1px solid var(--t-field); background: transparent; color: var(--t-paper); }
+.tsuki-page .tsuki-again:hover { border-color: var(--t-paper); }
+.tsuki-page .tsuki-foot { margin: 0 auto; padding-block: 32px 48px; border-top: 1px solid #2a3050; color: var(--t-soft); }
+
+/* sumi speaking above a showcase, in the docs type and colours, so it reads as apart from the made-up site. */
+p.showcase-bar {
+  max-width: none; margin: 0; padding: 10px 16px; background: #161314; color: #bdb3ac; text-align: center;
+  font-family: "Zen Kaku Gothic New", ui-sans-serif, sans-serif; font-weight: 400; font-size: 0.875rem;
+}
+.showcase-bar a { margin-left: 12px; color: #f3eee9; text-decoration-color: var(--red); }
+
+/* The index: one card per made-up site, each playing its lead effect on its own ground. */
+.showcase-grid { display: grid; gap: 32px; margin: 0 0 48px; padding: 0; list-style: none; }
+@media (min-width: 760px) { .showcase-grid { grid-template-columns: 1fr 1fr; } }
+.showcase-card { position: relative; }
+.showcase-stage { overflow: hidden; border-radius: 8px; }
+.showcase-preview { display: block; width: 100%; aspect-ratio: 16 / 10; }
+.showcase-card h2 { margin: 16px 0 6px; font-size: 1.5rem; }
+/* The whole card opens the site, through the one link in its heading. */
+.showcase-card h2 a::after { content: ""; position: absolute; inset: 0; }
+.showcase-card p { margin: 0 0 6px; }
+.showcase-uses { color: var(--ink-soft); font-size: 0.9375rem; }

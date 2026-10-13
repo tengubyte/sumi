@@ -2,17 +2,8 @@ import "@fontsource/shippori-mincho/latin-500.css";
 import "@fontsource/shippori-mincho/latin-700.css";
 import { Hinoko, Kaen, Suminagashi, TachigamiText, TornBand } from "@tengubyte/sumi";
 import type { JSX } from "react";
-import { ForgeFooter, ForgeHeader, Order, ShowcaseBar } from "./SumiganeParts";
-
-/**
- * The showcase page: a made-up knife forge built from six of the effects, each named in a caption. It brings its
- * own header, footer and type, so it reads as another site that uses sumi rather than a page of the docs.
- */
-export const SUMIGANE = {
-  path: "/showcase/sumigane",
-  name: "Sumigane Forge",
-  line: "A made-up knife forge built from sumi effects: a cut, torn paper, fire, embers, floating ink and a seal.",
-} as const;
+import { ShowcaseBar } from "./Showcase";
+import { ForgeFooter, ForgeHeader, Order } from "./SumiganeParts";
 
 const PAPER = "#f5f1ee";
 
@@ -107,10 +98,14 @@ function Finish(): JSX.Element {
   );
 }
 
+/**
+ * A made-up knife forge built from six of the effects, each named in a caption. It brings its own header, footer
+ * and type, so it reads as another site that uses sumi rather than a page of the docs.
+ */
 export function Sumigane(): JSX.Element {
   return (
     <div className="forge-page">
-      <ShowcaseBar />
+      <ShowcaseBar name="Sumigane" />
       <ForgeHeader />
       <main>
         <Hero />
