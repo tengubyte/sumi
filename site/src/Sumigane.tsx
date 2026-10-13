@@ -49,8 +49,12 @@ function Forge(): JSX.Element {
         </p>
         <p>Each blade starts as a core of hard steel welded between two layers of soft iron. The hammer draws it out, then it is quenched in water and tempered.</p>
         <p className="forge-cap">
-          Fire by <a href="/effects#fire">Kaen</a>, embers by <a href="/effects#embers">Hinoko</a>, the torn edges by{" "}
-          <a href="/effects#torn">TornBand</a>
+          {/* Hinoko draws nothing under reduced motion, so the caption stops naming it there. */}
+          Fire by <a href="/effects#fire">Kaen</a>,{" "}
+          <span className="forge-embers">
+            embers by <a href="/effects#embers">Hinoko</a>,{" "}
+          </span>
+          the torn edges by <a href="/effects#torn">TornBand</a>
         </p>
       </div>
       <div className="forge-fire">
@@ -114,7 +118,7 @@ export function Sumigane(): JSX.Element {
         <Finish />
         <section id="order" className="forge-order wrap" aria-labelledby="order-title">
           <h2 id="order-title">Order a knife</h2>
-          <p>Pick a shape and a finish. The forge is made up, so the order goes nowhere, but sending it shows the seal a forge would press on your slip.</p>
+          <p>Pick a shape and a finish. Nothing leaves this page. Sending the order shows the seal a forge would press on your slip.</p>
           <Order />
         </section>
       </main>

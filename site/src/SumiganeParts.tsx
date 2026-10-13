@@ -27,8 +27,7 @@ export function ForgeFooter(): JSX.Element {
   return (
     <footer className="forge-foot wrap">
       <p>
-        Sumigane is a made-up forge. The page shows <Link to="/">sumi</Link>, brush and ink effects for React, made by{" "}
-        <a href="https://tengubyte.io/">TenguByte</a>.
+        Built with <Link to="/">sumi</Link>, brush and ink effects for React, by <a href="https://tengubyte.io/">TenguByte</a>.
       </p>
     </footer>
   );
@@ -52,7 +51,7 @@ function Sent({ name, again }: { readonly name: string; readonly again: () => vo
         <h3 ref={heading} tabIndex={-1}>
           Order noted{name === "" ? "" : `, ${name}`}.
         </h3>
-        <p>Nothing was sent. Sumigane is made up for this showcase, and this is the seal a forge would press on your order slip.</p>
+        <p>This is the seal Sumigane would press on your order slip.</p>
         <button type="button" className="forge-again" onClick={again}>
           Start again
         </button>
@@ -75,10 +74,6 @@ export function Order(): JSX.Element {
       <label>
         Your name
         <input name="name" autoComplete="name" required />
-      </label>
-      <label>
-        Email
-        <input name="email" type="email" autoComplete="email" required />
       </label>
       <label>
         Shape

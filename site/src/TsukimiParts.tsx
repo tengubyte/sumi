@@ -2,7 +2,7 @@ import { Hanko } from "@tengubyte/sumi";
 import { useEffect, useRef, useState, type JSX, type SyntheticEvent } from "react";
 import { Link } from "./router";
 
-const NIGHTS = ["A spring night, under the cherry", "An autumn night, under the full moon"] as const;
+const NIGHTS = ["a spring night under the cherry", "an autumn night under the full moon"] as const;
 
 export function TsukiHeader(): JSX.Element {
   return (
@@ -27,8 +27,7 @@ export function TsukiFooter(): JSX.Element {
   return (
     <footer className="tsuki-foot wrap">
       <p>
-        Tsukimi-an is a made-up tea house. The page shows <Link to="/">sumi</Link>, brush and ink effects for React, made
-        by <a href="https://tengubyte.io/">TenguByte</a>.
+        Built with <Link to="/">sumi</Link>, brush and ink effects for React, by <a href="https://tengubyte.io/">TenguByte</a>.
       </p>
     </footer>
   );
@@ -52,7 +51,7 @@ function Seated({ name, again }: { readonly name: string; readonly again: () => 
         <h3 ref={heading} tabIndex={-1}>
           Seat noted{name === "" ? "" : `, ${name}`}.
         </h3>
-        <p>Nothing was sent. Tsukimi-an is made up for this showcase, and this is the seal a host would press on your card.</p>
+        <p>This is the seal Tsukimi-an would press on your card.</p>
         <button type="button" className="tsuki-again" onClick={again}>
           Start again
         </button>
@@ -71,31 +70,30 @@ export function Book(): JSX.Element {
   };
   if (name !== null) return <Seated name={name} again={() => { setName(null); }} />;
   return (
+    // One sentence the guest completes, where the forge has a stacked form: the same job in the tea house's voice.
     <form className="tsuki-form" onSubmit={send}>
-      <label>
-        Your name
-        <input name="name" autoComplete="name" required />
-      </label>
-      <label>
-        Email
-        <input name="email" type="email" autoComplete="email" required />
-      </label>
-      <label>
-        Guests
-        <select name="guests" defaultValue="2">
-          {["1", "2", "3", "4"].map((count) => (
-            <option key={count}>{count}</option>
-          ))}
-        </select>
-      </label>
-      <fieldset>
-        <legend>Night</legend>
-        {NIGHTS.map((night, i) => (
-          <label key={night}>
-            <input type="radio" name="night" value={night} defaultChecked={i === 0} /> {night}
-          </label>
-        ))}
-      </fieldset>
+      <p className="tsuki-sentence">
+        <label>
+          Seats for{" "}
+          <select name="guests" defaultValue="2">
+            {["1", "2", "3", "4"].map((count) => (
+              <option key={count}>{count}</option>
+            ))}
+          </select>
+        </label>{" "}
+        <label>
+          on{" "}
+          <select name="night">
+            {NIGHTS.map((night) => (
+              <option key={night}>{night}</option>
+            ))}
+          </select>
+        </label>
+        ,{" "}
+        <label>
+          in the name of <input name="name" autoComplete="name" required />
+        </label>
+      </p>
       <button type="submit" className="tsuki-button">
         Book the seat
       </button>

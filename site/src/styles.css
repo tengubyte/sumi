@@ -189,7 +189,8 @@ body:has(.forge-page) { background: #f5f1ee; }
 .forge-page .forge-foot { margin: 0 auto; padding-block: 32px 48px; border-top: 1px solid var(--f-field); color: var(--f-soft); }
 /* The cut characters lead; the Latin name and the one action sit under them and defer. */
 .forge-hero { padding-block: 24px 56px; }
-.forge-cut { max-width: 56rem; }
+/* Wide enough to lead, short enough that a 768 px tall laptop still shows the name under it. */
+.forge-cut { max-width: 50rem; }
 .forge-cut canvas { display: block; width: 100%; aspect-ratio: 2.2 / 1; }
 .forge-cut figcaption { text-align: right; }
 .forge-intro { display: grid; gap: 16px 56px; align-items: end; margin-top: 24px; }
@@ -205,6 +206,7 @@ body:has(.forge-page) { background: #f5f1ee; }
 .forge-night h2, .forge-night a { color: var(--f-glow); }
 .forge-page .forge-night p { color: var(--f-ash); }
 .forge-fire-text { padding-block: 40px 8px; }
+@media (prefers-reduced-motion: reduce) { .forge-embers { display: none; } }
 .forge-fire { position: relative; }
 /* Taller on a phone, so the band still reads as a fire. */
 .forge-flames { display: block; width: 100%; aspect-ratio: 2 / 1; }
@@ -268,17 +270,19 @@ body:has(.tsuki-page) { background: #11152a; }
 .tsuki-ridges { display: block; width: 100%; aspect-ratio: 4 / 3; }
 @media (min-width: 640px) { .tsuki-ridges { aspect-ratio: 2.4 / 1; } }
 .tsuki-hero figcaption { text-align: right; }
-.tsuki-intro { padding-block: 24px 64px; }
+.tsuki-intro { padding-block: 32px 8px; }
 .tsuki-intro h1 { margin: 0 0 12px; font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.05; }
-.tsuki-intro p { margin: 0 0 24px; font-size: 1.125rem; }
+.tsuki-intro > div { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
+.tsuki-intro p { margin: 0; font-size: 1.125rem; }
 .tsuki-page .tsuki-button {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 8px;
   background: var(--t-gold); color: var(--t-night); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
 }
 .tsuki-page .tsuki-button:hover { background: #f0dc9e; }
 .tsuki-tea { display: grid; gap: 24px 56px; align-items: center; padding-block: 56px; }
-@media (min-width: 900px) { .tsuki-tea { grid-template-columns: 1.1fr 1fr; } }
-.tsuki-drop { display: block; width: 100%; aspect-ratio: 4 / 3; }
+@media (min-width: 900px) { .tsuki-tea { grid-template-columns: minmax(0, 26rem) 1fr; } }
+/* A square box, so each bloom fills more of it than in a wide one. */
+.tsuki-drop { display: block; width: min(100%, 26rem); aspect-ratio: 1; }
 .tsuki-spring { padding-top: 56px; background: var(--t-deep); }
 .tsuki-branch { display: block; width: 100%; aspect-ratio: 4 / 3; }
 @media (min-width: 640px) { .tsuki-branch { aspect-ratio: 3 / 1; } }
@@ -291,16 +295,15 @@ body:has(.tsuki-page) { background: #11152a; }
 .tsuki-circle p { margin: 24px 0 0; max-width: 40ch; }
 .tsuki-page .tsuki-cap { margin-top: 12px; font-size: 0.875rem; }
 .tsuki-book { padding-block: 56px 72px; }
-.tsuki-form { display: grid; gap: 20px; max-width: 32rem; margin-top: 24px; }
-.tsuki-form label { display: grid; gap: 6px; font-weight: 700; }
-.tsuki-form input:not([type="radio"]), .tsuki-form select {
-  min-height: 44px; padding: 0 12px; border: 1px solid var(--t-field); border-radius: 8px; background: #181d36;
-  color: var(--t-paper); font: inherit;
+.tsuki-form { display: grid; gap: 24px; margin-top: 24px; }
+/* The booking reads as one sentence; each blank is a 44 px control underlined in the field colour. */
+.tsuki-page .tsuki-sentence { max-width: 48ch; margin: 0; color: var(--t-paper); font-size: clamp(1.25rem, 2.6vw, 1.75rem); line-height: 2.1; }
+.tsuki-sentence select, .tsuki-sentence input {
+  max-width: 100%; min-height: 44px; padding: 0 4px; border: 0; border-bottom: 2px solid var(--t-field); border-radius: 0;
+  background: transparent; color: var(--t-paper); font: inherit;
 }
-.tsuki-form fieldset { display: grid; margin: 0; padding: 0; border: 0; }
-.tsuki-form legend { margin-bottom: 6px; padding: 0; font-weight: 700; }
-.tsuki-form fieldset label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; }
-.tsuki-form input[type="radio"] { width: 20px; height: 20px; accent-color: var(--t-gold); }
+.tsuki-sentence input { width: 8em; }
+.tsuki-sentence option { background: var(--t-night); }
 .tsuki-form .tsuki-button { justify-self: start; }
 .tsuki-sent { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 40px; margin-top: 24px; }
 .tsuki-seal { display: block; width: 128px; aspect-ratio: 1; }
@@ -311,11 +314,13 @@ body:has(.tsuki-page) { background: #11152a; }
 .tsuki-page .tsuki-foot { margin: 0 auto; padding-block: 32px 48px; border-top: 1px solid #2a3050; color: var(--t-soft); }
 
 /* sumi speaking above a showcase, in the docs type and colours, so it reads as apart from the made-up site. */
-p.showcase-bar {
-  max-width: none; margin: 0; padding: 10px 16px; background: #161314; color: #bdb3ac; text-align: center;
-  font-family: "Zen Kaku Gothic New", ui-sans-serif, sans-serif; font-weight: 400; font-size: 0.875rem;
+.showcase-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 24px; padding: 4px 16px;
+  background: #161314; font-family: "Zen Kaku Gothic New", ui-sans-serif, sans-serif; font-size: 0.875rem; text-align: center;
 }
-.showcase-bar a { margin-left: 12px; color: #f3eee9; text-decoration-color: var(--red); }
+.showcase-bar p { max-width: none; margin: 0; padding-block: 6px; color: #bdb3ac; font-weight: 400; }
+.showcase-bar nav { display: flex; gap: 20px; }
+.showcase-bar a { display: inline-flex; align-items: center; min-height: 44px; color: #f3eee9; text-decoration-color: var(--red); }
 
 /* The index: one card per made-up site, each playing its lead effect on its own ground. */
 .showcase-grid { display: grid; gap: 32px; margin: 0 0 48px; padding: 0; list-style: none; }
@@ -328,3 +333,12 @@ p.showcase-bar {
 .showcase-card h2 a::after { content: ""; position: absolute; inset: 0; }
 .showcase-card p { margin: 0 0 6px; }
 .showcase-uses { color: var(--ink-soft); font-size: 0.9375rem; }
+.showcase-seals { margin-bottom: 64px; }
+.showcase-seals h2 { margin: 0 0 8px; font-size: 1.5rem; }
+.showcase-seals > p { margin: 0 0 24px; color: var(--ink-soft); }
+.showcase-seal-row { display: flex; flex-wrap: wrap; gap: 24px; }
+.showcase-seal-row figure { margin: 0; }
+.showcase-seal-stage { display: grid; place-items: center; width: 220px; height: 220px; border-radius: 8px; }
+.showcase-seal-tall { width: 100px; aspect-ratio: 1 / 1.6; }
+.showcase-seal-round { width: 128px; aspect-ratio: 1; }
+.showcase-seal-row figcaption { margin-top: 8px; font-size: 0.875rem; }

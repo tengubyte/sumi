@@ -13,21 +13,24 @@ const MOON_PAPER = "#ece6d6";
 function Hero(): JSX.Element {
   return (
     <section className="tsuki-hero" aria-labelledby="tsuki-title">
+      {/* The name and the action come first, so a laptop's first screen holds them with the moon. */}
+      <div className="wrap tsuki-intro">
+        <h1 id="tsuki-title" tabIndex={-1}>
+          Tsukimi-an
+        </h1>
+        <div>
+          <p>A tea house that opens on moonlit nights. Tsukimi is moon viewing, and an is a small, plain hut.</p>
+          <a className="tsuki-button" href="#book">
+            Book a seat
+          </a>
+        </div>
+      </div>
       <figure>
         <Sansui color={RIDGE} sunColor={GOLD} mist={0.7} seed={5} className="tsuki-ridges" />
         <figcaption className="wrap">
           Painted with <a href="/effects#sansui">Sansui</a>
         </figcaption>
       </figure>
-      <div className="wrap tsuki-intro">
-        <h1 id="tsuki-title" tabIndex={-1}>
-          Tsukimi-an
-        </h1>
-        <p>A tea house that opens on moonlit nights. Tsukimi is moon viewing, and an is a small, plain hut.</p>
-        <a className="tsuki-button" href="#book">
-          Book a seat
-        </a>
-      </div>
     </section>
   );
 }
@@ -36,7 +39,7 @@ function Tea(): JSX.Element {
   return (
     <section id="tea" className="tsuki-tea wrap" aria-labelledby="tea-title">
       <figure>
-        <InkDrop drops={[[0.36, 0.12], [0.64, 0.2, 0.9]]} color="#8db86b" swirl={0.8} className="tsuki-drop" />
+        <InkDrop drops={[[0.3, 0.1], [0.56, 0.16, 0.8], [0.76, 0.08, 1.6]]} color="#8db86b" swirl={0.8} className="tsuki-drop" />
         <figcaption>
           Dropped with <a href="/effects#drop">InkDrop</a>
         </figcaption>
@@ -104,7 +107,7 @@ export function Tsukimi(): JSX.Element {
         <Circle />
         <section id="book" className="tsuki-book wrap" aria-labelledby="book-title">
           <h2 id="book-title">Book a seat</h2>
-          <p>Pick a night. The tea house is made up, so the booking goes nowhere, but sending it shows the seal a host would press on your card.</p>
+          <p>Nothing leaves this page. Sending it shows the seal a host would press on your card.</p>
           <Book />
         </section>
       </main>
