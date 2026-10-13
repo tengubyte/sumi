@@ -1,4 +1,4 @@
-import { distanceGrid } from "./distance.js";
+import { pictureArt, SIDE, textArt, withField, type FireArt } from "./kaenArt.js";
 import { KAEN_FRAGMENT } from "./kaenGlsl.js";
 import { MINCHO } from "./kanji.js";
 import { loopInView, playCanvas, prefersReducedMotion, type CanvasPainter } from "./play.js";
@@ -10,11 +10,13 @@ import { coverProgram, drawCover, fitCanvas, uploadTexture } from "./webgl.js";
 export type FireLook = "shu" | "sumi" | "night";
 
 export interface FireOptions {
-  /** One character, or two, to set alight. Without it the fire burns along the bottom edge. */
+  /** One character, or two, to set alight. Without it, or `src`, the fire burns along the bottom edge. */
   readonly text?: string | undefined;
+  /** A picture with a transparent background to set alight round its outline, instead of `text`. Another origin must allow CORS. */
+  readonly src?: string | undefined;
   /** Default `"shu"`. */
   readonly look?: FireLook | undefined;
-  /** How high the flames climb, as a share of the canvas's shorter side. Default 0.6 along the edge, 0.13 round a character. */
+  /** How high the flames climb, as a share of the canvas's shorter side. Default 0.6 along the edge, 0.13 round a character or picture. */
   readonly reach?: number | undefined;
   /** A CSS font family for the character, loaded before the fire starts. Default a Mincho stack. */
   readonly font?: string | undefined;
@@ -39,58 +41,31 @@ const LOOKS = {
 
 /** Seconds the fire takes to climb to its full height at speed 1. */
 const IGNITE = 1.4;
-const SIDE = 1024;
 const fontSpec = (options: FireOptions): string => `${String(options.weight ?? 700)} ${String(SIDE * 0.3)}px ${options.font ?? MINCHO}`;
-
-/** The character in r, and in g the distance out from it in shares of the side, over `fieldReach`. */
-function glyphImage(text: string, options: FireOptions, fieldReach: number): ImageData {
-  const canvas = document.createElement("canvas");
-  canvas.width = SIDE;
-  canvas.height = SIDE;
-  const out = new ImageData(SIDE, SIDE);
-  const g = canvas.getContext("2d");
-  if (!g) return out;
-  g.fillStyle = "#fff";
-  g.font = fontSpec(options);
-  const m = g.measureText(text);
-  const w = Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1);
-  const h = Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1);
-  // Small and a little low, so the flames have room to climb above it.
-  const s = Math.min((SIDE * 0.5) / w, (SIDE * 0.26) / h);
-  g.setTransform(s, 0, 0, s, (SIDE - w * s) / 2 + m.actualBoundingBoxLeft * s, SIDE * 0.58 - (h * s) / 2 + m.actualBoundingBoxAscent * s);
-  g.fillText(text, 0, 0);
-  const pixels = g.getImageData(0, 0, SIDE, SIDE).data;
-  const far = distanceGrid((i) => (pixels[i * 4 + 3] ?? 0) > 110, SIDE, SIDE);
-  for (let i = 0; i < SIDE * SIDE; i++) {
-    out.data[i * 4] = pixels[i * 4 + 3] ?? 0;
-    out.data[i * 4 + 1] = ((far[i] ?? 0) / SIDE / fieldReach) * 255;
-    out.data[i * 4 + 3] = 255;
-  }
-  return out;
-}
+const shaped = (options: FireOptions): boolean => options.src !== undefined || (options.text ?? "") !== "";
+const reachOf = (options: FireOptions): number => Math.max(options.reach ?? (shaped(options) ? 0.13 : 0.6), 0.02);
 
 /** Returns null when WebGL, its derivatives or the shader are unavailable. A `still` painter keeps one grown frame. */
-export function firePainter(canvas: HTMLCanvasElement, options: FireOptions = {}, still = false): CanvasPainter | null {
+export function firePainter(canvas: HTMLCanvasElement, options: FireOptions, art: FireArt | null, still = false): CanvasPainter | null {
   const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false, depth: false });
   if (!gl?.getExtension("OES_standard_derivatives")) return null;
   const at = coverProgram(gl, KAEN_FRAGMENT);
   if (!at) return null;
-  const text = options.text ?? "";
   const look = LOOKS[options.look ?? "shu"];
-  const reach = Math.max(options.reach ?? (text === "" ? 0.6 : 0.13), 0.02);
-  // Straight above a character the flames climb past twice their reach, so its field has to reach further.
-  const fieldReach = reach * 4;
+  const reach = reachOf(options);
   gl.activeTexture(gl.TEXTURE0);
-  uploadTexture(gl, text === "" ? new ImageData(1, 1) : glyphImage(text, options, fieldReach), gl.RGBA, false);
-  gl.uniform1i(at("art"), 0);
-  gl.uniform1f(at("glyph"), text === "" ? 0 : 1);
+  uploadTexture(gl, art?.front ?? new ImageData(1, 1), gl.RGBA, true);
+  gl.activeTexture(gl.TEXTURE1);
+  uploadTexture(gl, art?.field ?? new ImageData(1, 1), gl.RGBA, false);
+  gl.uniform1i(at("front"), 0);
+  gl.uniform1i(at("field"), 1);
+  gl.uniform1f(at("shaped"), art ? 1 : 0);
   gl.uniform1f(at("reach"), reach);
-  gl.uniform1f(at("fieldReach"), fieldReach);
+  gl.uniform1f(at("fieldReach"), reach * 4);
   gl.uniform1f(at("seed"), random(options.seed ?? 1)() * 50);
   gl.uniform3fv(at("cEdge"), rgb(look.edge));
   gl.uniform3fv(at("cBody"), rgb(look.body));
   gl.uniform3fv(at("cHot"), rgb(look.hot));
-  gl.uniform3fv(at("ink"), rgb(options.color ?? look.ink));
   const speed = Math.max(options.speed ?? 1, 0.05);
   const uSize = at("size");
   const uPixel = at("pixel");
@@ -106,8 +81,8 @@ export function firePainter(canvas: HTMLCanvasElement, options: FireOptions = {}
       gl.uniform2f(uSize, canvas.width, canvas.height);
       gl.uniform1f(uPixel, canvas.width / Math.max(canvas.clientWidth, 1));
       // Whorls only turn where there is fire to turn.
-      if (text === "") gl.uniform4f(uWhorls, 0, 0.02, w, 0.02 + reach * 0.75);
-      else gl.uniform4f(uWhorls, (w - 1) / 2 + 0.15, (h - 1) / 2 + 0.15, (w + 1) / 2 - 0.15, (h - 1) / 2 + 0.9);
+      if (art) gl.uniform4f(uWhorls, (w - 1) / 2 + 0.15, (h - 1) / 2 + 0.15, (w + 1) / 2 - 0.15, (h - 1) / 2 + 0.9);
+      else gl.uniform4f(uWhorls, 0, 0.02, w, 0.02 + reach * 0.75);
       // A still frame is the fire fully grown, at one moment of its burning.
       const t = still ? 4 : seconds * speed;
       gl.uniform1f(uTime, t);
@@ -120,27 +95,42 @@ export function firePainter(canvas: HTMLCanvasElement, options: FireOptions = {}
   };
 }
 
+/** The picture or the character to burn round, once it has loaded, or null to burn along the edge. */
+async function artFor(options: FireOptions): Promise<FireArt | null> {
+  // Straight above the art the flames climb past twice their reach, so its field has to reach further.
+  const fieldReach = reachOf(options) * 4;
+  if (options.src !== undefined) {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = options.src;
+    await image.decode();
+    return withField(pictureArt(image), fieldReach);
+  }
+  const text = options.text ?? "";
+  if (text === "") return null;
+  // The character is drawn from the font once, so it has to be there first.
+  await document.fonts.load(fontSpec(options), text).catch(() => []);
+  return withField(textArt(text, fontSpec(options), options.color ?? LOOKS[options.look ?? "shu"].ink), fieldReach);
+}
+
 /**
- * Sets `canvas` alight along its bottom edge, or with `text` round a character, burning while the canvas is
- * on screen. Size the canvas with CSS. The fire paints its own colours, so it suits paper and dark pages
- * alike. Reduced motion shows one still frame of the grown fire; no WebGL draws nothing. Returns the cleanup.
+ * Sets `canvas` alight along its bottom edge, or round a character with `text` or a picture's outline with
+ * `src`, burning while the canvas is on screen. Size the canvas with CSS. The fire paints its own colours, so
+ * pick the look for the page. Reduced motion shows one still frame of the grown fire. No WebGL, or a picture
+ * that fails to load, draws nothing. Returns the cleanup.
  */
 export function kindleFire(canvas: HTMLCanvasElement, options: FireOptions = {}): () => void {
-  const start = (): (() => void) =>
-    prefersReducedMotion()
-      ? playCanvas(canvas, () => firePainter(canvas, options, true), options.delay ?? 0)
-      : loopInView(canvas, () => firePainter(canvas, options), options.delay ?? 0);
-  const text = options.text ?? "";
-  if (text === "") return start();
   let stop = (): void => undefined;
   let cancelled = false;
-  // The character is drawn from the font once, so it has to be there first.
-  void document.fonts
-    .load(fontSpec(options), text)
-    .catch(() => [])
-    .then(() => {
-      if (!cancelled) stop = start();
-    });
+  void artFor(options).then(
+    (art) => {
+      if (cancelled) return;
+      stop = prefersReducedMotion()
+        ? playCanvas(canvas, () => firePainter(canvas, options, art, true), options.delay ?? 0)
+        : loopInView(canvas, () => firePainter(canvas, options, art), options.delay ?? 0);
+    },
+    () => undefined,
+  );
   return () => {
     cancelled = true;
     stop();

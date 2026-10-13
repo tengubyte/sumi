@@ -26,7 +26,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
 | [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
 | [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
-| [Kaen](#kaen) | Sets fire along an edge or round a character | [fire](https://sumi.tengubyte.io/effects#fire) |
+| [Kaen](#kaen) | Sets fire along an edge, round a character or round a picture | [fire](https://sumi.tengubyte.io/effects#fire) |
 | [Shuchusen](#shuchusen) | Draws manga focus lines or speed lines | [lines](https://sumi.tengubyte.io/effects#focus) |
 | [Hanasaka](#hanasaka) | Brings a cherry branch into bloom | [bloom](https://sumi.tengubyte.io/effects#bloom) |
 
@@ -445,18 +445,20 @@ import { Kaen } from "@tengubyte/sumi";
 
 <Kaen style={{ width: "100%", aspectRatio: "2 / 1" }} />
 <Kaen text="炎" label="Flame" look="night" style={{ width: 320, aspectRatio: "1" }} />
+<Kaen src="/tengu.webp" label="A crow tengu seated on a rock" style={{ width: "100%", aspectRatio: "4 / 3" }} />
 ```
 
 Fire (火炎) as the Heiji scroll and the Blue Fudo paint it. The flames are one mass: tongues rise to points, sway more the higher they reach and break off at the top while new ones come up from below. Fine pale and dark strands run up each tongue, a pale line runs just inside the outline, and slow whorls turn the flow.
 
-It burns along the bottom edge of the canvas, or with `text` round a character and climbs above it. The fire paints its own colours, so pick the `look` for the page: `"shu"` and `"sumi"` for paper, `"night"` for a dark page. Like `Hinoko` it runs while the canvas is on screen; with reduced motion it holds one frame of the grown fire. It needs WebGL's standard derivatives, which nearly every browser has.
+It burns along the bottom edge of the canvas, round a character with `text`, or with `src` round the outline of a picture with a transparent background, and climbs above it. An opaque picture burns round its rectangle, and one from another origin must allow CORS, since the fire reads its pixels. The fire paints its own colours, so pick the `look` for the page: `"shu"` and `"sumi"` for paper, `"night"` for a dark page. Like `Hinoko` it runs while the canvas is on screen; with reduced motion it holds one frame of the grown fire. It needs WebGL's standard derivatives, which nearly every browser has.
 
 | Prop | Type | Default | What it does |
 |---|---|---|---|
-| `text` | `string` | none | One character, or two, to set alight. Without it the fire burns along the bottom edge. |
-| `label` | `string` | none | What the character means. Without it the canvas is hidden from assistive technology. |
+| `text` | `string` | none | One character, or two, to set alight. Without it, or `src`, the fire burns along the bottom edge. |
+| `src` | `string` | none | A picture with a transparent background to set alight round its outline, in place of `text`. |
+| `label` | `string` | none | What the character or picture shows. Without it the canvas is hidden from assistive technology. |
 | `look` | `"shu" \| "sumi" \| "night"` | `"shu"` | Vermilion on paper, black ink, or brighter for a dark page. |
-| `reach` | `number` | `0.6` (text `0.13`) | How high the flames climb, as a share of the canvas's shorter side. |
+| `reach` | `number` | `0.6` (`text`, `src` `0.13`) | How high the flames climb, as a share of the canvas's shorter side. |
 | `font`, `weight` | `string`, `number` | a Mincho stack, `700` | A CSS font family you load. The fire waits for it. |
 | `color` | `` `#${string}` `` | by look | The character: sumi on `"shu"`, vermilion on `"sumi"`, paper white on `"night"`. |
 | `seed` | `number` | `1` | Changes every tongue and whorl. |

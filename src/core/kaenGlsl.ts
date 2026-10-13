@@ -6,8 +6,8 @@ import { NOISE_GLSL } from "./noiseGlsl.js";
  * from below. Inside, fine pale and dark strands run up each tongue in dashes that stream upward, a pale line
  * runs just inside the outline, a few slow whorls turn the flow, and every edge feathers into the paper.
  *
- * Positions are in shares of the shorter side, y up. The fuel is the bottom edge, or with `glyph` a character
- * whose distance field sits in the `art` texture's green channel and whose shape is in its red.
+ * Positions are in shares of the shorter side, y up. The fuel is the bottom edge, or with `shaped` a character
+ * or picture, drawn in the `front` texture, whose distance field sits in the `field` texture's red channel.
  */
 export const KAEN_FRAGMENT = `#extension GL_OES_standard_derivatives : enable
 precision highp float;
@@ -15,7 +15,7 @@ uniform vec2 size;
 uniform float pixel;
 uniform float time;
 uniform float grow;
-uniform float glyph;
+uniform float shaped;
 uniform float reach;
 uniform float fieldReach;
 uniform float seed;
@@ -23,32 +23,29 @@ uniform vec4 whorlBox;
 uniform vec3 cEdge;
 uniform vec3 cBody;
 uniform vec3 cHot;
-uniform vec3 ink;
-uniform sampler2D art;
+uniform sampler2D front;
+uniform sampler2D field;
 ${NOISE_GLSL}
 
-// Where p falls in the character's square, which is centred on the canvas with the shorter side as its side.
+// Where p falls in the art's square, which is centred on the canvas with the shorter side as its side. The
+// textures' first row is the square's top.
 vec2 inSquare(vec2 p) {
-  return p - (size / min(size.x, size.y) - 1.0) * 0.5;
-}
-
-// The texture's first row is the square's top.
-vec4 artAt(vec2 uv) {
-  return texture2D(art, vec2(uv.x, 1.0 - uv.y));
+  vec2 uv = p - (size / min(size.x, size.y) - 1.0) * 0.5;
+  return vec2(uv.x, 1.0 - uv.y);
 }
 
 float source(vec2 p) {
-  if (glyph < 0.5) return max(p.y - 0.02, 0.0);
+  if (shaped < 0.5) return max(p.y - 0.02, 0.0);
   vec2 uv = inSquare(p);
   // Past the square's sides the field keeps growing with the distance to them, instead of repeating its edge.
-  return artAt(uv).g * fieldReach + length(uv - clamp(uv, 0.0, 1.0));
+  return texture2D(field, uv).r * fieldReach + length(uv - clamp(uv, 0.0, 1.0));
 }
 
 // Fire climbs: fuel straight below counts at under half its distance, fuel beside or above at more than
 // its distance. The direction comes from the field's gradient, taken over a wide step so the field's 8-bit
 // levels do not shake it, and fades out toward the field's reach, where it flattens.
 float lifted(vec2 p) {
-  if (glyph < 0.5) return source(p);
+  if (shaped < 0.5) return source(p);
   float d = source(p);
   float h = 0.015;
   vec2 g = vec2(source(p + vec2(h, 0.0)) - source(p - vec2(h, 0.0)), source(p + vec2(0.0, h)) - source(p - vec2(0.0, h)));
@@ -117,6 +114,6 @@ void main() {
   col = mix(col, cEdge, shown * step(rs, 0.5) * 0.6);
   vec4 fire = vec4(col * a, a);
 
-  float letter = glyph > 0.5 ? artAt(inSquare(p)).r : 0.0;
-  gl_FragColor = vec4(ink * letter, letter) + fire * (1.0 - letter);
+  vec4 art = shaped > 0.5 ? texture2D(front, inSquare(p)) : vec4(0.0);
+  gl_FragColor = art + fire * (1.0 - art.a);
 }`;
