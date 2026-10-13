@@ -52,7 +52,7 @@ export function Hero({ dark }: { readonly dark: boolean }): JSX.Element {
             into view; inkTransition plays each time you call it, Hinoko, Kaen and Shuchusen run while they are on screen,
             and Fude is a brush the visitor draws with. React is the only dependency.
           </p>
-          <Code>npm install github:tengubyte/sumi#v0.10.0</Code>
+          <Code>npm install github:tengubyte/sumi#v0.11.0</Code>
           <p className="more">
             <Link to={LIST.path}>See every effect</Link> or <Link to={SHOWCASE.path}>see them build two made-up sites</Link>
           </p>
