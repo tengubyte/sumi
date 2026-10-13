@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { Fluid } from "./fluid";
 import { dropPainter, dropSeconds } from "./inkDrop";
 import { floodReach } from "./inkTransition";
 import { sealCells, sealPainter } from "./seal";
@@ -44,5 +45,11 @@ describe("without WebGL", () => {
     const noWebGL = { getContext: () => null } as unknown as HTMLCanvasElement;
     expect(sealPainter(noWebGL, "墨")).toBeNull();
     expect(dropPainter(noWebGL)).toBeNull();
+    expect(dropPainter(noWebGL, { view: "top" })).toBeNull();
+  });
+
+  it("opens no fluid without half-float textures, so the side view can fall back to the ring", () => {
+    const noHalfFloat = { getExtension: () => null } as unknown as WebGLRenderingContext;
+    expect(Fluid.open(noHalfFloat, 4 / 3)).toBeNull();
   });
 });

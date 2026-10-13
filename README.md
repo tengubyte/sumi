@@ -212,19 +212,23 @@ Drops of ink and clear water land on one spot in turn, each pushing the last out
 import { InkDrop } from "@tengubyte/sumi";
 
 <InkDrop drops={[[0.38, 0.1], [0.64, 0.1, 0.9, "#d8001a"]]} style={{ width: "100%", aspectRatio: "4 / 3" }} />
+<InkDrop view="top" drops={[[0.5, 0.5]]} style={{ width: "100%", aspectRatio: "1" }} />
 ```
 
-Ink dropped into still water. Each drop sinks as a ring whose rim rolls up into a cap and frays into filaments, with a thin stem behind it, and thins to a grey wash as it slows. The ring is two spinning cores with curled noise on top, and every pixel traces its water back to the moment each drop landed.
+Ink dropped into still water. From the side, ink is heavier than water, so each drop sinks; its thick patches fall faster than its thin ones, which rolls it into a cap that breaks into curls and threads. This view is a small fluid simulation (Stam's stable fluids) on half-float textures. It keeps velocity on a coarse grid and ink on a fine one, and steps 60 times a second. Devices that cannot render to half-float textures get a traced vortex ring instead.
+
+From above, the landing throws the ink outward, far harder in a few directions, and those become needle rays with drops flung past their tips. Under that push the splash is a polar shape that grows with time, so the top view needs no simulation and draws any frame straight from the time.
 
 | Prop | Type | Default | What it does |
 |---|---|---|---|
-| `drops` | `[x, y, start?, color?][]` | `[[0.5, 0.1]]` | Up to three: where, as shares of the canvas (y down), when in seconds, and their ink. |
+| `view` | `"side" \| "top"` | `"side"` | Watch the ink sink through the water, or look down as it lands and splashes. |
+| `drops` | `[x, y, start?, color?][]` | `[[0.5, 0.1]]`, top `[[0.5, 0.5]]` | Up to three: where, as shares of the canvas (y down), when in seconds, and their ink. |
 | `color` | `` `#${string}` `` | `"#161314"` | Ink for drops without their own. |
-| `swirl` | `number` | `0.6` | How much the water churns, 0 to 2. |
-| `seed` | `number` | `1` | How the rims fray. |
+| `swirl` | `number` | `0.6` | How much the water churns, 0 to 2. More curls from the side, more bend in the rays from above. |
+| `seed` | `number` | `1` | How the ink breaks up and where the rays point. |
 | `speed`, `delay` | `number` | `1`, `0` | Each drop takes 4.5 seconds to settle at speed 1. |
 
-Each drop sinks about 60% of the canvas height, so start them near the top. The trace is the costly part, so the canvas renders at no more than half a megapixel; the soft ink does not need more.
+Side drops sink most of the way down, so start them near the top. A splash from above reaches about 40% of the canvas height from where it lands. Under reduced motion the side view runs the whole simulation once, as soon as the canvas is in view, and shows the last frame. The top view renders at no more than half a megapixel; its edges stay sharp at that size.
 
 ## InkWipe
 

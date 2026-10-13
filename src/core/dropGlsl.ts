@@ -7,7 +7,7 @@ export const DROP_SECONDS = 4.5;
  * Ink dropped into still water, in a canvas one unit high (y down). Each drop sinks as a vortex ring,
  * two opposite cores in this cross-section, whose rim rolls up into a mushroom and frays into filaments.
  * Every pixel traces its water back to the moment each drop landed, so a frame is a pure function of
- * time and the last frame needs no history.
+ * time and the last frame needs no history. The side view draws this where the fluid cannot run.
  */
 export const DROP_FRAGMENT = `
 precision highp float;

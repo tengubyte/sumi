@@ -39,7 +39,7 @@ function Tea(): JSX.Element {
   return (
     <section id="tea" className="tsuki-tea wrap" aria-labelledby="tea-title">
       <figure>
-        <InkDrop drops={[[0.3, 0.1], [0.56, 0.16, 0.8], [0.76, 0.08, 1.6]]} color="#8db86b" swirl={0.8} className="tsuki-drop" />
+        <InkDrop drops={[[0.36, 0.08], [0.66, 0.12, 1]]} color="#8db86b" className="tsuki-drop" />
         <figcaption>
           Dropped with <a href="/effects#drop">InkDrop</a>
         </figcaption>

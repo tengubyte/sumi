@@ -91,12 +91,13 @@ export const HANKO: readonly Row[] = [
 ];
 
 export const DROP: readonly Row[] = [
-  ["drops", "[x, y, start?, color?][]", "[[0.5, 0.1]]", "Up to three: where, as shares of the canvas, when in seconds, and their ink."],
+  ["view", '"side" | "top"', '"side"', "Watch the ink sink through the water, or look down as it lands and splashes."],
+  ["drops", "[x, y, start?, color?][]", "[[0.5, 0.1]], top [[0.5, 0.5]]", "Up to three: where, as shares of the canvas, when in seconds, and their ink."],
   ["color", "#rrggbb", '"#161314"', "Ink for drops without their own."],
-  ["swirl", "number", "0.6", "How much the water churns, 0 to 2."],
-  ["seed", "number", "1", "How the rims fray."],
+  ["swirl", "number", "0.6", "How much the water churns, 0 to 2. More curls from the side, more bend in the rays from above."],
+  ["seed", "number", "1", "How the ink breaks up and where the rays point."],
   ["speed, delay", "number", "1, 0", "2 runs twice as fast; seconds to wait once in view."],
-  ["className, style", "", "", "Size the canvas here. Each drop sinks about 60% of its height."],
+  ["className, style", "", "", "Size the canvas here. Side drops sink most of the way down; a splash from above reaches about 40% of the height."],
 ];
 
 export const TORN: readonly Row[] = [
