@@ -3,6 +3,7 @@ import { BrushStudy } from "./BrushStudy";
 import { DropStudy } from "./DropStudy";
 import { EmberStudy } from "./EmberStudy";
 import { EnsoStudy } from "./EnsoStudy";
+import { FireStudy } from "./FireStudy";
 import { FloatStudy } from "./FloatStudy";
 import { FocusStudy } from "./FocusStudy";
 import { FudeStudy } from "./FudeStudy";
@@ -49,6 +50,7 @@ export const BODIES: Readonly<Record<string, Body>> = {
   sansui: (dark) => <SansuiStudy dark={dark} />,
   "ink-splat": (dark) => <SplatStudy dark={dark} />,
   hinoko: () => <EmberStudy />,
+  kaen: (dark) => <FireStudy dark={dark} />,
   shuchusen: (dark) => <FocusStudy dark={dark} />,
   hanasaka: (dark) => <HanasakaStudy dark={dark} />,
 };

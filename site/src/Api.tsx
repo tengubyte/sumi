@@ -10,7 +10,7 @@ export function Api(): JSX.Element {
         The same effects work on plain elements. Each call returns its cleanup, except inkTransition, which returns
         a promise that resolves when the ink has gone, and fudePad, which returns a pad to trace, clear and stop.
       </p>
-      <Code>{`import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+      <Code>{`import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, kindleFire, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas over it.
 const stopPaint = paintIn(document.querySelector("img.enso"), { sweep: "ring" });
@@ -33,7 +33,8 @@ const stopColor = colorIn(document.querySelector("img.view"), { seed: 2 });
 const stopCut = hakeIn(document.querySelector("img.header"), { angle: -16 });
 const stopSwash = paintHake(document.querySelector("canvas.swash"), { color: "#c99e2b", bend: -0.5 });
 const stopLines = focusLines(document.querySelector("canvas.lines"), { focus: [0.6, 0.4] });
-const stopFire = riseEmbers(document.querySelector("canvas.fire"), { wind: 0.3 });
+const stopEmbers = riseEmbers(document.querySelector("canvas.embers"), { wind: 0.3 });
+const stopFire = kindleFire(document.querySelector("canvas.fire"), { text: "炎", look: "night" });
 // The image must fill a positioned parent; the cut runs on a canvas over it.
 const stopSlash = slashIn(document.querySelector("img.duel"), { mode: "fall" });
 const stopWord = slashText(document.querySelector("canvas.word"), "一閃", { color: "#d8001a" });
@@ -43,8 +44,8 @@ await pad?.trace(ensoStroke());
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });`}</Code>
       <h3>What every effect does</h3>
       <ul className="facts">
-        <li>Plays once, when it has scrolled a little way into view. inkTransition plays once per call, Hinoko and Shuchusen run while they are on screen, and Fude draws when the visitor does.</li>
-        <li>With reduced motion it shows the last frame: the finished art, the settled water, the torn frame or the landed splat. inkTransition just swaps, a torn cover is already off, Irodori and a closed Tachigami cut show the plain image, focus lines hold still, no embers rise and a traced Fude stroke lands at once.</li>
+        <li>Plays once, when it has scrolled a little way into view. inkTransition plays once per call, Hinoko, Kaen and Shuchusen run while they are on screen, and Fude draws when the visitor does.</li>
+        <li>With reduced motion it shows the last frame: the finished art, the settled water, the torn frame or the landed splat. inkTransition just swaps, a torn cover is already off, Irodori and a closed Tachigami cut show the plain image, focus lines and fire hold still, no embers rise and a traced Fude stroke lands at once.</li>
         <li>Without WebGL, BrushReveal, InkWipe, Irodori, HakeCut, Tachigami and TornEdge show the plain image, BrushMark the plain words, inkTransition just swaps, and the others show nothing.</li>
         <li>BrushReveal, InkWipe, Irodori, a closed Tachigami cut, a torn cover and inkTransition release their WebGL context as soon as they finish. Fude keeps its context while it is on the page, and the others keep their last frame.</li>
         <li>No dependencies besides React, which the core does not need.</li>

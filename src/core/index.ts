@@ -9,6 +9,7 @@ export { riseEmbers, type EmberOptions } from "./hinoko.js";
 export { dropInk, type Drop, type DropOptions } from "./inkDrop.js";
 export { colorIn, type ColorOptions } from "./irodori.js";
 export { inkTransition, type Spot, type TransitionOptions } from "./inkTransition.js";
+export { kindleFire, type FireLook, type FireOptions } from "./kaen.js";
 export { strikeKanji, type StrikeOptions } from "./kanji.js";
 export { MARK_TYPES, markStrokes, paintMark, type MarkOptions, type MarkShape, type MarkType } from "./mark.js";
 export { MARBLE_PATTERNS, marblePattern, type MarbleInk, type MarbleOp, type MarblePattern } from "./marble.js";

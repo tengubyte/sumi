@@ -35,6 +35,7 @@ export const EFFECTS: readonly Effect[] = [
   { slug: "sansui", group: "scene", anchors: ["sansui"] },
   { slug: "ink-splat", group: "scene", anchors: ["splat"] },
   { slug: "hinoko", group: "scene", anchors: ["embers"] },
+  { slug: "kaen", group: "scene", anchors: ["fire"] },
   { slug: "shuchusen", group: "scene", anchors: ["focus"] },
   { slug: "hanasaka", group: "scene", anchors: ["bloom"] },
 ];

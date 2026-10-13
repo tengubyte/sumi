@@ -1,6 +1,6 @@
 # sumi
 
-Twenty brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, `Hinoko` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
+Twenty-one brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
 
 Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects)
 
@@ -26,6 +26,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
 | [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
 | [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
+| [Kaen](#kaen) | Sets fire along an edge or round a character | [fire](https://sumi.tengubyte.io/effects#fire) |
 | [Shuchusen](#shuchusen) | Draws manga focus lines or speed lines | [lines](https://sumi.tengubyte.io/effects#focus) |
 | [Hanasaka](#hanasaka) | Brings a cherry branch into bloom | [bloom](https://sumi.tengubyte.io/effects#bloom) |
 
@@ -437,6 +438,30 @@ Unlike the other effects it keeps going: the fire runs while the canvas is on sc
 | `seed` | `number` | `1` | Changes every ember's path. |
 | `speed`, `delay` | `number` | `1`, `0` | 2 runs twice as fast; seconds to wait once in view. |
 
+## Kaen
+
+```tsx
+import { Kaen } from "@tengubyte/sumi";
+
+<Kaen style={{ width: "100%", aspectRatio: "2 / 1" }} />
+<Kaen text="炎" label="Flame" look="night" style={{ width: 320, aspectRatio: "1" }} />
+```
+
+Fire (火炎) as the Heiji scroll and the Blue Fudo paint it. The flames are one mass: tongues rise to points, sway more the higher they reach and break off at the top while new ones come up from below. Fine pale and dark strands run up each tongue, a pale line runs just inside the outline, and slow whorls turn the flow.
+
+It burns along the bottom edge of the canvas, or with `text` round a character and climbs above it. The fire paints its own colours, so pick the `look` for the page: `"shu"` and `"sumi"` for paper, `"night"` for a dark page. Like `Hinoko` it runs while the canvas is on screen; with reduced motion it holds one frame of the grown fire. It needs WebGL's standard derivatives, which nearly every browser has.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `text` | `string` | none | One character, or two, to set alight. Without it the fire burns along the bottom edge. |
+| `label` | `string` | none | What the character means. Without it the canvas is hidden from assistive technology. |
+| `look` | `"shu" \| "sumi" \| "night"` | `"shu"` | Vermilion on paper, black ink, or brighter for a dark page. |
+| `reach` | `number` | `0.6` (text `0.13`) | How high the flames climb, as a share of the canvas's shorter side. |
+| `font`, `weight` | `string`, `number` | a Mincho stack, `700` | A CSS font family you load. The fire waits for it. |
+| `color` | `` `#${string}` `` | by look | The character: sumi on `"shu"`, vermilion on `"sumi"`, paper white on `"night"`. |
+| `seed` | `number` | `1` | Changes every tongue and whorl. |
+| `speed`, `delay` | `number` | `1`, `0` | 2 burns twice as fast; seconds to wait once in view. |
+
 ## Shuchusen
 
 ```tsx
@@ -487,7 +512,7 @@ A cherry branch brushed in stroke by stroke, thick at the start and thinning as 
 ## Without React
 
 ```ts
-import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, kindleFire, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -510,7 +535,8 @@ const stopColor = colorIn(document.querySelector("img.view")!, { seed: 2 });
 const stopCut = hakeIn(document.querySelector("img.header")!, { angle: -16 });
 const stopSwash = paintHake(document.querySelector("canvas.swash")!, { color: "#c99e2b", bend: -0.5 });
 const stopLines = focusLines(document.querySelector("canvas.lines")!, { focus: [0.6, 0.4] });
-const stopFire = riseEmbers(document.querySelector("canvas.fire")!, { wind: 0.3 });
+const stopEmbers = riseEmbers(document.querySelector("canvas.embers")!, { wind: 0.3 });
+const stopFire = kindleFire(document.querySelector("canvas.fire")!, { text: "炎", look: "night" });
 // The image must fill a positioned parent; the cut runs on a canvas laid over it.
 const stopSlash = slashIn(document.querySelector("img.duel")!, { mode: "fall" });
 const stopWord = slashText(document.querySelector("canvas.word")!, "一閃", { color: "#d8001a" });
@@ -524,8 +550,8 @@ Each call returns its cleanup, except `inkTransition`, which returns a promise, 
 
 ## What every effect does
 
-- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, `Hinoko` and `Shuchusen` run while they are on screen, and `Fude` draws when the visitor does.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge, the parted halves, the branch in bloom or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` and a closed `Tachigami` cut show the plain image, focus lines hold still, no embers rise and a traced `Fude` stroke lands at once.
+- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` draws when the visitor does.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge, the parted halves, the branch in bloom or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` and a closed `Tachigami` cut show the plain image, focus lines and fire hold still, no embers rise and a traced `Fude` stroke lands at once.
 - Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut`, `Tachigami` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
 - `BrushReveal`, `InkWipe`, `Irodori`, a closed `Tachigami` cut and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects, a torn frame, `HakeCut` and parted or fallen halves keep their last frame and redraw it on resize. `Fude` keeps its context while it is on the page.
 - Each effect holds one WebGL context while it keeps its last frame, and browsers keep about 16 alive per page. Past that the oldest is dropped and its canvas leaves the page, so spread long runs of effects across pages.

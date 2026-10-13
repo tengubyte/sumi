@@ -24,7 +24,7 @@ export interface StrikeOptions {
 }
 
 const SIDE = 512;
-const MINCHO = '"Shippori Mincho B1", "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif';
+export const MINCHO ='"Shippori Mincho B1", "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif';
 const fontSpec = (options: StrikeOptions): string => `${String(options.weight ?? 700)} ${String(SIDE * 0.8)}px ${options.font ?? MINCHO}`;
 
 /**

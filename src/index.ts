@@ -13,6 +13,7 @@ export { InkDrop, type InkDropProps } from "./react/InkDrop.js";
 export { InkSplat, type InkSplatProps } from "./react/InkSplat.js";
 export { InkWipe, type InkWipeProps } from "./react/InkWipe.js";
 export { Irodori, type IrodoriProps } from "./react/Irodori.js";
+export { Kaen, type KaenProps } from "./react/Kaen.js";
 export { KanjiStrike, type KanjiStrikeProps } from "./react/KanjiStrike.js";
 export { Sansui, type SansuiProps } from "./react/Sansui.js";
 export { Shuchusen, type ShuchusenProps } from "./react/Shuchusen.js";
