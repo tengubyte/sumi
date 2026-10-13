@@ -4,21 +4,29 @@ import { LIST } from "./effects";
 import { Footer, Header, Hero, NotFound } from "./Layout";
 import { useDark } from "./parts";
 import { rememberedScroll, usePath } from "./router";
+import { Sumigane, SUMIGANE } from "./Sumigane";
 
 const SITE = "https://sumi.tengubyte.io";
+const PAGES = [LIST, SUMIGANE] as const;
 
-/** The effects page gets its own title and description; the home page keeps those from index.html. */
+/** Each page but home gets its own title and description; the home page keeps those from index.html. */
 function usePageMeta(path: string): void {
   const home = useRef<{ title: string; description: string } | null>(null);
   useEffect(() => {
     const description = document.querySelector('meta[name="description"]');
     const canonical = document.querySelector('link[rel="canonical"]');
     home.current ??= { title: document.title, description: description?.getAttribute("content") ?? "" };
-    const list = path === LIST.path;
-    document.title = list ? `${LIST.name} | sumi` : path === "/" ? home.current.title : "Nothing here | sumi";
-    description?.setAttribute("content", list ? `${LIST.line} Brush and ink effects for React, by TenguByte.` : home.current.description);
+    const page = PAGES.find((one) => one.path === path);
+    document.title = page ? `${page.name} | sumi` : path === "/" ? home.current.title : "Nothing here | sumi";
+    description?.setAttribute("content", page ? `${page.line} Brush and ink effects for React, by TenguByte.` : home.current.description);
     canonical?.setAttribute("href", `${SITE}${path}`);
   }, [path]);
+}
+
+function Page({ path, dark }: { readonly path: string; readonly dark: boolean }): JSX.Element {
+  if (path === "/") return <Hero dark={dark} />;
+  if (path === LIST.path) return <EffectList dark={dark} />;
+  return <NotFound />;
 }
 
 export function App(): JSX.Element {
@@ -39,10 +47,12 @@ export function App(): JSX.Element {
     document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
   }, [path]);
 
+  // The showcase stands as its own site, with its own header and footer.
+  if (path === SUMIGANE.path) return <Sumigane />;
   return (
     <>
       <Header />
-      {path === "/" ? <Hero dark={dark} /> : path === LIST.path ? <EffectList dark={dark} /> : <NotFound />}
+      <Page path={path} dark={dark} />
       <Footer />
     </>
   );

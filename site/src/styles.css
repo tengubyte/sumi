@@ -162,3 +162,87 @@ h1:focus { outline: none; }
 .filter { padding-bottom: 32px; }
 .filter .choice { flex-wrap: wrap; }
 .missing { display: block; width: min(100%, 360px); aspect-ratio: 1; margin-bottom: 40px; }
+
+/*
+ * The Sumigane showcase. Paper and fire are the brand, so the page keeps them in either site theme: washi paper,
+ * torn open once onto a forge at night. Red is the cut, the order button and the seal, nothing else.
+ */
+.forge-page {
+  --f-paper: #f5f1ee; --f-ink: #161314; --f-soft: #4b4547; --f-field: #8a8183; --f-night: #0f0c0b;
+  --f-glow: #f3eee9; --f-ash: #bdb3ac;
+  background: var(--f-paper); color: var(--f-ink); color-scheme: light;
+  font-family: "Shippori Mincho", "Yu Mincho", serif; font-weight: 500;
+}
+/* No docs header or footer here, so the paper runs under the overscroll too. */
+body:has(.forge-page) { background: #f5f1ee; }
+.forge-page a { color: var(--f-ink); }
+.forge-page p { max-width: 60ch; color: var(--f-soft); }
+.forge-page figure { margin: 0; }
+.forge-page figcaption, .forge-cap { margin: 8px 0 0; font-size: 0.875rem; color: var(--f-soft); }
+.forge-page h2 { margin: 0 0 16px; font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; }
+/* sumi speaking, in the docs type, so it reads as apart from the forge. */
+.forge-page .forge-bar {
+  max-width: none; margin: 0; padding: 10px 16px; background: var(--f-ink); color: var(--f-ash);
+  font-family: "Zen Kaku Gothic New", ui-sans-serif, sans-serif; font-weight: 400; font-size: 0.875rem; text-align: center;
+}
+.forge-page .forge-bar a { color: var(--f-glow); }
+.forge-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 24px; min-height: 72px; padding-block: 8px; }
+.forge-page .forge-mark { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--f-ink); font-size: 1.25rem; font-weight: 700; }
+.forge-mark span { font-family: "Yuji Syuku", serif; font-weight: 400; font-size: 1.75rem; }
+.forge-top nav { display: flex; gap: 20px; }
+.forge-top nav a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; text-decoration: none; }
+.forge-top nav a:hover { text-decoration: underline; }
+.forge-page .forge-foot { margin: 0 auto; padding-block: 32px 48px; border-top: 1px solid var(--f-field); color: var(--f-soft); }
+/* The cut characters lead; the Latin name and the one action sit under them and defer. */
+.forge-hero { padding-block: 24px 56px; }
+.forge-cut { max-width: 56rem; }
+.forge-cut canvas { display: block; width: 100%; aspect-ratio: 2.2 / 1; }
+.forge-cut figcaption { text-align: right; }
+.forge-intro { display: grid; gap: 16px 56px; align-items: end; margin-top: 24px; }
+@media (min-width: 900px) { .forge-intro { grid-template-columns: auto 1fr; } }
+.forge-intro h1 { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 700; letter-spacing: -0.02em; }
+.forge-intro p { margin: 0 0 20px; max-width: 46ch; font-size: 1.125rem; }
+.forge-page .forge-button {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 999px;
+  background: var(--red); color: #fff; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.forge-page .forge-button:hover { background: var(--red-deep); }
+.forge-night { background: var(--f-night); color: var(--f-glow); }
+.forge-night h2, .forge-night a { color: var(--f-glow); }
+.forge-page .forge-night p { color: var(--f-ash); }
+.forge-fire-text { padding-block: 40px 8px; }
+.forge-fire { position: relative; }
+/* Taller on a phone, so the band still reads as a fire. */
+.forge-flames { display: block; width: 100%; aspect-ratio: 2 / 1; }
+@media (min-width: 640px) { .forge-flames { aspect-ratio: 3 / 1; } }
+/* The paper tears back over the base of the fire, so the flames stand on its edge. */
+.forge-night > canvas:last-child { position: relative; margin-top: -40px; }
+/* No cards: a list with the gyuto, the shape most kitchens start with, set larger. */
+.forge-shapes { padding-block: 56px 24px; }
+.forge-shapes ul { display: grid; gap: 24px; margin: 24px 0 0; padding: 0; list-style: none; }
+.forge-shapes li { display: grid; gap: 4px 32px; }
+@media (min-width: 640px) { .forge-shapes li { grid-template-columns: 11rem 1fr; align-items: baseline; } }
+.forge-shapes h3 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+.forge-shapes li:first-child h3 { font-size: 2.25rem; }
+.forge-shapes li p { margin: 0; }
+.forge-finish { display: grid; gap: 24px 56px; align-items: center; padding-block: 56px; }
+@media (min-width: 900px) { .forge-finish { grid-template-columns: 1fr 1.2fr; } }
+.forge-water { display: block; width: 100%; aspect-ratio: 4 / 3; }
+.forge-order { padding-block: 56px 72px; }
+.forge-form { display: grid; gap: 20px; max-width: 32rem; margin-top: 24px; }
+.forge-form label { display: grid; gap: 6px; font-weight: 700; }
+.forge-form input:not([type="radio"]), .forge-form select {
+  min-height: 44px; padding: 0 12px; border: 1px solid var(--f-field); border-radius: 6px; background: #fdfcfa;
+  color: var(--f-ink); font: inherit;
+}
+.forge-form fieldset { display: grid; gap: 0; margin: 0; padding: 0; border: 0; }
+.forge-form legend { margin-bottom: 6px; padding: 0; font-weight: 700; }
+.forge-form fieldset label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; }
+.forge-form input[type="radio"] { width: 20px; height: 20px; accent-color: var(--red); }
+.forge-form .forge-button { justify-self: start; }
+.forge-sent { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px 40px; margin-top: 24px; }
+.forge-seal { display: block; width: 112px; aspect-ratio: 1 / 1.6; }
+.forge-sent h3 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 700; }
+.forge-sent h3:focus { outline: none; }
+.forge-page .forge-again { border: 1px solid var(--f-field); background: transparent; color: var(--f-ink); }
+.forge-page .forge-again:hover { border-color: var(--f-ink); }
