@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://sumi.tengubyte.io/</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/without-react</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/brush-reveal</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/brush-paint</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/brush-mark</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/hanko</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/kanji-strike</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/enso</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/fude</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/suminagashi</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/ink-drop</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/ink-wipe</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/ink-transition</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/torn-edge</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/irodori</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/hake</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/tachigami</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/sansui</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/ink-splat</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/hinoko</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/kaen</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/shuchusen</loc></url>
+  <url><loc>https://sumi.tengubyte.io/docs/hanasaka</loc></url>
   <url><loc>https://sumi.tengubyte.io/effects</loc></url>
   <url><loc>https://sumi.tengubyte.io/showcase</loc></url>
   <url><loc>https://sumi.tengubyte.io/showcase/sumigane</loc></url>

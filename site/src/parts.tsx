@@ -14,12 +14,12 @@ export function Code({ children }: { readonly children: string }): JSX.Element {
   };
   return (
     <div className="code">
-      <pre>
-        <code>{children}</code>
-      </pre>
       <button type="button" onClick={copy}>
         {copied ? "Copied" : "Copy"}
       </button>
+      <pre>
+        <code>{children}</code>
+      </pre>
     </div>
   );
 }

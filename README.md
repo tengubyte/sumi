@@ -2,7 +2,7 @@
 
 Twenty-one brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
 
-Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects)
+Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects). Docs, one page per effect: [sumi.tengubyte.io/docs](https://sumi.tengubyte.io/docs)
 
 Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://tengubyte.io).
 
@@ -37,6 +37,20 @@ The core calls for pages without React are under [Without React](#without-react)
 ```sh
 npm install github:tengubyte/sumi#v0.11.0
 ```
+
+## Usage
+
+Each effect is a React component. Import it, give it a size with `className` or `style`, and it plays once it scrolls into view.
+
+```tsx
+import { InkDrop } from "@tengubyte/sumi";
+
+export function Tea() {
+  return <InkDrop color="#4f7a3a" style={{ width: "100%", aspectRatio: "4 / 3" }} />;
+}
+```
+
+Canvas effects such as `InkDrop`, `Sansui` and `Enso` fill the box you give them, so give them a width and a height or an aspect ratio. Picture effects such as `InkWipe`, `TornEdge` and `Irodori` take the picture's `src`, `width`, `height` and `alt`, and show the plain picture where WebGL is missing. Each effect's section lists its props. Pages without React can call the same effects from `@tengubyte/sumi/core`, as shown under [Without React](#without-react).
 
 ## BrushReveal
 

@@ -1,5 +1,6 @@
 import { BrushMark, InkSplat, KanjiStrike } from "@tengubyte/sumi";
 import type { JSX } from "react";
+import { DOCS } from "./docPages";
 import { LIST } from "./effects";
 import { Code } from "./parts";
 import { Link } from "./router";
@@ -19,6 +20,7 @@ export function Header(): JSX.Element {
         </Link>
         <nav aria-label="Site">
           <Link to="/">Home</Link>
+          <Link to={DOCS.path}>Docs</Link>
           <Link to={LIST.path}>Effects</Link>
           <Link to={SHOWCASE.path}>Showcase</Link>
           <a href="https://github.com/tengubyte/sumi">GitHub</a>
@@ -54,7 +56,8 @@ export function Hero({ dark }: { readonly dark: boolean }): JSX.Element {
           </p>
           <Code>npm install github:tengubyte/sumi#v0.11.0</Code>
           <p className="more">
-            <Link to={LIST.path}>See every effect</Link> or <Link to={SHOWCASE.path}>see them build two made-up sites</Link>
+            <Link to={DOCS.path}>Read the docs</Link>, <Link to={LIST.path}>see every effect</Link> or{" "}
+            <Link to={SHOWCASE.path}>see them build two made-up sites</Link>
           </p>
         </div>
       </section>

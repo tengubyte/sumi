@@ -1,4 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, type JSX } from "react";
+import { Docs } from "./Docs";
+import { DOC_PAGES, DOCS } from "./docPages";
 import { EffectList } from "./EffectList";
 import { LIST } from "./effects";
 import { Footer, Header, Hero, NotFound } from "./Layout";
@@ -10,7 +12,7 @@ import { Sumigane } from "./Sumigane";
 import { Tsukimi } from "./Tsukimi";
 
 const SITE = "https://sumi.tengubyte.io";
-const PAGES = [LIST, SHOWCASE, SUMIGANE, TSUKIMI] as const;
+const PAGES = [LIST, SHOWCASE, SUMIGANE, TSUKIMI, ...DOC_PAGES] as const;
 
 /** Each page but home gets its own title and description; the home page keeps those from index.html. */
 function usePageMeta(path: string): void {
@@ -30,6 +32,7 @@ function Page({ path, dark }: { readonly path: string; readonly dark: boolean })
   if (path === "/") return <Hero dark={dark} />;
   if (path === LIST.path) return <EffectList dark={dark} />;
   if (path === SHOWCASE.path) return <ShowcaseList />;
+  if (path === DOCS.path || path.startsWith(`${DOCS.path}/`)) return <Docs path={path} />;
   return <NotFound />;
 }
 
@@ -39,13 +42,15 @@ export function App(): JSX.Element {
   const first = useRef(true);
   usePageMeta(path);
 
-  // After a link or the back button: back to where the reader was, and the new heading takes focus so a
-  // screen reader announces the page. The first load keeps the browser's own focus and goes to its #section.
+  // After a link or the back button: back to where the reader was, or to the link's #section, and the new
+  // heading takes focus so a screen reader announces the page. The first load keeps the browser's own focus.
   useLayoutEffect(() => {
-    scrollTo(0, rememberedScroll());
+    const section = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    const back = rememberedScroll();
+    if (section && (first.current || back === 0)) section.scrollIntoView();
+    else scrollTo(0, back);
     if (first.current) {
       first.current = false;
-      if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
       return;
     }
     document.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
