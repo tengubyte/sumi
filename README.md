@@ -35,7 +35,7 @@ The core calls for pages without React are under [Without React](#without-react)
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.7.0
+npm install github:tengubyte/sumi#v0.8.0
 ```
 
 ## BrushReveal
