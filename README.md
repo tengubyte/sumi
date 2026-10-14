@@ -16,7 +16,7 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [Enso](#enso) | Draws an ensō from a seed | [ensō](https://sumi.tengubyte.io/effects#enso) |
 | [Fude](#fude) | A sumi brush the visitor draws with | [draw](https://sumi.tengubyte.io/effects#fude) |
 | [Suminagashi](#suminagashi) | Floats ink on water | [water](https://sumi.tengubyte.io/effects#float) |
-| [InkDrop](#inkdrop) | Drops ink into still water | [drop](https://sumi.tengubyte.io/effects#drop) |
+| [InkDrop](#inkdrop) | Drops ink into still water, or onto paper seen from above | [drop](https://sumi.tengubyte.io/effects#drop) |
 | [InkWipe](#inkwipe) | Brings an image in under ink | [image](https://sumi.tengubyte.io/effects#wipe) |
 | [inkTransition](#inktransition) | Changes the page under ink | [page](https://sumi.tengubyte.io/effects#transition) |
 | [TornEdge](#tornedge) | Tears paper round a picture or across a section | [tear](https://sumi.tengubyte.io/effects#torn) |
@@ -241,23 +241,36 @@ Drops of ink and clear water land on one spot in turn, each pushing the last out
 import { InkDrop } from "@tengubyte/sumi";
 
 <InkDrop drops={[[0.38, 0.1], [0.64, 0.1, 0.9, "#d8001a"]]} style={{ width: "100%", aspectRatio: "4 / 3" }} />
-<InkDrop view="top" drops={[[0.5, 0.5]]} style={{ width: "100%", aspectRatio: "1" }} />
+<InkDrop view="top" kind="flick" style={{ width: "100%", aspectRatio: "4 / 3" }} />
 ```
 
-Ink dropped into still water. From the side, ink is heavier than water, so each drop sinks; its thick patches fall faster than its thin ones, which rolls it into a cap that breaks into curls and threads. This view is a small fluid simulation (Stam's stable fluids) on half-float textures. It keeps velocity on a coarse grid and ink on a fine one, and steps 60 times a second. Devices that cannot render to half-float textures get a traced vortex ring instead.
+From the side, ink falls into still water. It is heavier than water, so each drop sinks; its thick patches fall faster than its thin ones, which rolls it into a cap that breaks into curls and threads. This view is a small fluid simulation (Stam's stable fluids) on half-float textures. It keeps velocity on a coarse grid and ink on a fine one, and steps 60 times a second. Devices that cannot render to half-float textures get a traced vortex ring instead.
 
-From above, the landing throws the ink outward, far harder in a few directions, and those become needle rays with drops flung past their tips. Under that push the splash is a polar shape that grows with time, so the top view needs no simulation and draws any frame straight from the time.
+From above, sumi ink lands on washi, drawn in code. Satellite drops skid as they land, so their tails point away from the landing, and spikes and streaks break into beads. After the black, a grey halo wicks into the paper fibres and slows as it goes. The top view needs no simulation, so any frame, the last one included, comes straight from the time.
+
+| Kind | What lands |
+|---|---|
+| `drop` | A round blot, sometimes with a smaller drop merged into its rim, and a few satellites. |
+| `splash` | A blot thrown out into spikes, beads past their tips, satellites and a little mist. |
+| `flick` | A brush flicked along `angle`: a short smear, then curving streaks that end in teardrops. |
+| `spray` | Grainy specks off a dry brush, thinning out from the middle, with no halo. |
+| `bloom` | A soft, mottled grey stain that keeps spreading while it is wet. |
+| `drip` | A drop that runs along `angle`, down by default, with a bulb leading. |
+| `ring` | A drop that dries with its pigment pulled out to a dark rim, leaving the middle pale. |
 
 | Prop | Type | Default | What it does |
 |---|---|---|---|
-| `view` | `"side" \| "top"` | `"side"` | Watch the ink sink through the water, or look down as it lands and splashes. |
-| `drops` | `[x, y, start?, color?][]` | `[[0.5, 0.1]]`, top `[[0.5, 0.5]]` | Up to three: where, as shares of the canvas (y down), when in seconds, and their ink. |
+| `view` | `"side" \| "top"` | `"side"` | Watch the ink sink through water, or look down as it lands on paper. |
+| `drops` | `[x, y, start?, color?][]` | `[[0.5, 0.1]]`; top `[[0.5, 0.5]]`, a drip `[[0.5, 0.2]]`, a flick `[[0.25, 0.7]]` | Up to three: where, as shares of the canvas (y down), when in seconds, and their ink. |
 | `color` | `` `#${string}` `` | `"#161314"` | Ink for drops without their own. |
-| `swirl` | `number` | `0.6` | How much the water churns, 0 to 2. More curls from the side, more bend in the rays from above. |
-| `seed` | `number` | `1` | How the ink breaks up and where the rays point. |
-| `speed`, `delay` | `number` | `1`, `0` | Each drop takes 4.5 seconds to settle at speed 1. |
+| `seed` | `number` | `1` | How the ink breaks up, where the spikes point and where the satellites land. |
+| `swirl` | `number` | `0.6` | Side view: how much the water churns, 0 to 2. |
+| `kind` | `"drop" \| "splash" \| "flick" \| "spray" \| "bloom" \| "drip" \| "ring"` | `"splash"` | Top view: what lands. |
+| `size` | `number` | `1` | Top view: how big each one lands, 0.2 to 3. |
+| `angle` | `number` | `-30` for a flick, `90` for a drip, else `0` | Top view: the way a flick throws, a drip runs or a spray stretches, in degrees clockwise from pointing right. |
+| `speed`, `delay` | `number` | `1`, `0` | At speed 1 a drop takes 4.5 seconds to settle in water and 3 on paper. |
 
-Side drops sink most of the way down, so start them near the top. A splash from above reaches about 40% of the canvas height from where it lands. Under reduced motion the side view runs the whole simulation once, as soon as the canvas is in view, and shows the last frame. The top view renders at no more than half a megapixel; its edges stay sharp at that size.
+Side drops sink most of the way down, so start them near the top. From above, a splash's satellites reach about 45% of the canvas height from where it lands, a flick about half, and a drip runs down up to two thirds of it. Each kind is its own small shader, so a page that shows several kinds compiles one for each. Under reduced motion the side view runs the whole simulation once, as soon as the canvas is in view, and shows the last frame; the top view shows its settled frame. The top view renders at no more than half a megapixel.
 
 ## InkWipe
 

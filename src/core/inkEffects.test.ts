@@ -29,6 +29,10 @@ describe("dropSeconds", () => {
     expect(dropSeconds([[0.5, 0.1]])).toBe(4.5);
     expect(dropSeconds([[0.3, 0.1, 0], [0.7, 0.1, 1.2]])).toBeCloseTo(5.7);
   });
+
+  it("runs until the last drop has settled on paper", () => {
+    expect(dropSeconds([[0.3, 0.5, 0], [0.7, 0.5, 0.8]], 3)).toBeCloseTo(3.8);
+  });
 });
 
 describe("floodReach", () => {

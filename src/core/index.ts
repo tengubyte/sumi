@@ -6,7 +6,7 @@ export { ensoStroke, fudePad, type FudeOptions, type FudePad, type FudeStroke } 
 export { hakeIn, paintHake, type HakeCutOptions, type HakeOptions, type HakeStrokeOptions } from "./hake.js";
 export { bloomBranch, type BloomOptions } from "./hanasaka.js";
 export { riseEmbers, type EmberOptions } from "./hinoko.js";
-export { dropInk, type Drop, type DropOptions } from "./inkDrop.js";
+export { dropInk, type Drop, type DropKind, type DropOptions } from "./inkDrop.js";
 export { colorIn, type ColorOptions } from "./irodori.js";
 export { inkTransition, type Spot, type TransitionOptions } from "./inkTransition.js";
 export { kindleFire, type FireLook, type FireOptions } from "./kaen.js";
