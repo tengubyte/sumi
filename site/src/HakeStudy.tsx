@@ -1,22 +1,6 @@
 import { HakeCut, HakeStroke } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
-
-const HAKE: readonly Row[] = [
-  ["src, width, height, alt", "", "required", "HakeCut: the picture, and its own size in px."],
-  ["shape", '"edge" | "band"', '"edge"', "HakeCut: keep the picture on one side of a brushed edge, or inside one band."],
-  ["side", '"top" | "bottom"', '"top"', "HakeCut: which side of the edge keeps the picture."],
-  ["offset", "number", "0.2 (band 0)", "HakeCut: how far below the middle the edge or band runs, as a share of the height."],
-  ["thickness", "number", "0.6 (stroke 0.3)", "The band's share of the height, or the stroke's share of the shorter side."],
-  ["streaks", "number", "0", "HakeCut: white streaks laid over the picture along its edge, 0 to 1."],
-  ["color", "#rrggbb", '"#161314"', "HakeStroke: the paint."],
-  ["bend", "number", "0", "HakeStroke: positive sags in the middle, negative arches."],
-  ["angle", "number", "-12 (stroke 0)", "The way the brush travels in degrees. Positive climbs."],
-  ["seed", "number", "1", "Changes the bristles."],
-  ["duration, delay", "number", "1.3 (stroke 1), 0", "Seconds the stroke takes, and seconds to wait once in view."],
-  ["className, style", "", "", "HakeStroke: size the canvas here; the stroke runs through its middle."],
-];
 
 type Cut = "edge" | "streaks" | "band" | "stroke";
 
@@ -62,7 +46,7 @@ export function HakeStudy(): JSX.Element {
       <HakeCut key={key} {...art} />
     );
   return (
-    <Study id="hake" kanji="刷" title="Brush a picture in" what="HakeCut and HakeStroke" props={{ rows: HAKE, label: "HakeCut and HakeStroke props" }} stage={stage}>
+    <Study id="hake" kanji="刷" title="Brush a picture in" what="HakeCut and HakeStroke" stage={stage}>
       <p>
         One pass of a hake, the wide flat brush. Its bristles leave long streaks along the way it travels, the
         edges break up where the brush runs dry, and the head shows bristle tips as it moves.

@@ -1,6 +1,5 @@
 import { BrushMark } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { MARK } from "./apiRows";
 import { Code, Study, useReplay } from "./parts";
 
 export function MarkStudy(): JSX.Element {
@@ -15,7 +14,6 @@ export function MarkStudy(): JSX.Element {
       kanji="印"
       title="Mark the words"
       what="BrushMark"
-      props={{ rows: MARK, label: "BrushMark props" }}
       stage={
         <div key={run} className="mark-stage">
           <p className="mark-head">

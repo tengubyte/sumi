@@ -117,7 +117,15 @@ import { BrushMark } from "@tengubyte/sumi";
 </h1>
 ```
 
-Hand-drawn annotations in the spirit of Rough Notation, with the brush: `underline` (default), `circle` (an ensō round the word), `highlight` (a dry swipe behind the text), `strike` and `box`. The words stay plain text on one line; the mark is measured when it scrolls into view and painted on a canvas round it. Takes `seed` (how far off true the hand is), `color` (default `"#d8001a"`), `speed` and `delay`. Stagger several marks with `delay`.
+Hand-drawn annotations in the spirit of Rough Notation, with the brush: `underline` (default), `circle` (an ensō round the word), `highlight` (a dry swipe behind the text), `strike` and `box`. The words stay plain text on one line; the mark is measured when it scrolls into view and painted on a canvas round it.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `children` | `ReactNode` | required | The words. They stay on one line. |
+| `type` | `"underline" \| "circle" \| "highlight" \| "strike" \| "box"` | `"underline"` | The mark. A highlight goes behind the text. |
+| `seed` | `number` | `1` | How far off true the hand is. |
+| `color` | `` `#${string}` `` | `"#d8001a"` | The ink. |
+| `speed`, `delay` | `number` | `1`, `0` | 2 paints twice as fast; seconds after it is in view. Stagger several marks with `delay`. |
 
 ## Hanko
 
@@ -172,7 +180,14 @@ import { Enso } from "@tengubyte/sumi";
 <Enso seed={42} style={{ width: 360, aspectRatio: "1" }} />
 ```
 
-The same brush given one stroke made from a seed: where it starts, how far round it goes, its wobble, weight and how dry its tail runs. The same seed always draws the same ensō. Takes `seed` (default `7`), `weight` (default from the seed), and `speed`, `color`, `bleed` and `delay` as for `BrushPaint`.
+The same brush given one stroke made from a seed: where it starts, how far round it goes, its wobble, weight and how dry its tail runs. The same seed always draws the same ensō.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `seed` | `number` | `7` | Where it starts and lifts, its wobble, weight and dryness. |
+| `weight` | `number` | from the seed | Brush radius as a share of the canvas width. |
+| `speed`, `color`, `bleed`, `delay` | | | As for `BrushPaint`. |
+| `className`, `style` | | | Size the canvas here. |
 
 ## Fude
 
@@ -407,7 +422,16 @@ import { Sansui } from "@tengubyte/sumi";
 <Sansui seed={8} style={{ width: "100%", aspectRatio: "16 / 9" }} />
 ```
 
-An ink-wash landscape drawn in code. Five ridges are brushed in from far to near; each ridge line goes on left to right, then its wash creeps down and thins into mist. The sun bleeds in like vermilion on damp paper and bands of mist drift across it. Takes `seed` (default `3`), `sun` (default `true`), `mist` (0 to 1, default `0.6`), `color`, `sunColor` (default `"#d8001a"`), `speed` and `delay`. It runs about 6.5 seconds at speed 1.
+An ink-wash landscape drawn in code. Five ridges are brushed in from far to near; each ridge line goes on left to right, then its wash creeps down and thins into mist. The sun bleeds in like vermilion on damp paper and bands of mist drift across it. It runs about 6.5 seconds at speed 1.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `seed` | `number` | `3` | Changes every ridge. |
+| `sun` | `boolean` | `true` | A sun behind the far ridges, half veiled by mist. |
+| `mist` | `number` | `0.6` | How much mist lies between the ridges, 0 to 1. |
+| `color`, `sunColor` | `` `#${string}` `` | `"#161314"`, `"#d8001a"` | The ink and the sun. |
+| `speed`, `delay` | `number` | `1`, `0` | 2 paints twice as fast; seconds after it is in view. |
+| `className`, `style` | | | Size the canvas here; wide shapes suit it. |
 
 ## InkSplat
 

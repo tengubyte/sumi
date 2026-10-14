@@ -1,20 +1,6 @@
 import { Kaen, type FireLook, type KaenProps } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
-
-const FIRE: readonly Row[] = [
-  ["text", "string", "none", "One character, or two, to set alight. Without it, or src, the fire burns along the bottom edge."],
-  ["src", "string", "none", "A picture with a transparent background to set alight round its outline. Another origin must allow CORS."],
-  ["label", "string", "none", "What the character or picture shows. Without it the canvas is hidden from assistive technology."],
-  ["look", '"shu" | "sumi" | "night"', '"shu"', "Vermilion on paper, black ink, or brighter for a dark page."],
-  ["reach", "number", "0.6 (text, src 0.13)", "How high the flames climb, as a share of the shorter side."],
-  ["font, weight", "string, number", "a Mincho stack, 700", "A CSS font family you load. The fire waits for it."],
-  ["color", "#rrggbb", "by look", "The character: sumi on shu, vermilion on sumi, paper white on night."],
-  ["seed", "number", "1", "Changes every tongue and whorl."],
-  ["speed, delay", "number", "1, 0", "2 burns twice as fast; seconds to wait once in view."],
-  ["className, style", "", "", "Size the canvas here. A character or picture sits a little below its middle."],
-];
 
 type Fuel = "edge" | "炎" | "tengu";
 
@@ -37,7 +23,6 @@ export function FireStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="炎"
       title="Set it alight"
       what="Kaen"
-      props={{ rows: FIRE, label: "Kaen props" }}
       stage={<div className={look === "night" ? "night" : "paper"}>{fire}</div>}
     >
       <p>

@@ -1,6 +1,5 @@
 import { TornBand, TornEdge } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { TORN } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
 
@@ -42,7 +41,7 @@ export function TornStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       </div>
     );
   return (
-    <Study id="torn" kanji="破" title="Tear the paper" what="TornEdge and TornBand" props={{ rows: TORN, label: "TornEdge and TornBand props" }} stage={stage}>
+    <Study id="torn" kanji="破" title="Tear the paper" what="TornEdge and TornBand" stage={stage}>
       <p>
         Paper torn by hand. The edge wanders at three scales, a thin white core shows where the tear split the
         sheet, and long fibres reach past it. The torn sheet throws a soft shadow.

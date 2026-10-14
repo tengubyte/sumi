@@ -1,6 +1,5 @@
 import { Sansui } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { SANSUI } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Code, Range, Study, useReplay } from "./parts";
 
@@ -18,7 +17,6 @@ export function SansuiStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="山"
       title="Paint the mountains"
       what="Sansui"
-      props={{ rows: SANSUI, label: "Sansui props" }}
       stage={<Sansui key={run} seed={seed} sun={sun} mist={mist} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "16 / 9" }} />}
     >
       <p>

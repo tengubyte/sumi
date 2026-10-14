@@ -1,5 +1,5 @@
 import readme from "../../README.md?raw";
-import { EFFECTS, type Effect } from "./effects";
+import { docPath, EFFECTS, type Effect } from "./effects";
 import { sections, type Resolve } from "./markdown";
 
 // The docs pages read the README, so the docs and the README cannot drift apart.
@@ -14,8 +14,6 @@ export interface DocPage {
   readonly line: string;
   readonly effect?: Effect;
 }
-
-export const docPath = (effect: Effect): string => `${DOCS.path}/${effect.slug}`;
 
 /** What each effect does, from the table at the top of the README. */
 const DOES = new Map<string, string>();

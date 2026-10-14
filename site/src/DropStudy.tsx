@@ -1,6 +1,5 @@
 import { InkDrop, type Drop } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { DROP } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Range, Study, useReplay } from "./parts";
 
@@ -33,7 +32,6 @@ export function DropStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="滴"
       title="Drop ink in water"
       what="InkDrop"
-      props={{ rows: DROP, label: "InkDrop props" }}
       stage={<InkDrop key={`${view} ${fall} ${String(run)}`} view={view} drops={drops} swirl={swirl} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "4 / 3" }} />}
     >
       <p>

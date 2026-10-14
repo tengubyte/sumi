@@ -1,20 +1,7 @@
 import { ensoStroke, Fude, type FudeHandle } from "@tengubyte/sumi";
 import { useCallback, useRef, useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study } from "./parts";
-
-const FUDE: readonly Row[] = [
-  ["color", "#rrggbb", '"#161314"', "The ink."],
-  ["size", "number", "9", "The brush's half width in CSS px at an even pace."],
-  ["dryAfter", "number", "1200", "CSS px of stroke a loaded brush lasts before it runs dry."],
-  ["fadeAfter", "number", "1.6", "Seconds of rest before the strokes fade. 0 keeps them."],
-  ["onDrawing", "(drawing) => void", "", "Told when the brush goes down and comes up."],
-  ["seed", "number", "1", "Changes how much ink each bristle holds."],
-  ["label", "string", "", "What the drawing area is for. Without it the canvas is hidden from assistive technology."],
-  ["className, style", "", "", "Size the canvas here. A resize wipes it."],
-  ["ref", "FudeHandle", "", "trace(stroke) draws a stroke as a hand would; clear() wipes the paper."],
-];
 
 type Surface = "paper" | "picture";
 type Ink = "sumi" | "red";
@@ -68,7 +55,7 @@ export function FudeStudy({ dark }: { readonly dark: boolean }): JSX.Element {
     </div>
   );
   return (
-    <Study id="fude" kanji="描" title="Draw with a brush" what="Fude" props={{ rows: FUDE, label: "Fude props" }} stage={stage}>
+    <Study id="fude" kanji="描" title="Draw with a brush" what="Fude" stage={stage}>
       <p>
         A sumi brush to draw with. It goes in thin and presses, runs thinner and greyer when fast, and dries out
         bristle by bristle into streaks. A slow lift stops round; a quick one flicks off to a dry point. A pen&apos;s

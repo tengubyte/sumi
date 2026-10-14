@@ -1,6 +1,5 @@
 import { InkWipe, type Blot, type Hex } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { WIPE } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
 
@@ -24,7 +23,6 @@ export function WipeStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="滲"
       title="Bring an image in under ink"
       what="InkWipe"
-      props={{ rows: WIPE, label: "InkWipe props" }}
       stage={
         <InkWipe
           key={`${spread} ${String(over)} ${String(run)}`}

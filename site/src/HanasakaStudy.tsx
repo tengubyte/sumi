@@ -1,20 +1,6 @@
 import { Hanasaka } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
-
-const BLOOM: readonly Row[] = [
-  ["from", "[x, y]", "[-0.04, 0.8]", "Where the branch starts, as shares of the canvas. Past an edge, it grows in from outside."],
-  ["angle", "number", "26", "The way it grows in degrees. Positive climbs."],
-  ["reach", "number", "1", "How far it grows. 0.5 is half as far."],
-  ["flowers, petals", "number", "22, 10", "Blossoms along the branch, up to 28, and petals that fall, up to 16."],
-  ["wind", "[x, y]", "[0.06, 0.02]", "Where the falling petals drift, per second."],
-  ["bark, outline", "#rrggbb", '"#291f1c", "#3b1f26"', "The branch's ink, and the line round each petal."],
-  ["pink, heart", "#rrggbb", '"#f7bfd1", "#db6185"', "The petals, and the deep pink at each flower's heart."],
-  ["seed", "number", "1", "Grows a different branch."],
-  ["duration, delay", "number", "5, 0", "Seconds from first stroke to last petal, and seconds to wait once in view."],
-  ["className, style", "", "", "Size the canvas here."],
-];
 
 type Grow = "left" | "above" | "rising";
 
@@ -40,7 +26,6 @@ export function HanasakaStudy({ dark }: { readonly dark: boolean }): JSX.Element
       kanji="花"
       title="Bring a branch into bloom"
       what="Hanasaka"
-      props={{ rows: BLOOM, label: "Hanasaka props" }}
       stage={
         <Hanasaka
           key={`${grow} ${String(seed)} ${String(run)}`}

@@ -1,6 +1,5 @@
 import { BrushReveal } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { REVEAL } from "./apiRows";
 import { Code, Range, Study, useReplay } from "./parts";
 
 export function RingStudy(): JSX.Element {
@@ -12,7 +11,6 @@ export function RingStudy(): JSX.Element {
       kanji="円"
       title="Paint a ring"
       what='BrushReveal with sweep="ring"'
-      props={{ rows: REVEAL, label: "BrushReveal props" }}
       stage={<BrushReveal key={run} src="/art/enso.webp" width={560} height={560} sweep="ring" startAngle={2} duration={duration} />}
     >
       <p>

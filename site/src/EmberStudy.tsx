@@ -1,6 +1,5 @@
 import { Hinoko } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { EMBERS } from "./apiRows";
 import { Choice, Code, Range, Study, useReplay } from "./parts";
 
 type Fire = "fire" | "burst";
@@ -16,7 +15,6 @@ export function EmberStudy(): JSX.Element {
       kanji="火"
       title="Send up embers"
       what="Hinoko"
-      props={{ rows: EMBERS, label: "Hinoko props" }}
       stage={
         <div className="night embers">
           <img src="/art/sansui.webp" width={1200} height={674} alt="" />

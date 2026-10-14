@@ -1,6 +1,5 @@
 import { KanjiStrike } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { STRIKE } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
 
 type Word = "死" | "危" | "忍" | "斬";
@@ -28,7 +27,6 @@ export function StrikeStudy(): JSX.Element {
       kanji="撃"
       title="Strike a character"
       what="KanjiStrike"
-      props={{ rows: STRIKE, label: "KanjiStrike props" }}
       stage={glow ? <div className="night">{strike}</div> : strike}
     >
       <p>

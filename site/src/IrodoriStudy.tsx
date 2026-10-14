@@ -1,16 +1,6 @@
 import { Irodori, type Blot } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
-
-const IRODORI: readonly Row[] = [
-  ["src, width, height, alt", "", "required", "The picture, and its own size in px."],
-  ["blooms", "[x, y, start][]", "three", "Where colour starts, as shares of the picture, and when, as a share of the run. Up to five."],
-  ["paper, ink", "#rrggbb", '"#f5f1eb", "#161314"', "The light and the dark of the wash."],
-  ["seed", "number", "1", "Changes the shape of the blooms."],
-  ["duration, delay", "number", "2.6, 0", "Seconds the colour takes, and seconds to wait once in view."],
-  ["className, style", "", "", "Sizes the wrapper. Width alone keeps the picture's shape."],
-];
 
 type Art = "scene" | "tengu";
 type Spread = "three" | "edge" | "five";
@@ -47,7 +37,6 @@ export function IrodoriStudy(): JSX.Element {
       kanji="彩"
       title="Colour a picture in"
       what="Irodori"
-      props={{ rows: IRODORI, label: "Irodori props" }}
       stage={
         <Irodori
           key={`${art} ${spread} ${String(seed)} ${String(run)}`}

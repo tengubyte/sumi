@@ -1,6 +1,5 @@
 import { Hanko, type SealShape } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { HANKO } from "./apiRows";
 import { Choice, Code, Study, useReplay } from "./parts";
 
 type Seal = "ink" | "tengu" | "ichigo" | "wa";
@@ -27,7 +26,6 @@ export function HankoStudy(): JSX.Element {
       kanji="判"
       title="Press a seal"
       what="Hanko"
-      props={{ rows: HANKO, label: "Hanko props" }}
       stage={
         <Hanko
           key={`${pick} ${String(run)}`}

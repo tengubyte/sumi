@@ -1,21 +1,7 @@
 import { Shuchusen } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import type { Row } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
-
-const FOCUS: readonly Row[] = [
-  ["lines", '"focus" | "speed"', '"focus"', "Lines that run in toward a point, or stream past side by side."],
-  ["focus", "[x, y]", "[0.5, 0.5]", "The point they run toward, as shares of the canvas."],
-  ["clear", "[x, y]", "[0.32, 0.3]", "Half the width and height of the clear oval round it, as shares of the canvas."],
-  ["count", "number", "150", "How many lines go round, 8 to 600."],
-  ["weight", "number", "1", "Line thickness. 2 is twice as heavy."],
-  ["color", "#rrggbb", '"#161314"', "The ink."],
-  ["fps", "number", "10", "How often the lines are drawn anew. 0 keeps one drawing."],
-  ["angle, speed", "number", "0, 1", "Speed lines: their direction in degrees, and how fast they stream."],
-  ["seed, delay", "number", "1, 0", "Changes every line; seconds to wait once in view."],
-  ["className, style", "", "", "Size the canvas here, behind what the lines point at."],
-];
 
 type Lines = "focus" | "off" | "speed";
 
@@ -35,7 +21,6 @@ export function FocusStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="集"
       title="Draw focus lines"
       what="Shuchusen"
-      props={{ rows: FOCUS, label: "Shuchusen props" }}
       stage={
         <div className="focus-stage">
           <Shuchusen

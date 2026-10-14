@@ -1,6 +1,5 @@
 import { InkSplat, type Hex } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { SPLAT } from "./apiRows";
 import { Code, Range, Study } from "./parts";
 
 // True sumi disappears on dark paper, so the second ink lifts to a warm charcoal there.
@@ -21,7 +20,6 @@ export function SplatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="飛"
       title="Throw a splat"
       what="InkSplat"
-      props={{ rows: SPLAT, label: "InkSplat props" }}
       stage={
         <InkSplat
           seed={seed}

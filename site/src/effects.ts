@@ -42,6 +42,9 @@ export const EFFECTS: readonly Effect[] = [
   { slug: "hanasaka", name: "Hanasaka", group: "scene", anchors: ["bloom"] },
 ];
 
+/** An effect's docs page, with its usage and every prop. */
+export const docPath = (effect: Effect): string => `/docs/${effect.slug}`;
+
 /** The effects page. */
 export const LIST = { path: "/effects", name: "Effects", line: "Every effect in sumi. Each one plays as it scrolls into view." } as const;
 

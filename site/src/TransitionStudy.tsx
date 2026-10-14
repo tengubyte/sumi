@@ -1,7 +1,6 @@
 import { inkTransition, type Hex, type Spot } from "@tengubyte/sumi";
 import { useRef, useState, type JSX, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
-import { TRANSITION } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Code, Study } from "./parts";
 
@@ -37,7 +36,6 @@ export function TransitionStudy({ dark }: { readonly dark: boolean }): JSX.Eleme
       kanji="幕"
       title="Change the page under ink"
       what="inkTransition"
-      props={{ rows: TRANSITION, label: "inkTransition options" }}
       eager
       stage={
         <div ref={screen} className={`screen page-${String(page % 2)}`}>

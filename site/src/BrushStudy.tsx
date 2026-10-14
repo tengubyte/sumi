@@ -2,7 +2,6 @@ import { BrushPaint, type Hex } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
 import boku from "./kanji/058a8.svg?raw";
 import ei from "./kanji/06c38.svg?raw";
-import { BRUSH } from "./apiRows";
 import { Choice, Code, Range, Study, useReplay } from "./parts";
 
 // Our own line icon: corners, a circle, and a harai along the bottom.
@@ -37,7 +36,6 @@ export function BrushStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="筆"
       title="Write with a brush"
       what="BrushPaint"
-      props={{ rows: BRUSH, label: "BrushPaint props" }}
       stage={<BrushPaint key={`${name} ${String(run)}`} svg={art.svg} label={art.label} weight={weight} color={color} style={{ display: "block", width: "100%", aspectRatio: "1" }} />}
     >
       <p>

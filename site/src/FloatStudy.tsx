@@ -1,6 +1,5 @@
 import { Suminagashi, type MarblePattern } from "@tengubyte/sumi";
 import { useState, type JSX } from "react";
-import { FLOAT } from "./apiRows";
 import { inkFor } from "./BrushStudy";
 import { Choice, Code, Study, useReplay } from "./parts";
 
@@ -19,7 +18,6 @@ export function FloatStudy({ dark }: { readonly dark: boolean }): JSX.Element {
       kanji="流"
       title="Float ink on water"
       what="Suminagashi"
-      props={{ rows: FLOAT, label: "Suminagashi props" }}
       stage={<Suminagashi key={run} pattern={pattern} color={inkFor(dark)} style={{ display: "block", width: "100%", aspectRatio: "4 / 3" }} />}
     >
       <p>

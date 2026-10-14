@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type JSX, type ReactNode } from "react";
-import { Props, type PropsDoc } from "./Props";
+import { docPath, EFFECTS } from "./effects";
+import { Link } from "./router";
 
 /** A code block with a copy button. */
 export function Code({ children }: { readonly children: string }): JSX.Element {
@@ -32,14 +33,16 @@ interface StudyProps {
   readonly what: string;
   readonly stage: ReactNode;
   readonly children: ReactNode;
-  /** The effect's props table, shown last under how it works. */
-  readonly props?: PropsDoc | undefined;
   /** Keep the demo mounted off screen, for a study whose own code holds on to the demo's elements. */
   readonly eager?: boolean;
 }
 
-/** One effect: the live demo on one side, how it works, its controls and its props on the other. */
-export function Study({ id, kanji, title, what, stage, children, props, eager = false }: StudyProps): JSX.Element {
+/**
+ * One effect: the live demo on one side, how it works and its controls on the other. Its props live on its
+ * docs page, which the study links to last.
+ */
+export function Study({ id, kanji, title, what, stage, children, eager = false }: StudyProps): JSX.Element {
+  const effect = EFFECTS.find((one) => one.anchors.includes(id));
   return (
     <section id={id} className="study" aria-labelledby={`${id}-title`}>
       <header>
@@ -55,7 +58,11 @@ export function Study({ id, kanji, title, what, stage, children, props, eager = 
         {eager ? <div className="stage">{stage}</div> : <InView className="stage">{stage}</InView>}
         <div>
           {children}
-          {props && <Props {...props} />}
+          {effect && (
+            <p className="study-docs">
+              <Link to={docPath(effect)}>{effect.name} props and usage</Link>
+            </p>
+          )}
         </div>
       </div>
     </section>

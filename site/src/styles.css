@@ -94,6 +94,8 @@ button.primary:hover { background: var(--red-deep); }
 .controls label { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
 .controls input[type="range"] { width: 140px; accent-color: var(--red); }
 .controls output { min-width: 3.5ch; font-variant-numeric: tabular-nums; color: var(--ink-soft); font-weight: 400; }
+.study .study-docs { margin: 20px 0 0; }
+.study-docs a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
 
 .facts { padding-left: 1.2em; max-width: 64ch; }
 .facts li { margin-bottom: 8px; }
@@ -115,7 +117,6 @@ footer p { margin: 0 0 8px; }
 .study .screen p { margin: 0; max-width: 22ch; color: var(--ink-soft); }
 .screen.page-1::after { content: ""; position: absolute; right: 10%; top: 20%; width: 20%; aspect-ratio: 1; border-radius: 50%; background: var(--red); }
 button:disabled { opacity: 0.5; cursor: default; }
-.props summary { padding-block: 11px; font-weight: 700; cursor: pointer; }
 /* Effects made of light need a dark page under them, whichever theme the site is in. */
 .night { margin: -24px; padding: 24px; background: #100d0e; }
 /* And fire painted for paper needs paper under it. */
@@ -131,14 +132,6 @@ button:disabled { opacity: 0.5; cursor: default; }
 .fude-over img { display: block; width: 100%; height: auto; transition: filter 0.4s; }
 .fude-over canvas { position: absolute; inset: 0; height: 100%; }
 .fude-over.brushing img { filter: sepia(0.75) saturate(0.55) brightness(1.06) contrast(0.92); }
-.props { margin-top: 32px; border-top: 1px solid var(--line); }
-.props dl { margin: 4px 0 0; }
-.props dl > div { padding-block: 12px; border-bottom: 1px solid var(--line); }
-.props dt { display: flex; flex-wrap: wrap; gap: 4px 14px; font-weight: 700; }
-.props dt code { overflow-wrap: anywhere; }
-.props .type { color: var(--ink-soft); font-weight: 400; }
-.props dd { margin: 6px 0 0; max-width: 60ch; }
-.props .default { color: var(--ink-soft); font-size: 0.9375rem; }
 .mark-stage { padding: 24px 8px; }
 .mark-stage p { margin: 0 0 16px; font-size: 1.125rem; line-height: 2.1; }
 .mark-stage .mark-head { margin-bottom: 28px; font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.4; font-weight: 900; letter-spacing: -0.02em; }
