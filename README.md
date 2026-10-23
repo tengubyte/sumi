@@ -38,7 +38,7 @@ The core calls for pages without React are under [Without React](#without-react)
 ## Install
 
 ```sh
-npm install github:tengubyte/sumi#v0.12.0
+npm install github:tengubyte/sumi#v0.13.0
 ```
 
 ## Usage
