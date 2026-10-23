@@ -11,9 +11,12 @@ import { HakeStudy } from "./HakeStudy";
 import { HanasakaStudy } from "./HanasakaStudy";
 import { HankoStudy } from "./HankoStudy";
 import { IrodoriStudy } from "./IrodoriStudy";
+import { KasumiStudy } from "./KasumiStudy";
+import { KintsugiStudy } from "./KintsugiStudy";
 import { MarkStudy } from "./MarkStudy";
 import { BandStudy, RingStudy } from "./Reveals";
 import { SansuiStudy } from "./SansuiStudy";
+import { ShiboriStudy } from "./ShiboriStudy";
 import { SplatStudy } from "./SplatStudy";
 import { StrikeStudy } from "./StrikeStudy";
 import { TachigamiStudy } from "./TachigamiStudy";
@@ -47,7 +50,10 @@ export const BODIES: Readonly<Record<string, Body>> = {
   irodori: () => <IrodoriStudy />,
   hake: () => <HakeStudy />,
   tachigami: (dark) => <TachigamiStudy dark={dark} />,
+  kintsugi: () => <KintsugiStudy />,
+  kasumi: () => <KasumiStudy />,
   sansui: (dark) => <SansuiStudy dark={dark} />,
+  shibori: () => <ShiboriStudy />,
   "ink-splat": (dark) => <SplatStudy dark={dark} />,
   hinoko: () => <EmberStudy />,
   kaen: (dark) => <FireStudy dark={dark} />,

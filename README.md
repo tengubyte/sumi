@@ -1,6 +1,6 @@
 # sumi
 
-Twenty-one brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` plays each time it is called, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
+Twenty-four brush and ink effects for React, listed in the table below. Each one is a WebGL shader. Most play once as they scroll into view; `inkTransition` and `kasumiTransition` play each time they are called, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` is a brush the visitor draws with. React is the only dependency, and the core works without it.
 
 Live demos: [sumi.tengubyte.io/effects](https://sumi.tengubyte.io/effects). Docs, one page per effect: [sumi.tengubyte.io/docs](https://sumi.tengubyte.io/docs)
 
@@ -23,7 +23,10 @@ Sumi (墨) is the ink of Japanese brush painting. Made by [TenguByte](https://te
 | [Irodori](#irodori) | Colours a picture in from wet blooms | [colour](https://sumi.tengubyte.io/effects#irodori) |
 | [HakeCut](#hakecut) | Brushes a picture in with a wide flat brush, or drags one stroke | [hake](https://sumi.tengubyte.io/effects#hake) |
 | [Tachigami](#tachigami) | Cuts a picture or a word with one slash | [slash](https://sumi.tengubyte.io/effects#slash) |
+| [Kintsugi](#kintsugi) | Breaks a picture and mends it with gold | [mend](https://sumi.tengubyte.io/effects#kintsugi) |
+| [Kasumi](#kasumi) | Lays gold cloud bands across a section or the page | [mist](https://sumi.tengubyte.io/effects#kasumi) |
 | [Sansui](#sansui) | Paints ink-wash mountains | [hills](https://sumi.tengubyte.io/effects#sansui) |
+| [Shibori](#shibori) | Dyes cloth in indigo, dip by dip | [dye](https://sumi.tengubyte.io/effects#shibori) |
 | [InkSplat](#inksplat) | Throws an ink splat | [splat](https://sumi.tengubyte.io/effects#splat) |
 | [Hinoko](#hinoko) | Sends up embers | [embers](https://sumi.tengubyte.io/effects#embers) |
 | [Kaen](#kaen) | Sets fire along an edge, round a character or round a picture | [fire](https://sumi.tengubyte.io/effects#fire) |
@@ -427,6 +430,49 @@ One slash of the brush. A dry ink stroke tears across, spraying drops, and the t
 | `duration`, `delay` | `number` | `1.6` (fall `2`), `0` | Seconds the cut takes, and seconds to wait once in view. |
 | `className`, `style` | | | `Tachigami`: width alone keeps the image's shape. `TachigamiText`: size the canvas. |
 
+## Kintsugi
+
+```tsx
+import { Kintsugi } from "@tengubyte/sumi";
+
+<Kintsugi src="/scene.webp" width={1200} height={800} alt="A red sun over blue hills" impact={[0.42, 0.48]} />
+```
+
+Kintsugi (金継ぎ) mends broken pottery with lacquer and gold. The picture shakes and cracks run out from the blow, small shards near it and a few long cracks reaching the edges, each tapering to a point. Red urushi fills the cracks from the blow outward, then gold is dusted on, and a sheen crosses the seams once. The mended picture stays on a canvas over the hidden image. Only its opaque part breaks, so a cut-out figure cracks and the space round it stays clear. The seams are measured in pixels, so a thumbnail and a hero get the same line.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `src`, `width`, `height`, `alt` | | required | The picture and its own size in px. |
+| `impact` | `[x, y]` | `[0.45, 0.45]` | Where the blow lands, as shares of the picture (y down). |
+| `seed` | `number` | `1` | Changes the cracks. |
+| `duration`, `delay` | `number` | `3.4`, `0` | Seconds from the blow until the sheen has crossed, and seconds to wait once in view. |
+| `className`, `style` | | | Sizes the wrapper. Width alone keeps the image's shape. |
+
+## Kasumi
+
+```tsx
+import { Kasumi, kasumiTransition } from "@tengubyte/sumi";
+import { flushSync } from "react-dom";
+
+// Two bands slide in from either side and settle, between sections.
+<Kasumi style={{ width: "100%", height: 120 }} />
+
+// Five bands close over the page, it changes, and they drift out the far side.
+<button onClick={() => kasumiTransition(() => flushSync(() => setPage("dye")))}>
+```
+
+Suyari-gasumi, the long gold cloud bands that picture scrolls use to part one scene from the next. Each band is flat gold leaf laid in squares, its ends stepping in as rounded lobes, with gold dust and cut flakes gathered near the edge and a slow sheen across it. `kasumiTransition` works like `inkTransition`. It plays once per call, waits for `swap` with the page hidden, and resolves when the bands have gone. Make the change synchronous, as `flushSync` does for React state.
+
+| Prop or option | Type | Default | What it does |
+|---|---|---|---|
+| `seed` | `number` | `1` | Changes the bands' stepped ends and their leaf. |
+| `duration` | `number` | `1.4`, transition `1.8` | `Kasumi`: seconds until both bands settle. `kasumiTransition`: seconds to close and open, not counting the wait for `swap`. |
+| `delay` | `number` | `0` | `Kasumi`: seconds to wait once in view. |
+| `within` | `HTMLElement` | the window | `kasumiTransition`: cover a positioned element instead. |
+| `className`, `style` | | | `Kasumi`: size the canvas. Full width and 80 to 160 px tall suits a divider. |
+
+Clicks pass through the bands to the page under them. With reduced motion, or without WebGL, `kasumiTransition` just calls `swap`.
+
 ## Sansui
 
 ```tsx
@@ -445,6 +491,26 @@ An ink-wash landscape drawn in code. Five ridges are brushed in from far to near
 | `color`, `sunColor` | `` `#${string}` `` | `"#161314"`, `"#d8001a"` | The ink and the sun. |
 | `speed`, `delay` | `number` | `1`, `0` | 2 paints twice as fast; seconds after it is in view. |
 | `className`, `style` | | | Size the canvas here; wide shapes suit it. |
+
+## Shibori
+
+```tsx
+import { Shibori } from "@tengubyte/sumi";
+
+<Shibori pattern="arashi" dips={4} style={{ width: "100%", aspectRatio: "3 / 2" }} />
+```
+
+Shibori (絞り) is Japanese tie-dye. The cloth goes into the vat bottom first, comes out yellow-green and turns blue in the air, and each dip goes darker. The dye darkens the way light through it does, so a pale dip of indigo is sky blue, not grey. Where the cloth was bound the dye cannot reach, and it creeps in a little at the edge. The weave is measured in pixels. Three dips run about 4.5 seconds at speed 1.
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `pattern` | `"arashi" \| "itajime" \| "kanoko"` | `"itajime"` | Pleated on a pole, folded and clamped between round boards, or tied in tiny points. |
+| `dips` | `number` | `3` | Dips in the vat, 1 to 6. Each one darker. |
+| `color` | `` `#${string}` `` | `"#122645"` | The dye at its deepest, after six dips. |
+| `cloth` | `` `#${string}` `` | `"#ede8d9"` | The undyed cloth, which the resist keeps. |
+| `seed` | `number` | `1` | Changes the folds, the mottling and the weave. |
+| `speed`, `delay` | `number` | `1`, `0` | 2 dyes twice as fast; seconds after it is in view. |
+| `className`, `style` | | | Size the canvas here. |
 
 ## InkSplat
 
@@ -569,7 +635,7 @@ A cherry branch brushed in stroke by stroke, thick at the start and thinning as 
 ## Without React
 
 ```ts
-import { bloomBranch, colorIn, dropInk, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, kindleFire, paintEnso, paintHake, paintIn, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
+import { bloomBranch, colorIn, dropInk, dyeShibori, ensoStroke, floatInk, focusLines, fudePad, hakeIn, inkTransition, kasumiTransition, kindleFire, mendIn, paintEnso, paintHake, paintIn, paintKasumi, paintMark, paintSansui, paintStrokes, pressSeal, riseEmbers, slashIn, slashText, strikeKanji, tearBand, tearIn, throwSplat, wipeIn } from "@tengubyte/sumi/core";
 
 // The image must fill a positioned parent; the brush draws on a canvas laid over it.
 const stopPaint = paintIn(document.querySelector("img.enso")!, { sweep: "ring" });
@@ -598,19 +664,24 @@ const stopFire = kindleFire(document.querySelector("canvas.fire")!, { text: "炎
 const stopSlash = slashIn(document.querySelector("img.duel")!, { mode: "fall" });
 const stopWord = slashText(document.querySelector("canvas.word")!, "一閃", { color: "#d8001a" });
 const stopBloom = bloomBranch(document.querySelector("canvas.branch")!, { seed: 5 });
+// The image must fill a positioned parent; the mended picture stays on a canvas laid over it.
+const stopMend = mendIn(document.querySelector("img.bowl")!, { impact: [0.4, 0.5] });
+const stopMist = paintKasumi(document.querySelector("canvas.divider")!, { seed: 3 });
+const stopDye = dyeShibori(document.querySelector("canvas.cloth")!, { pattern: "kanoko" });
 const pad = fudePad(document.querySelector("canvas.sheet")!, { fadeAfter: 0 });
 await pad?.trace(ensoStroke());
 await inkTransition(() => showPage("water"), { from: [0.9, 0.1] });
+await kasumiTransition(() => showPage("dye"));
 ```
 
-Each call returns its cleanup, except `inkTransition`, which returns a promise, and `fudePad`, which returns a pad with `trace`, `clear` and `stop`, or null without WebGL.
+Each call returns its cleanup, except `inkTransition` and `kasumiTransition`, which return a promise, and `fudePad`, which returns a pad with `trace`, `clear` and `stop`, or null without WebGL.
 
 ## What every effect does
 
-- Plays once, when it has scrolled a little way into view. `inkTransition` plays once per call, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` draws when the visitor does.
-- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge, the parted halves, the branch in bloom or the landed splat. `inkTransition` just swaps, a torn cover is already off, `Irodori` and a closed `Tachigami` cut show the plain image, focus lines and fire hold still, no embers rise and a traced `Fude` stroke lands at once.
-- Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut`, `Tachigami` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` just swaps, and the canvas effects show nothing.
-- `BrushReveal`, `InkWipe`, `Irodori`, a closed `Tachigami` cut and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` removes its canvas once the ink has gone. The canvas effects, a torn frame, `HakeCut` and parted or fallen halves keep their last frame and redraw it on resize. `Fude` keeps its context while it is on the page.
+- Plays once, when it has scrolled a little way into view. `inkTransition` and `kasumiTransition` play once per call, `Hinoko`, `Kaen` and `Shuchusen` run while they are on screen, and `Fude` draws when the visitor does.
+- With `prefers-reduced-motion: reduce` it shows the last frame: the finished art, the settled water, the pressed seal, the torn frame, the brushed edge, the parted halves, the mended picture, the settled bands, the dyed cloth, the branch in bloom or the landed splat. `inkTransition` and `kasumiTransition` just swap, a torn cover is already off, `Irodori` and a closed `Tachigami` cut show the plain image, focus lines and fire hold still, no embers rise and a traced `Fude` stroke lands at once.
+- Without WebGL, `BrushReveal`, `InkWipe`, `Irodori`, `HakeCut`, `Tachigami`, `Kintsugi` and `TornEdge` show the plain image, `BrushMark` shows the plain words, `inkTransition` and `kasumiTransition` just swap, and the canvas effects show nothing.
+- `BrushReveal`, `InkWipe`, `Irodori`, a closed `Tachigami` cut and a torn cover end on the image's own pixels, hand back to the plain image and release their WebGL context, and `inkTransition` and `kasumiTransition` remove their canvas once the page shows again. The canvas effects, a torn frame, `HakeCut`, `Kintsugi` and parted or fallen halves keep their last frame and redraw it on resize. `Fude` keeps its context while it is on the page.
 - Each effect holds one WebGL context while it keeps its last frame, and browsers keep about 16 alive per page. Past that the oldest is dropped and its canvas leaves the page, so spread long runs of effects across pages.
 - Every component is marked `"use client"` for React Server Components.
 

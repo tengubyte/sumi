@@ -1,5 +1,5 @@
 import { FLOOD_FRAGMENT } from "./floodGlsl.js";
-import { playClock, prefersReducedMotion } from "./play.js";
+import { playShare, prefersReducedMotion } from "./play.js";
 import { random } from "./random.js";
 import { rgb, type Hex } from "./splatShader.js";
 import { coverProgram, drawCover, fitCanvas } from "./webgl.js";
@@ -67,13 +67,6 @@ function floodPainter(canvas: HTMLCanvasElement, options: TransitionOptions): Fl
   };
 }
 
-const play = (seconds: number, frame: (share: number) => void): Promise<void> =>
-  new Promise((resolve) => {
-    playClock(seconds, 0, (s) => {
-      frame(seconds > 0 ? s / seconds : 1);
-    }, resolve);
-  });
-
 /**
  * Floods the viewport (or `within`) with ink, calls `swap` once nothing shows and waits for it, then
  * opens the paper again. Resolves when the ink has gone. Each call plays once. Reduced motion or no
@@ -91,11 +84,11 @@ export async function inkTransition(swap: () => unknown, options: TransitionOpti
   (options.within ?? document.body).append(surface);
   const half = Math.max(options.duration ?? 1.6, 0) / 2;
   try {
-    await play(half, (share) => {
+    await playShare(half, (share) => {
       flood.draw(share / 2);
     });
     await swap();
-    await play(half, (share) => {
+    await playShare(half, (share) => {
       flood.draw(0.5 + share / 2);
     });
   } finally {

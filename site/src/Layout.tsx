@@ -50,8 +50,8 @@ export function Hero({ dark }: { readonly dark: boolean }): JSX.Element {
             for React
           </h1>
           <p className="lede">
-            sumi has twenty-one effects, each a WebGL shader that paints in the browser. Most play once as they scroll
-            into view; inkTransition plays each time you call it, Hinoko, Kaen and Shuchusen run while they are on screen,
+            sumi has twenty-four effects, each a WebGL shader that paints in the browser. Most play once as they scroll
+            into view; inkTransition and kasumiTransition play each time you call them, Hinoko, Kaen and Shuchusen run while they are on screen,
             and Fude is a brush the visitor draws with. React is the only dependency.
           </p>
           <Code>npm install github:tengubyte/sumi#v0.12.0</Code>

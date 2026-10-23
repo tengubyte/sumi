@@ -46,6 +46,14 @@ export function playClock(duration: number, delay: number, frame: (seconds: numb
   };
 }
 
+/** Calls `frame` with the share of `seconds` gone, 0 to 1, on each animation frame. Resolves at 1. */
+export const playShare = (seconds: number, frame: (share: number) => void): Promise<void> =>
+  new Promise((resolve) => {
+    playClock(seconds, 0, (s) => {
+      frame(seconds > 0 ? s / seconds : 1);
+    }, resolve);
+  });
+
 /** A canvas laid over `image`, which must fill a positioned parent, for an effect that runs on the picture. */
 export function overlayCanvas(image: HTMLImageElement): HTMLCanvasElement {
   const surface = document.createElement("canvas");
